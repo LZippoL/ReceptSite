@@ -5,7 +5,6 @@ import {
   Heart, 
   ShoppingBag, 
   Sparkles, 
-  Settings, 
   Menu, 
   X,
   BookOpen,
@@ -135,15 +134,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           {/* Theme Switcher */}
           <ThemeToggle />
 
-          {/* Admin link */}
-          <Link
-            to="/admin"
-            className="hidden sm:flex p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-brand-600 transition-colors"
-            title={t('nav.admin')}
-            aria-label={t('nav.admin')}
-          >
-            <Settings className="w-5 h-5" />
-          </Link>
+
 
           {/* Mobile hamburger menu toggle */}
           <button
@@ -200,14 +191,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
                   </span>
                 )}
               </Link>
-              <Link
-                to="/admin"
-                onClick={() => setMobileMenuOpen(false)}
-                className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-900"
-              >
-                <Settings className="w-5 h-5" />
-                <span>{t('nav.admin')}</span>
-              </Link>
+
             </div>
           </div>
 

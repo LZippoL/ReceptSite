@@ -5,7 +5,6 @@ import {
   Heart, 
   Clock, 
   ShoppingBag, 
-  Settings, 
   Sun, 
   Moon, 
   Laptop, 
@@ -113,7 +112,7 @@ export const ProfilePage: React.FC = () => {
       </div>
 
       {/* QUICK LINKS GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <Link
           to="/favorites"
           className="p-5 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-warm hover:-translate-y-0.5 transition-all flex items-center gap-4"
@@ -137,19 +136,6 @@ export const ProfilePage: React.FC = () => {
           <div>
             <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">{t('shoppingList.title')}</h3>
             <p className="text-xs text-stone-500">{totalCount} {t('shoppingList.itemsTotal')}</p>
-          </div>
-        </Link>
-
-        <Link
-          to="/admin"
-          className="p-5 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 shadow-sm hover:shadow-warm hover:-translate-y-0.5 transition-all flex items-center gap-4"
-        >
-          <div className="w-12 h-12 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 flex items-center justify-center">
-            <Settings className="w-6 h-6" />
-          </div>
-          <div>
-            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">{t('nav.admin')}</h3>
-            <p className="text-xs text-stone-500">{t('admin.addRecipeBtn')}</p>
           </div>
         </Link>
       </div>

@@ -93,25 +93,25 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Author / CMS & Info */}
+          {/* User & Info */}
           <div>
             <h4 className="text-xs font-bold uppercase tracking-wider text-stone-600 dark:text-stone-300 mb-4">
-              {t('nav.admin')}
+              {t('nav.profile')}
             </h4>
             <ul className="space-y-2 text-sm text-stone-600 dark:text-stone-400">
               <li>
-                <Link to="/admin" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-                  {t('admin.addRecipeBtn')}
-                </Link>
-              </li>
-              <li>
-                <Link to="/admin?tab=articles" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
-                  {t('admin.addArticleBtn')}
-                </Link>
-              </li>
-              <li>
                 <Link to="/profile" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
                   {t('profile.title')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/favorites" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                  {t('favorites.title')}
+                </Link>
+              </li>
+              <li>
+                <Link to="/shopping-list" className="hover:text-brand-600 dark:hover:text-brand-400 transition-colors">
+                  {t('shoppingList.title')}
                 </Link>
               </li>
             </ul>
