@@ -38,7 +38,9 @@ class ReviewService implements IReviewService {
           .order('created_at', { ascending: false });
 
         if (!error && data) {
-          return data.map(mapDbToReview);
+          return data
+            .filter(r => !r.user_name?.startsWith('[DELETED]'))
+            .map(mapDbToReview);
         }
       } catch (err) {
         console.warn('Supabase fetch reviews failed:', err);
@@ -59,7 +61,9 @@ class ReviewService implements IReviewService {
           .order('created_at', { ascending: false });
 
         if (!error && data) {
-          return data.map(mapDbToReview);
+          return data
+            .filter(r => !r.user_name?.startsWith('[DELETED]'))
+            .map(mapDbToReview);
         }
       } catch (err) {
         console.warn('Supabase fetch reviews by recipe failed:', err);
