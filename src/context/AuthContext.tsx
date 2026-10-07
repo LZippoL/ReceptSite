@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../services/supabaseClient';
 import { 
@@ -40,6 +40,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [userProfile, setUserProfile] = useState<UserProfileRecord | null>(null);
   const [loading, setLoading] = useState(true);
 
+  // Keep a stable ref to user so effects and callbacks never trigger loops
+  const userRef = useRef<User | null>(null);
+  userRef.current = user;
+
+  const lastRefreshTimeRef = useRef<number>(0);
+
   // Auth modal control
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'login' | 'register'>('login');
@@ -59,7 +65,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user_metadata: currUser.user_metadata,
         created_at: currUser.created_at,
       });
-      setUserProfile(profile);
+      setUserProfile(prev => {
+        if (!prev) return profile;
+        if (
+          prev.id !== profile.id ||
+          prev.isBanned !== profile.isBanned ||
+          prev.isMuted !== profile.isMuted ||
+          prev.mutedUntil !== profile.mutedUntil ||
+          prev.displayName !== profile.displayName
+        ) {
+          return profile;
+        }
+        return prev;
+      });
     } catch (err) {
       console.warn('Failed to sync user profile:', err);
       // Fallback local representation
@@ -77,14 +95,28 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const refreshUserProfile = useCallback(async () => {
-    if (!user) return;
+    const curr = userRef.current;
+    if (!curr) return;
     try {
-      const fresh = await userService.getById(user.id, true);
-      if (fresh) setUserProfile(fresh);
+      const fresh = await userService.getById(curr.id, false);
+      if (fresh) {
+        setUserProfile(prev => {
+          if (
+            prev?.isBanned !== fresh.isBanned ||
+            prev?.isMuted !== fresh.isMuted ||
+            prev?.mutedUntil !== fresh.mutedUntil ||
+            prev?.banReason !== fresh.banReason ||
+            prev?.displayName !== fresh.displayName
+          ) {
+            return fresh;
+          }
+          return prev;
+        });
+      }
     } catch (err) {
       console.warn('Failed to refresh user profile:', err);
     }
-  }, [user]);
+  }, []);
 
   useEffect(() => {
     if (!isSupabaseConfigured) {
@@ -92,10 +124,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       return;
     }
 
-    // Get initial session
+    // 1. Get initial session
     supabase.auth.getSession().then(({ data: { session } }) => {
       setSession(session);
       const currUser = session?.user ?? null;
+      userRef.current = currUser;
       setUser(currUser);
       if (currUser) {
         syncUserProfile(currUser);
@@ -106,33 +139,51 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     });
 
-    // Listen for auth state changes
+    // 2. Listen for auth state changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       setSession(session);
       const currUser = session?.user ?? null;
+      const prevId = userRef.current?.id;
+      userRef.current = currUser;
       setUser(currUser);
       if (currUser) {
-        syncUserProfile(currUser);
+        if (currUser.id !== prevId) {
+          syncUserProfile(currUser);
+        }
       } else {
         setUserProfile(null);
       }
       setLoading(false);
     });
 
-    // Realtime channel to listen for instant admin ban / mute updates
+    // 3. Realtime channel to listen for instant admin ban / mute updates
     const channel = supabase
       .channel('users-moderation-realtime')
       .on(
         'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'recipes' },
+        { event: 'UPDATE', schema: 'public', table: 'recipes', filter: 'id=eq.__SYSTEM_USERS__' },
         (payload) => {
           const row = payload.new as any;
-          if (row?.id === '__SYSTEM_USERS__' && row.description) {
+          if (row?.description) {
             try {
               const list = JSON.parse(row.description) as UserProfileRecord[];
-              const myProfile = list.find((u) => u.id === user?.id);
-              if (myProfile) {
-                setUserProfile(myProfile);
+              userService.updateMemoryCache(list);
+              const currId = userRef.current?.id;
+              if (currId) {
+                const myProfile = list.find((u) => u.id === currId);
+                if (myProfile) {
+                  setUserProfile(prev => {
+                    if (
+                      prev?.isBanned !== myProfile.isBanned ||
+                      prev?.isMuted !== myProfile.isMuted ||
+                      prev?.mutedUntil !== myProfile.mutedUntil ||
+                      prev?.banReason !== myProfile.banReason
+                    ) {
+                      return myProfile;
+                    }
+                    return prev;
+                  });
+                }
               }
             } catch (e) {
               console.warn('Realtime parse error:', e);
@@ -142,36 +193,24 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       )
       .subscribe();
 
+    // 4. Throttled tab focus listener (max once every 30 seconds)
+    const onTabFocus = () => {
+      const now = Date.now();
+      if (now - lastRefreshTimeRef.current > 30_000) {
+        lastRefreshTimeRef.current = now;
+        refreshUserProfile();
+      }
+    };
+    window.addEventListener('focus', onTabFocus);
+    document.addEventListener('visibilitychange', onTabFocus);
+
     return () => {
       subscription.unsubscribe();
       supabase.removeChannel(channel);
+      window.removeEventListener('focus', onTabFocus);
+      document.removeEventListener('visibilitychange', onTabFocus);
     };
-  }, [syncUserProfile, user]);
-
-  // Periodic refresh of profile status (bans/mutes from admin)
-  useEffect(() => {
-    if (!user) return;
-
-    // Refresh immediately on mount
-    refreshUserProfile();
-
-    // Refresh on tab focus
-    const onFocus = () => {
-      refreshUserProfile();
-    };
-    window.addEventListener('focus', onFocus);
-    document.addEventListener('visibilitychange', onFocus);
-
-    const interval = setInterval(() => {
-      refreshUserProfile();
-    }, 5_000); // Check every 5s
-
-    return () => {
-      clearInterval(interval);
-      window.removeEventListener('focus', onFocus);
-      document.removeEventListener('visibilitychange', onFocus);
-    };
-  }, [user, refreshUserProfile]);
+  }, [syncUserProfile, refreshUserProfile]);
 
   const openAuthModal = (mode: 'login' | 'register' = 'login') => {
     setAuthModalMode(mode);

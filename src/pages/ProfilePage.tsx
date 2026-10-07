@@ -54,7 +54,7 @@ export const ProfilePage: React.FC = () => {
 
   useEffect(() => {
     refreshUserProfile();
-  }, [refreshUserProfile]);
+  }, []);
 
   useEffect(() => {
     updateMetaTags({

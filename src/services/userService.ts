@@ -36,9 +36,17 @@ export function isUserMutedActive(user: UserProfileRecord | null | undefined): b
 class UserService {
   private memoryCache: UserProfileRecord[] | null = null;
   private lastFetch = 0;
-  private readonly CACHE_TTL = 3_000; // 3 seconds
+  private readonly CACHE_TTL = 30_000; // 30 seconds cache
 
-  async getAll(forceFresh = true): Promise<UserProfileRecord[]> {
+  updateMemoryCache(list: UserProfileRecord[]): void {
+    if (Array.isArray(list)) {
+      this.memoryCache = list;
+      this.lastFetch = Date.now();
+      storage.set(STORAGE_KEY, list).catch(() => {});
+    }
+  }
+
+  async getAll(forceFresh = false): Promise<UserProfileRecord[]> {
     if (!forceFresh && this.memoryCache && Date.now() - this.lastFetch < this.CACHE_TTL) {
       return this.memoryCache;
     }
@@ -74,7 +82,7 @@ class UserService {
     return local;
   }
 
-  async getById(idOrFriendlyIdOrEmail: string, forceFresh = true): Promise<UserProfileRecord | null> {
+  async getById(idOrFriendlyIdOrEmail: string, forceFresh = false): Promise<UserProfileRecord | null> {
     if (!idOrFriendlyIdOrEmail) return null;
     const users = await this.getAll(forceFresh);
     const query = idOrFriendlyIdOrEmail.toLowerCase().trim();
@@ -152,10 +160,14 @@ class UserService {
 
     if (existingIndex >= 0) {
       const existing = users[existingIndex];
+      // If user details haven't changed, don't write to DB (prevents DB spam and Realtime echo)
+      if (existing.email === email && existing.displayName === displayName) {
+        return existing;
+      }
       // CRUCIAL: Preserve existing isBanned, isMuted, banReason, mutedUntil from database!
       const updated: UserProfileRecord = {
         ...existing,
-        email: existing.email || email,
+        email: email || existing.email,
         displayName: displayName || existing.displayName,
         lastLoginAt: now,
       };
