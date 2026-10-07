@@ -46,11 +46,15 @@ export const ProfilePage: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const { success, error, info } = useToast();
   const { t, localizeRecipe } = useLanguage();
-  const { user, signOut, openAuthModal, friendlyId, isBanned, isMuted, userProfile } = useAuth();
+  const { user, signOut, openAuthModal, friendlyId, isBanned, isMuted, userProfile, refreshUserProfile } = useAuth();
 
   const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
   const [newStapleInput, setNewStapleInput] = useState('');
   const [copiedId, setCopiedId] = useState(false);
+
+  useEffect(() => {
+    refreshUserProfile();
+  }, [refreshUserProfile]);
 
   useEffect(() => {
     updateMetaTags({

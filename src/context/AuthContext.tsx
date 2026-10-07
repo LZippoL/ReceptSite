@@ -79,7 +79,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const refreshUserProfile = useCallback(async () => {
     if (!user) return;
     try {
-      const fresh = await userService.getById(user.id);
+      const fresh = await userService.getById(user.id, true);
       if (fresh) setUserProfile(fresh);
     } catch (err) {
       console.warn('Failed to refresh user profile:', err);
@@ -119,19 +119,58 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     });
 
+    // Realtime channel to listen for instant admin ban / mute updates
+    const channel = supabase
+      .channel('users-moderation-realtime')
+      .on(
+        'postgres_changes',
+        { event: 'UPDATE', schema: 'public', table: 'recipes' },
+        (payload) => {
+          const row = payload.new as any;
+          if (row?.id === '__SYSTEM_USERS__' && row.description) {
+            try {
+              const list = JSON.parse(row.description) as UserProfileRecord[];
+              const myProfile = list.find((u) => u.id === user?.id);
+              if (myProfile) {
+                setUserProfile(myProfile);
+              }
+            } catch (e) {
+              console.warn('Realtime parse error:', e);
+            }
+          }
+        }
+      )
+      .subscribe();
+
     return () => {
       subscription.unsubscribe();
+      supabase.removeChannel(channel);
     };
-  }, [syncUserProfile]);
+  }, [syncUserProfile, user]);
 
   // Periodic refresh of profile status (bans/mutes from admin)
   useEffect(() => {
     if (!user) return;
+
+    // Refresh immediately on mount
+    refreshUserProfile();
+
+    // Refresh on tab focus
+    const onFocus = () => {
+      refreshUserProfile();
+    };
+    window.addEventListener('focus', onFocus);
+    document.addEventListener('visibilitychange', onFocus);
+
     const interval = setInterval(() => {
       refreshUserProfile();
-    }, 15_000); // Check every 15s
+    }, 5_000); // Check every 5s
 
-    return () => clearInterval(interval);
+    return () => {
+      clearInterval(interval);
+      window.removeEventListener('focus', onFocus);
+      document.removeEventListener('visibilitychange', onFocus);
+    };
   }, [user, refreshUserProfile]);
 
   const openAuthModal = (mode: 'login' | 'register' = 'login') => {

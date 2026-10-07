@@ -36,10 +36,10 @@ export function isUserMutedActive(user: UserProfileRecord | null | undefined): b
 class UserService {
   private memoryCache: UserProfileRecord[] | null = null;
   private lastFetch = 0;
-  private readonly CACHE_TTL = 10_000; // 10 seconds
+  private readonly CACHE_TTL = 3_000; // 3 seconds
 
-  async getAll(): Promise<UserProfileRecord[]> {
-    if (this.memoryCache && Date.now() - this.lastFetch < this.CACHE_TTL) {
+  async getAll(forceFresh = true): Promise<UserProfileRecord[]> {
+    if (!forceFresh && this.memoryCache && Date.now() - this.lastFetch < this.CACHE_TTL) {
       return this.memoryCache;
     }
 
@@ -74,9 +74,9 @@ class UserService {
     return local;
   }
 
-  async getById(idOrFriendlyIdOrEmail: string): Promise<UserProfileRecord | null> {
+  async getById(idOrFriendlyIdOrEmail: string, forceFresh = true): Promise<UserProfileRecord | null> {
     if (!idOrFriendlyIdOrEmail) return null;
-    const users = await this.getAll();
+    const users = await this.getAll(forceFresh);
     const query = idOrFriendlyIdOrEmail.toLowerCase().trim();
     return (
       users.find(
@@ -95,30 +95,37 @@ class UserService {
 
     if (isSupabaseConfigured) {
       try {
-        await supabase
+        const { error } = await supabase
           .from('recipes')
-          .upsert({
-            id: SYSTEM_STORE_ID,
-            slug: '__system_users__',
-            title: 'System Users Store',
-            description: JSON.stringify(users),
-            category: 'system',
-            cuisine: 'system',
-            difficulty: 'easy',
-            prep_time: 0,
-            cook_time: 0,
-            total_time: 0,
-            servings: 1,
-            calories: 0,
-            image: '',
-            rating: 0,
-            reviews_count: 0,
-            dietary: {},
-            ingredients: [],
-            instructions: [],
-            tags: ['system'],
-            author: { name: 'system' }
-          });
+          .update({ description: JSON.stringify(users) })
+          .eq('id', SYSTEM_STORE_ID);
+
+        if (error) {
+          await supabase
+            .from('recipes')
+            .upsert({
+              id: SYSTEM_STORE_ID,
+              slug: '__system_users__',
+              title: 'System Users Store',
+              description: JSON.stringify(users),
+              category: 'system',
+              cuisine: 'system',
+              difficulty: 'easy',
+              prep_time: 0,
+              cook_time: 0,
+              total_time: 0,
+              servings: 1,
+              calories: 0,
+              image: '',
+              rating: 0,
+              reviews_count: 0,
+              dietary: {},
+              ingredients: [],
+              instructions: [],
+              tags: ['system'],
+              author: { name: 'system' }
+            });
+        }
       } catch (err) {
         console.error('Failed to sync users to Supabase:', err);
       }
@@ -131,7 +138,8 @@ class UserService {
     user_metadata?: any;
     created_at?: string;
   }): Promise<UserProfileRecord> {
-    const users = await this.getAll();
+    // ALWAYS fetch fresh from Supabase to prevent overwriting admin ban/mute sanctions!
+    const users = await this.getAll(true);
     const existingIndex = users.findIndex((u) => u.id === user.id);
 
     const friendlyId = generateFriendlyId(user.id);
@@ -144,6 +152,7 @@ class UserService {
 
     if (existingIndex >= 0) {
       const existing = users[existingIndex];
+      // CRUCIAL: Preserve existing isBanned, isMuted, banReason, mutedUntil from database!
       const updated: UserProfileRecord = {
         ...existing,
         email: existing.email || email,
@@ -168,81 +177,6 @@ class UserService {
       await this.saveAll(users);
       return newUser;
     }
-  }
-
-  async banUser(userId: string, reason?: string): Promise<UserProfileRecord> {
-    const users = await this.getAll();
-    const idx = users.findIndex((u) => u.id === userId || u.friendlyId === userId);
-    if (idx === -1) throw new Error('Користувача не знайдено');
-
-    users[idx] = {
-      ...users[idx],
-      isBanned: true,
-      banReason: reason?.trim() || 'Порушення правил спільноти',
-      bannedAt: new Date().toISOString(),
-    };
-    await this.saveAll(users);
-    return users[idx];
-  }
-
-  async unbanUser(userId: string): Promise<UserProfileRecord> {
-    const users = await this.getAll();
-    const idx = users.findIndex((u) => u.id === userId || u.friendlyId === userId);
-    if (idx === -1) throw new Error('Користувача не знайдено');
-
-    users[idx] = {
-      ...users[idx],
-      isBanned: false,
-      banReason: undefined,
-      bannedAt: undefined,
-    };
-    await this.saveAll(users);
-    return users[idx];
-  }
-
-  async muteUser(
-    userId: string,
-    durationDays: number = 7,
-    reason?: string
-  ): Promise<UserProfileRecord> {
-    const users = await this.getAll();
-    const idx = users.findIndex((u) => u.id === userId || u.friendlyId === userId);
-    if (idx === -1) throw new Error('Користувача не знайдено');
-
-    let mutedUntil: string;
-    if (durationDays <= 0) {
-      mutedUntil = 'permanent';
-    } else {
-      const expiry = new Date();
-      expiry.setDate(expiry.getDate() + durationDays);
-      mutedUntil = expiry.toISOString();
-    }
-
-    users[idx] = {
-      ...users[idx],
-      isMuted: true,
-      muteReason: reason?.trim() || 'Тимчасове обмеження публікації відгуків',
-      mutedUntil,
-      mutedAt: new Date().toISOString(),
-    };
-    await this.saveAll(users);
-    return users[idx];
-  }
-
-  async unmuteUser(userId: string): Promise<UserProfileRecord> {
-    const users = await this.getAll();
-    const idx = users.findIndex((u) => u.id === userId || u.friendlyId === userId);
-    if (idx === -1) throw new Error('Користувача не знайдено');
-
-    users[idx] = {
-      ...users[idx],
-      isMuted: false,
-      muteReason: undefined,
-      mutedUntil: undefined,
-      mutedAt: undefined,
-    };
-    await this.saveAll(users);
-    return users[idx];
   }
 }
 
