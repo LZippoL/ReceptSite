@@ -20,11 +20,7 @@ interface FavoritesContextType {
 }
 
 const DEFAULT_COLLECTIONS: UserCollection[] = [
-  { id: 'col-fav', name: 'Улюблене', description: 'Найкращі перевірені рецепти', icon: '❤️', recipeIds: [], createdAt: '2024-01-01' },
-  { id: 'col-breakfast', name: 'Сніданки', description: 'Ідеї на добрий ранок', icon: '🍳', recipeIds: ['rec-2', 'rec-10', 'rec-12'], createdAt: '2024-01-01' },
-  { id: 'col-holiday', name: 'На свята', description: 'Святковий стіл та гості', icon: '🎉', recipeIds: ['rec-9', 'rec-34'], createdAt: '2024-01-01' },
-  { id: 'col-try', name: 'Спробувати', description: 'Страви в черзі на приготування', icon: '📌', recipeIds: ['rec-6', 'rec-33'], createdAt: '2024-01-01' },
-  { id: 'col-quick-dinner', name: 'Швидка вечеря', description: 'Вечеря за 20-30 хвилин', icon: '⚡', recipeIds: ['rec-6', 'rec-41'], createdAt: '2024-01-01' }
+  { id: 'col-fav', name: 'Улюблене', description: 'Найкращі перевірені рецепти', icon: '❤️', recipeIds: [], createdAt: '2024-01-01' }
 ];
 
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
@@ -33,9 +29,9 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('smakolyk_favorites');
-      return saved ? JSON.parse(saved) : ['rec-1', 'rec-2', 'rec-6', 'rec-22'];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return ['rec-1', 'rec-2', 'rec-6', 'rec-22'];
+      return [];
     }
   });
 
@@ -51,9 +47,9 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
   const [recentlyViewed, setRecentlyViewed] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('smakolyk_history');
-      return saved ? JSON.parse(saved) : ['rec-1', 'rec-2', 'rec-6'];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return ['rec-1', 'rec-2', 'rec-6'];
+      return [];
     }
   });
 
