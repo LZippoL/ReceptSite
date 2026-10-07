@@ -22,19 +22,31 @@ export default defineConfig({
         start_url: process.env.NODE_ENV === 'production' ? '/ReceptSite/' : '/',
         icons: [
           {
-            src: 'icon-192.png',
+            src: '/ReceptSite/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: 'icon-512.png',
+            src: '/ReceptSite/icon-192.png',
+            sizes: '192x192',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/ReceptSite/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
+            purpose: 'any'
           },
           {
-            src: 'favicon.svg',
+            src: '/ReceptSite/icon-512.png',
+            sizes: '512x512',
+            type: 'image/png',
+            purpose: 'maskable'
+          },
+          {
+            src: '/ReceptSite/favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml'
           }
