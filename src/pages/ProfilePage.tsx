@@ -13,7 +13,12 @@ import {
   LogOut, 
   ShieldCheck, 
   Sparkles, 
-  Lock 
+  Lock,
+  Copy,
+  Check,
+  Ban,
+  MessageSquareOff,
+  AlertTriangle
 } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useShoppingList } from '../context/ShoppingListContext';
@@ -41,10 +46,11 @@ export const ProfilePage: React.FC = () => {
   const { theme, setTheme } = useTheme();
   const { success, error, info } = useToast();
   const { t, localizeRecipe } = useLanguage();
-  const { user, signOut, openAuthModal } = useAuth();
+  const { user, signOut, openAuthModal, friendlyId, isBanned, isMuted, userProfile } = useAuth();
 
   const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
   const [newStapleInput, setNewStapleInput] = useState('');
+  const [copiedId, setCopiedId] = useState(false);
 
   useEffect(() => {
     updateMetaTags({
@@ -165,20 +171,28 @@ export const ProfilePage: React.FC = () => {
     );
   }
 
+  const handleCopyId = () => {
+    const toCopy = friendlyId || user?.id || '';
+    if (!toCopy) return;
+    navigator.clipboard.writeText(toCopy);
+    setCopiedId(true);
+    setTimeout(() => setCopiedId(false), 2000);
+  };
+
   const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Кулінар';
   const memberSince = user.created_at
     ? new Date(user.created_at).toLocaleDateString('uk-UA', { year: 'numeric', month: 'long', day: 'numeric' })
     : '';
 
   return (
-    <div className="max-w-4xl mx-auto space-y-10 pb-16 animate-fade-in pt-4">
+    <div className="max-w-4xl mx-auto space-y-8 pb-16 animate-fade-in pt-4">
       {/* User Header Profile Card */}
       <div className="p-6 sm:p-8 rounded-[2rem] bg-gradient-to-r from-brand-600 via-amber-600 to-orange-600 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
         <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
           <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white text-3xl font-extrabold shrink-0 shadow-lg">
             {displayName[0].toUpperCase()}
           </div>
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <div className="flex items-center justify-center sm:justify-start gap-2">
               <h1 className="text-2xl sm:text-3xl font-extrabold">{displayName}</h1>
               <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/25 text-[11px] font-bold backdrop-blur-md">
@@ -189,11 +203,49 @@ export const ProfilePage: React.FC = () => {
             <p className="text-xs sm:text-sm text-amber-100 font-medium">
               {user.email}
             </p>
+
+            {/* Unique ID Badge and Status Badge */}
+            <div className="flex flex-wrap items-center justify-center sm:justify-start gap-2 pt-0.5 text-xs">
+              <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-white/20 backdrop-blur-md font-mono font-bold text-amber-100">
+                <span>ID: {friendlyId || 'UID-00000000'}</span>
+                <button
+                  type="button"
+                  onClick={handleCopyId}
+                  className="hover:text-white transition-colors ml-0.5"
+                  title="Скопіювати унікальний ID"
+                >
+                  {copiedId ? (
+                    <Check className="w-3.5 h-3.5 text-emerald-300" />
+                  ) : (
+                    <Copy className="w-3.5 h-3.5 opacity-80" />
+                  )}
+                </button>
+              </div>
+
+              {isBanned ? (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-rose-600 text-white font-black text-[11px] shadow">
+                  <Ban className="w-3.5 h-3.5" />
+                  ЗАБЛОКОВАНО
+                </span>
+              ) : isMuted ? (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500 text-white font-black text-[11px] shadow">
+                  <MessageSquareOff className="w-3.5 h-3.5" />
+                  КОМЕНТАРІ ОБМЕЖЕНО
+                </span>
+              ) : (
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-emerald-500/80 text-white font-bold text-[11px] backdrop-blur-md">
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  Акаунт активний
+                </span>
+              )}
+            </div>
+
             {memberSince && (
-              <p className="text-[11px] text-amber-200/80">
+              <p className="text-[11px] text-amber-200/80 pt-0.5">
                 Учасник клубу з {memberSince}
               </p>
             )}
+
             <div className="pt-2 flex flex-wrap justify-center sm:justify-start gap-2 text-xs font-semibold">
               <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
                 ❤️ {favorites.length} {t('profile.savedRecipes')}
@@ -219,6 +271,88 @@ export const ProfilePage: React.FC = () => {
           <span>Вийти</span>
         </button>
       </div>
+
+      {/* Moderation Warning Banners */}
+      {isBanned && (
+        <div className="p-5 sm:p-6 rounded-3xl bg-rose-50 dark:bg-rose-950/40 border-2 border-rose-500/80 text-rose-900 dark:text-rose-200 space-y-3 animate-fade-in shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-rose-500 text-white flex items-center justify-center shrink-0">
+              <Ban className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-black text-base text-rose-700 dark:text-rose-300">
+                Ваш акаунт заблоковано адміністратором
+              </h3>
+              <p className="text-xs text-rose-600 dark:text-rose-400">
+                Дію вашого профілю тимчасово призупинено через порушення правил платформи.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-rose-100/70 dark:bg-rose-900/40 text-xs space-y-1">
+            <div className="flex items-center gap-1.5 font-bold text-rose-800 dark:text-rose-200">
+              <AlertTriangle className="w-4 h-4 text-rose-500" />
+              <span>Причина блокування:</span>
+            </div>
+            <div className="pl-5 text-rose-900 dark:text-rose-100">
+              {userProfile?.banReason || 'Порушення правил спільноти Смаколик'}
+            </div>
+          </div>
+
+          <p className="text-[11px] text-rose-600 dark:text-rose-400 leading-relaxed">
+            * На час дії блокування ви не можете публікувати нові відгуки до рецептів. Якщо ви вважаєте це помилкою, зверніться до служби підтримки.
+          </p>
+        </div>
+      )}
+
+      {isMuted && !isBanned && (
+        <div className="p-5 sm:p-6 rounded-3xl bg-amber-50 dark:bg-amber-950/40 border-2 border-amber-500/80 text-amber-900 dark:text-amber-200 space-y-3 animate-fade-in shadow-md">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500 text-white flex items-center justify-center shrink-0">
+              <MessageSquareOff className="w-5 h-5" />
+            </div>
+            <div>
+              <h3 className="font-black text-base text-amber-800 dark:text-amber-300">
+                Встановлено обмеження на публікацію коментарів
+              </h3>
+              <p className="text-xs text-amber-700 dark:text-amber-400">
+                Можливість залишати відгуки до рецептів тимчасово відключено адміністратором.
+              </p>
+            </div>
+          </div>
+
+          <div className="p-3.5 rounded-2xl bg-amber-100/70 dark:bg-amber-900/40 text-xs space-y-1.5">
+            <div className="flex items-center justify-between flex-wrap gap-2 font-bold text-amber-800 dark:text-amber-200">
+              <span className="flex items-center gap-1.5">
+                <Clock className="w-4 h-4 text-amber-600" />
+                <span>Термін дії обмеження:</span>
+              </span>
+              <span className="px-2 py-0.5 rounded-lg bg-amber-200 dark:bg-amber-800 font-extrabold text-amber-900 dark:text-amber-100">
+                {userProfile?.mutedUntil === 'permanent'
+                  ? 'Безстроково'
+                  : userProfile?.mutedUntil
+                  ? new Date(userProfile.mutedUntil).toLocaleDateString('uk-UA', {
+                      day: 'numeric',
+                      month: 'long',
+                      year: 'numeric',
+                      hour: '2-digit',
+                      minute: '2-digit'
+                    })
+                  : 'Тимчасово'}
+              </span>
+            </div>
+            {userProfile?.muteReason && (
+              <div className="text-amber-900 dark:text-amber-100 pl-5 pt-0.5">
+                <strong>Причина:</strong> {userProfile.muteReason}
+              </div>
+            )}
+          </div>
+
+          <p className="text-[11px] text-amber-700 dark:text-amber-400 leading-relaxed">
+            * Після закінчення терміну обмеження можливість писати відгуки відновиться автоматично.
+          </p>
+        </div>
+      )}
 
       {/* QUICK LINKS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

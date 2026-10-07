@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useTransition } from 'react';
-import { ThumbsUp, MessageSquarePlus, MessageSquare, Star } from 'lucide-react';
+import { ThumbsUp, MessageSquarePlus, MessageSquare, Star, Ban, MessageSquareOff } from 'lucide-react';
 import { Review } from '../../types';
 import { reviewService } from '../../services/reviewService';
 import { RatingStars } from '../common/RatingStars';
@@ -25,7 +25,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const [, startTransition] = useTransition();
   const [sortBy, setSortBy] = useState<'newest' | 'helpful' | 'highest' | 'lowest'>('newest');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useAuth();
+  const { user, isBanned, isMuted, userProfile } = useAuth();
 
   // Form fields
   const [rating, setRating] = useState(5);
@@ -60,6 +60,17 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (isBanned) {
+      error(t('common.error'), 'Ваш акаунт заблоковано адміністратором. Публікація відгуків заборонена.');
+      return;
+    }
+
+    if (isMuted) {
+      error(t('common.error'), 'Для вашого акаунта діє обмеження на публікацію коментарів.');
+      return;
+    }
+
     if (!userName.trim()) {
       error(t('common.error'), t('reviews.yourName'));
       return;
@@ -127,13 +138,26 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           </div>
         </div>
 
-        <Button
-          onClick={() => setIsModalOpen(true)}
-          className="shadow-md shadow-brand-500/20"
-        >
-          <MessageSquarePlus className="w-4 h-4 mr-2" />
-          {t('reviews.writeReview')}
-        </Button>
+        {/* Action Button / Moderation status badge */}
+        {isBanned ? (
+          <div className="px-4 py-2.5 rounded-2xl bg-rose-50 dark:bg-rose-950/40 border border-rose-300 dark:border-rose-800 text-rose-700 dark:text-rose-300 text-xs font-bold flex items-center gap-2">
+            <Ban className="w-4 h-4 shrink-0" />
+            <span>Акаунт заблоковано</span>
+          </div>
+        ) : isMuted ? (
+          <div className="px-4 py-2.5 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-800 text-amber-700 dark:text-amber-300 text-xs font-bold flex items-center gap-2" title={userProfile?.muteReason}>
+            <MessageSquareOff className="w-4 h-4 shrink-0" />
+            <span>Коментарі обмежено</span>
+          </div>
+        ) : (
+          <Button
+            onClick={() => setIsModalOpen(true)}
+            className="shadow-md shadow-brand-500/20"
+          >
+            <MessageSquarePlus className="w-4 h-4 mr-2" />
+            {t('reviews.writeReview')}
+          </Button>
+        )}
       </div>
 
       {/* Reviews list */}
