@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { UserCollection } from '../types';
 import { DEFAULT_STAPLES } from '../data/categories';
+import { useAuth } from './AuthContext';
 
 interface FavoritesContextType {
   favorites: string[]; // recipe IDs
@@ -26,6 +27,7 @@ const DEFAULT_COLLECTIONS: UserCollection[] = [
 const FavoritesContext = createContext<FavoritesContextType | undefined>(undefined);
 
 export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isGuest, openGuestWarning } = useAuth();
   const [favorites, setFavorites] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('smakolyk_favorites');
@@ -83,6 +85,11 @@ export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       const exists = prev.includes(recipeId);
       const next = exists ? prev.filter(id => id !== recipeId) : [...prev, recipeId];
       
+      // If adding recipe as guest, show the warning about cache loss
+      if (!exists && isGuest && sessionStorage.getItem('smakolyk_guest_warning_dismissed') !== 'true') {
+        openGuestWarning();
+      }
+
       // Also sync with the 'Улюблене' collection
       setCollections(curr => curr.map(col => {
         if (col.id === 'col-fav') {

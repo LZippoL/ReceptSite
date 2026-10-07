@@ -1,8 +1,9 @@
 import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
-import { Home, Search, Sparkles, Heart, User } from 'lucide-react';
+import { Home, Search, Sparkles, Heart, User, LogIn } from 'lucide-react';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../utils/cn';
 
 interface MobileBottomNavProps {
@@ -13,6 +14,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
   const location = useLocation();
   const { favorites } = useFavorites();
   const { t } = useLanguage();
+  const { user, openAuthModal } = useAuth();
 
   const isCurrent = (path: string) => {
     if (path === '/' && location.pathname !== '/') return false;
@@ -83,20 +85,31 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
           )}
         </NavLink>
 
-        {/* Профіль */}
-        <NavLink
-          to="/profile"
-          className={cn(
-            'flex flex-col items-center justify-center flex-1 py-1 text-center select-none transition-colors relative min-h-[44px]',
-            isCurrent('/profile') ? 'text-brand-600 dark:text-brand-400 font-bold' : 'text-stone-500 dark:text-stone-400'
-          )}
-        >
-          <User className="w-5 h-5 mb-1" />
-          <span className="text-[11px] leading-tight truncate max-w-[64px]">{t('nav.profile')}</span>
-          {isCurrent('/profile') && (
-            <span className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-500" />
-          )}
-        </NavLink>
+        {/* Профіль (Тільки для зареєстрованих користувачів, для гостей — Вхід) */}
+        {user ? (
+          <NavLink
+            to="/profile"
+            className={cn(
+              'flex flex-col items-center justify-center flex-1 py-1 text-center select-none transition-colors relative min-h-[44px]',
+              isCurrent('/profile') ? 'text-brand-600 dark:text-brand-400 font-bold' : 'text-stone-500 dark:text-stone-400'
+            )}
+          >
+            <User className="w-5 h-5 mb-1" />
+            <span className="text-[11px] leading-tight truncate max-w-[64px]">{t('nav.profile')}</span>
+            {isCurrent('/profile') && (
+              <span className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-500" />
+            )}
+          </NavLink>
+        ) : (
+          <button
+            type="button"
+            onClick={() => openAuthModal('login')}
+            className="flex flex-col items-center justify-center flex-1 py-1 text-center select-none text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors min-h-[44px]"
+          >
+            <LogIn className="w-5 h-5 mb-1" />
+            <span className="text-[11px] leading-tight truncate max-w-[64px]">Вхід</span>
+          </button>
+        )}
       </nav>
     </div>
   );

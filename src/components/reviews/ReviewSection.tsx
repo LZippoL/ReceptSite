@@ -9,6 +9,7 @@ import { Modal } from '../common/Modal';
 import { ImageUpload } from '../common/ImageUpload';
 import { useToast } from '../../context/ToastContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../utils/cn';
 
 interface ReviewSectionProps {
@@ -24,6 +25,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const [, startTransition] = useTransition();
   const [sortBy, setSortBy] = useState<'newest' | 'helpful' | 'highest' | 'lowest'>('newest');
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { user } = useAuth();
 
   // Form fields
   const [rating, setRating] = useState(5);
@@ -31,6 +33,12 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const [comment, setComment] = useState('');
   const [photoUrl, setPhotoUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (user && !userName) {
+      setUserName(user.user_metadata?.full_name || user.email?.split('@')[0] || '');
+    }
+  }, [user]);
 
   const { success, error } = useToast();
   const { t, language } = useLanguage();

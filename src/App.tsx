@@ -18,6 +18,9 @@ import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
+import { AuthModal } from './components/auth/AuthModal';
+import { GuestSaveWarningModal } from './components/auth/GuestSaveWarningModal';
+
 // Scroll to top on route change
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -65,6 +68,12 @@ export function App() {
           isOpen={isSearchOpen}
           onClose={() => setIsSearchOpen(false)}
         />
+
+        {/* Authentication Modal */}
+        <AuthModal />
+
+        {/* Guest Save Warning Modal */}
+        <GuestSaveWarningModal />
       </div>
     </BrowserRouter>
   );

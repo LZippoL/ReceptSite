@@ -9,13 +9,16 @@ import {
   X,
   BookOpen,
   UtensilsCrossed,
-  ChefHat
+  ChefHat,
+  User,
+  LogIn
 } from 'lucide-react';
 import { ThemeToggle } from '../common/ThemeToggle';
 import { LanguageSelector } from '../common/LanguageSelector';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useShoppingList } from '../../context/ShoppingListContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { useAuth } from '../../context/AuthContext';
 import { cn } from '../../utils/cn';
 
 interface HeaderProps {
@@ -27,6 +30,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
   const { favorites } = useFavorites();
   const { uncompletedCount } = useShoppingList();
   const { t } = useLanguage();
+  const { user, openAuthModal } = useAuth();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
@@ -134,7 +138,39 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           {/* Theme Switcher */}
           <ThemeToggle />
 
-
+          {/* User Profile / Login (Only show profile if logged in, otherwise show login button) */}
+          {user ? (
+            <Link
+              to="/profile"
+              className={cn(
+                'flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-2xl border transition-all text-xs font-bold shrink-0',
+                isActive('/profile')
+                  ? 'bg-brand-500 text-white border-brand-500 shadow-sm'
+                  : 'bg-stone-100 dark:bg-stone-900 border-stone-200/80 dark:border-stone-800 text-stone-700 dark:text-stone-200 hover:border-brand-500/50'
+              )}
+              title={t('profile.title')}
+            >
+              <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-500 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
+                {user.user_metadata?.full_name
+                  ? user.user_metadata.full_name[0].toUpperCase()
+                  : user.email
+                  ? user.email[0].toUpperCase()
+                  : 'U'}
+              </div>
+              <span className="hidden sm:inline max-w-[90px] truncate">
+                {user.user_metadata?.full_name || user.email?.split('@')[0]}
+              </span>
+            </Link>
+          ) : (
+            <button
+              type="button"
+              onClick={() => openAuthModal('login')}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-brand-500 hover:bg-brand-600 active:scale-95 text-white text-xs sm:text-sm font-bold transition-all shadow-sm shadow-brand-500/20 shrink-0"
+            >
+              <LogIn className="w-4 h-4" />
+              <span>Увійти</span>
+            </button>
+          )}
 
           {/* Mobile hamburger menu toggle */}
           <button
@@ -192,6 +228,34 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
                 )}
               </Link>
 
+              {/* Conditional Profile or Login in Mobile Drawer */}
+              {user ? (
+                <Link
+                  to="/profile"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-semibold bg-brand-50 dark:bg-brand-950/40 text-brand-700 dark:text-brand-300 border border-brand-200 dark:border-brand-800/60"
+                >
+                  <User className="w-5 h-5 text-brand-600" />
+                  <div className="flex flex-col text-left">
+                    <span>{t('profile.title')}</span>
+                    <span className="text-[10px] text-stone-500 font-normal truncate max-w-[180px]">
+                      {user.user_metadata?.full_name || user.email}
+                    </span>
+                  </div>
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setMobileMenuOpen(false);
+                    openAuthModal('login');
+                  }}
+                  className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-2xl text-sm font-bold bg-brand-500 text-white shadow-md shadow-brand-500/20"
+                >
+                  <LogIn className="w-4 h-4" />
+                  <span>Увійти / Зареєструватися</span>
+                </button>
+              )}
             </div>
           </div>
 

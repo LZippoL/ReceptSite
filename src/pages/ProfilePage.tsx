@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  User, 
   Heart, 
   Clock, 
   ShoppingBag, 
@@ -9,13 +8,18 @@ import {
   Moon, 
   Laptop, 
   Plus, 
-  X,
-  Download
+  X, 
+  Download, 
+  LogOut, 
+  ShieldCheck, 
+  Sparkles, 
+  Lock 
 } from 'lucide-react';
 import { useFavorites } from '../context/FavoritesContext';
 import { useShoppingList } from '../context/ShoppingListContext';
 import { useTheme } from '../context/ThemeContext';
 import { useToast } from '../context/ToastContext';
+import { useAuth } from '../context/AuthContext';
 import { recipeService } from '../services/recipeService';
 import { Recipe } from '../types';
 import { Button } from '../components/common/Button';
@@ -35,8 +39,9 @@ export const ProfilePage: React.FC = () => {
   } = useFavorites();
   const { totalCount, uncompletedCount } = useShoppingList();
   const { theme, setTheme } = useTheme();
-  const { success, error } = useToast();
+  const { success, error, info } = useToast();
   const { t, localizeRecipe } = useLanguage();
+  const { user, signOut, openAuthModal } = useAuth();
 
   const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
   const [newStapleInput, setNewStapleInput] = useState('');
@@ -62,9 +67,17 @@ export const ProfilePage: React.FC = () => {
     success(t('common.save'), t('profile.stapleAdded'));
   };
 
+  const handleSignOut = async () => {
+    const { error: err } = await signOut();
+    if (!err) {
+      info('Вихід з акаунту', 'Ви успішно вийшли з кулінарного профілю');
+    }
+  };
+
   const handleExportData = async () => {
     try {
       const data = {
+        user: user?.email,
         favorites: localStorage.getItem('smakolyk_favorites'),
         collections: localStorage.getItem('smakolyk_collections'),
         shoppingList: localStorage.getItem('smakolyk_shopping_list'),
@@ -85,30 +98,126 @@ export const ProfilePage: React.FC = () => {
     }
   };
 
+  // If user is a guest (not authenticated), show the gate screen
+  if (!user) {
+    return (
+      <div className="max-w-xl mx-auto py-12 px-4 text-center space-y-6 animate-fade-in">
+        <div className="w-20 h-20 mx-auto rounded-3xl bg-amber-100 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800 text-amber-600 dark:text-amber-400 flex items-center justify-center shadow-lg">
+          <Lock className="w-10 h-10" />
+        </div>
+
+        <div className="space-y-2">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
+            Кулінарний профіль
+          </h1>
+          <p className="text-sm text-stone-600 dark:text-stone-400 max-w-md mx-auto">
+            Особистий кабінет доступний лише для зареєстрованих кулінарів.
+          </p>
+        </div>
+
+        <div className="p-6 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-card text-left space-y-4">
+          <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100 flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-brand-500" />
+            Що дає реєстрація у Смаколику?
+          </h3>
+          <ul className="space-y-2.5 text-xs sm:text-sm text-stone-600 dark:text-stone-300">
+            <li className="flex items-start gap-2.5">
+              <span className="text-emerald-500 font-bold shrink-0">✓</span>
+              <span><strong>Захист улюблених рецептів:</strong> ваші збережені страви не зникнуть при очищенні кешу чи зміні браузера.</span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <span className="text-emerald-500 font-bold shrink-0">✓</span>
+              <span><strong>Синхронізація:</strong> переглядайте обране та списки покупок на телефоні, планшеті та компʼютері.</span>
+            </li>
+            <li className="flex items-start gap-2.5">
+              <span className="text-emerald-500 font-bold shrink-0">✓</span>
+              <span><strong>Базові інгредієнти:</strong> налаштовуйте власний холодильник для миттєвого підбору страв.</span>
+            </li>
+          </ul>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+          <Button
+            variant="primary"
+            onClick={() => openAuthModal('login')}
+            className="h-12 px-6 rounded-2xl font-bold shadow-md shadow-brand-500/20"
+          >
+            Увійти в акаунт
+          </Button>
+          <Button
+            variant="outline"
+            onClick={() => openAuthModal('register')}
+            className="h-12 px-6 rounded-2xl font-bold"
+          >
+            Створити профіль
+          </Button>
+        </div>
+
+        <div>
+          <Link
+            to="/recipes"
+            className="text-xs font-semibold text-stone-500 hover:text-brand-600 transition-colors"
+          >
+            ← Повернутися до перегляду рецептів
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  const displayName = user.user_metadata?.full_name || user.email?.split('@')[0] || 'Кулінар';
+  const memberSince = user.created_at
+    ? new Date(user.created_at).toLocaleDateString('uk-UA', { year: 'numeric', month: 'long', day: 'numeric' })
+    : '';
+
   return (
     <div className="max-w-4xl mx-auto space-y-10 pb-16 animate-fade-in pt-4">
       {/* User Header Profile Card */}
-      <div className="p-6 sm:p-8 rounded-[2rem] bg-gradient-to-r from-brand-600 via-amber-600 to-orange-600 text-white shadow-xl flex flex-col sm:flex-row items-center gap-6">
-        <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white text-3xl font-bold shrink-0 shadow-lg">
-          <User className="w-10 h-10" />
-        </div>
-        <div className="text-center sm:text-left space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-extrabold">{t('profile.title')}</h1>
-          <p className="text-xs sm:text-sm text-amber-100">
-            {t('profile.subtitle')}
-          </p>
-          <div className="pt-2 flex flex-wrap justify-center sm:justify-start gap-2 text-xs font-semibold">
-            <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
-              ❤️ {favorites.length} {t('profile.savedRecipes')}
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
-              📁 {collections.length} {t('favorites.collections')}
-            </span>
-            <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
-              🛒 {uncompletedCount} {t('profile.activeShoppingList')}
-            </span>
+      <div className="p-6 sm:p-8 rounded-[2rem] bg-gradient-to-r from-brand-600 via-amber-600 to-orange-600 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+          <div className="w-20 h-20 rounded-3xl bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center text-white text-3xl font-extrabold shrink-0 shadow-lg">
+            {displayName[0].toUpperCase()}
+          </div>
+          <div className="space-y-1">
+            <div className="flex items-center justify-center sm:justify-start gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold">{displayName}</h1>
+              <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-white/25 text-[11px] font-bold backdrop-blur-md">
+                <ShieldCheck className="w-3.5 h-3.5" />
+                Профіль
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-amber-100 font-medium">
+              {user.email}
+            </p>
+            {memberSince && (
+              <p className="text-[11px] text-amber-200/80">
+                Учасник клубу з {memberSince}
+              </p>
+            )}
+            <div className="pt-2 flex flex-wrap justify-center sm:justify-start gap-2 text-xs font-semibold">
+              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
+                ❤️ {favorites.length} {t('profile.savedRecipes')}
+              </span>
+              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
+                📁 {collections.length} {t('favorites.collections')}
+              </span>
+              <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
+                🛒 {uncompletedCount} {t('profile.activeShoppingList')}
+              </span>
+            </div>
           </div>
         </div>
+
+        {/* Logout Button */}
+        <button
+          type="button"
+          onClick={handleSignOut}
+          className="self-center sm:self-start flex items-center gap-2 px-4 py-2.5 rounded-2xl bg-white/15 hover:bg-white/25 border border-white/30 text-white text-xs font-bold transition-all shrink-0 active:scale-95 shadow-sm"
+          title="Вийти з акаунту"
+        >
+          <LogOut className="w-4 h-4" />
+          <span>Вийти</span>
+        </button>
       </div>
 
       {/* QUICK LINKS GRID */}
