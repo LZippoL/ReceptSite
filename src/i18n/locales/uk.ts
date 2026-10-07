@@ -33,7 +33,10 @@ export const uk: TranslationSchema = {
     clear: 'Очистити',
     viewAll: 'Дивитися всі',
     recipesCount: 'рецептів',
-    articlesCount: 'статей'
+    articlesCount: 'статей',
+    timerPause: 'Пауза',
+    timerStart: 'Запустити таймер',
+    timerReset: 'Скинути таймер'
   },
   nav: {
     home: 'Головна',
@@ -165,7 +168,12 @@ export const uk: TranslationSchema = {
     wellDone: 'Смачного! Страва готова! 🥳',
     wellDoneDesc: 'Ви успішно пройшли всі кроки приготування. Насолоджуйтеся кулінарним шедевром!',
     soundOn: 'Звук увімкнено',
-    soundOff: 'Звук вимкнено'
+    soundOff: 'Звук вимкнено',
+    ingredientsBtn: 'Інгредієнти',
+    voiceRead: 'Озвучити крок',
+    voiceStop: 'Зупинити озвучення',
+    screenAwake: 'Екран активний',
+    backToRecipe: 'Повернутися до рецепта'
   },
   shoppingList: {
     title: 'Список покупок',
@@ -228,7 +236,10 @@ export const uk: TranslationSchema = {
     languageTitle: 'Мова інтерфейсу (Language)',
     exportBackup: 'Резервна копія даних',
     exportDesc: 'Експортуйте ваші обрані рецепти, добірки та списки покупок у JSON-файл.',
-    downloadBackup: 'Завантажити бекап'
+    downloadBackup: 'Завантажити бекап',
+    stapleAdded: 'Базовий продукт збережено',
+    backupExported: 'Резервну копію ваших даних завантажено',
+    backupError: 'Не вдалося створити файл експорту'
   },
   filters: {
     title: 'Фільтри рецептів',

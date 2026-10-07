@@ -95,7 +95,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
     : '5.0';
 
   return (
-    <section className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800/90 rounded-3xl p-5 sm:p-8 shadow-card">
+    <section id="reviews-section" className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800/90 rounded-3xl p-5 sm:p-8 shadow-card scroll-mt-24">
       {/* Header with summary and add button */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-100 dark:border-stone-800">
         <div>

@@ -34,12 +34,12 @@ export function App() {
   return (
     <BrowserRouter basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
-      <div className="min-h-screen flex flex-col bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 transition-colors font-sans">
+      <div className="min-h-screen flex flex-col bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 transition-colors font-sans overflow-x-hidden w-full max-w-full">
         {/* Sticky Header */}
         <Header onOpenSearch={() => setIsSearchOpen(true)} />
 
         {/* Main Content Body */}
-        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-2">
+        <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full max-w-full pt-2 overflow-x-hidden">
           <Routes>
             <Route path="/" element={<HomePage onOpenSearch={() => setIsSearchOpen(true)} />} />
             <Route path="/recipes" element={<RecipesPage />} />

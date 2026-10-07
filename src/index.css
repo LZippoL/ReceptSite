@@ -7,6 +7,15 @@
     --color-brand: 234 88 12;
   }
 
+  html,
+  body {
+    overflow-x: hidden;
+    max-width: 100%;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
   /* Accessible focus rings */
   *:focus-visible {
     @apply outline-none ring-2 ring-brand-500 ring-offset-2 dark:ring-offset-stone-900;

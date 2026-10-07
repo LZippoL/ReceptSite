@@ -33,7 +33,10 @@ export const en: TranslationSchema = {
     clear: 'Clear',
     viewAll: 'View All',
     recipesCount: 'recipes',
-    articlesCount: 'articles'
+    articlesCount: 'articles',
+    timerPause: 'Pause',
+    timerStart: 'Start Timer',
+    timerReset: 'Reset Timer'
   },
   nav: {
     home: 'Home',
@@ -165,7 +168,12 @@ export const en: TranslationSchema = {
     wellDone: 'Bon Appétit! Dish is Ready! 🥳',
     wellDoneDesc: "You have completed all recipe steps. Enjoy your culinary creation!",
     soundOn: 'Sound On',
-    soundOff: 'Sound Muted'
+    soundOff: 'Sound Muted',
+    ingredientsBtn: 'Ingredients',
+    voiceRead: 'Read Step Aloud',
+    voiceStop: 'Stop Reading',
+    screenAwake: 'Screen Awake',
+    backToRecipe: 'Back to Recipe'
   },
   shoppingList: {
     title: 'Shopping List',
@@ -228,7 +236,10 @@ export const en: TranslationSchema = {
     languageTitle: 'Language / Мова',
     exportBackup: 'Data Backup',
     exportDesc: 'Export your favorites, custom collections, and shopping list to a JSON file.',
-    downloadBackup: 'Download Backup'
+    downloadBackup: 'Download Backup',
+    stapleAdded: 'Kitchen staple saved',
+    backupExported: 'Backup file downloaded successfully',
+    backupError: 'Failed to create export file'
   },
   filters: {
     title: 'Recipe Filters',

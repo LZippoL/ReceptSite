@@ -284,76 +284,78 @@ export const RecipeDetailPage: React.FC = () => {
 
       {/* INGREDIENTS & STEPS GRID */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start pt-6">
-        {/* Ingredients Checklist */}
-        <div className="lg:col-span-5 sticky top-24">
+        {/* Ingredients Checklist (Sticky only on large screens, static on mobile) */}
+        <div className="lg:col-span-5 lg:sticky lg:top-24 lg:self-start">
           <IngredientChecklist recipe={localizedRecipe} />
         </div>
 
-        {/* Step-by-Step Instructions Timeline */}
-        <div className="lg:col-span-7 space-y-6">
-          <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
-            <h3 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100">
-              {t('recipeDetail.instructionsTitle')}
-            </h3>
-            <Button
-              onClick={() => setIsCookingModeOpen(true)}
-              variant="outline"
-              size="sm"
-              className="text-brand-600"
-            >
-              <Play className="w-3.5 h-3.5 mr-1 fill-current" />
-              {t('recipeDetail.cookingModeBtn')}
-            </Button>
-          </div>
-
+        {/* Right Column: Step-by-Step Instructions & Reviews */}
+        <div className="lg:col-span-7 space-y-10">
           <div className="space-y-6">
-            {localizedRecipe.instructions.map((step) => (
-              <div
-                key={step.stepNumber}
-                id={`step-${step.stepNumber}`}
-                className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800/90 rounded-3xl p-5 sm:p-6 shadow-card space-y-3 scroll-mt-24"
+            <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
+              <h3 className="text-xl sm:text-2xl font-extrabold text-stone-900 dark:text-stone-100">
+                {t('recipeDetail.instructionsTitle')}
+              </h3>
+              <Button
+                onClick={() => setIsCookingModeOpen(true)}
+                variant="outline"
+                size="sm"
+                className="text-brand-600"
               >
-                <div className="flex items-center justify-between gap-2">
-                  <span className="text-xs font-bold px-3 py-1 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
-                    {t('recipeDetail.step')} {step.stepNumber}
-                  </span>
+                <Play className="w-3.5 h-3.5 mr-1 fill-current" />
+                {t('recipeDetail.cookingModeBtn')}
+              </Button>
+            </div>
 
-                  {/* Step timer */}
-                  {step.timerMinutes && (
-                    <CookingTimer
-                      initialMinutes={step.timerMinutes}
-                      label={t('recipeDetail.startTimer')}
-                    />
+            <div className="space-y-6">
+              {localizedRecipe.instructions.map((step) => (
+                <div
+                  key={step.stepNumber}
+                  id={`step-${step.stepNumber}`}
+                  className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800/90 rounded-3xl p-5 sm:p-6 shadow-card space-y-3 scroll-mt-24"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-xs font-bold px-3 py-1 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
+                      {t('recipeDetail.step')} {step.stepNumber}
+                    </span>
+
+                    {/* Step timer */}
+                    {step.timerMinutes && (
+                      <CookingTimer
+                        initialMinutes={step.timerMinutes}
+                        label={t('recipeDetail.startTimer')}
+                      />
+                    )}
+                  </div>
+
+                  <h4 className="text-base sm:text-lg font-bold text-stone-900 dark:text-stone-100">
+                    {step.title}
+                  </h4>
+
+                  <p className="text-sm sm:text-base text-stone-700 dark:text-stone-300 leading-relaxed font-normal">
+                    {step.instruction}
+                  </p>
+
+                  {/* Chef Tip */}
+                  {step.tip && (
+                    <div className="mt-3 p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60 flex items-start gap-2.5">
+                      <Sparkles className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
+                      <p className="text-xs sm:text-sm text-amber-900 dark:text-amber-200 leading-snug">
+                        <strong className="font-semibold text-amber-800 dark:text-amber-300">{t('recipeDetail.tip')}: </strong>
+                        {step.tip}
+                      </p>
+                    </div>
                   )}
                 </div>
+              ))}
+            </div>
+          </div>
 
-                <h4 className="text-base sm:text-lg font-bold text-stone-900 dark:text-stone-100">
-                  {step.title}
-                </h4>
-
-                <p className="text-sm sm:text-base text-stone-700 dark:text-stone-300 leading-relaxed font-normal">
-                  {step.instruction}
-                </p>
-
-                {/* Chef Tip */}
-                {step.tip && (
-                  <div className="mt-3 p-3.5 rounded-2xl bg-amber-50/80 dark:bg-amber-950/30 border border-amber-200/60 dark:border-amber-800/60 flex items-start gap-2.5">
-                    <Sparkles className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-                    <p className="text-xs sm:text-sm text-amber-900 dark:text-amber-200 leading-snug">
-                      <strong className="font-semibold text-amber-800 dark:text-amber-300">{t('recipeDetail.tip')}: </strong>
-                      {step.tip}
-                    </p>
-                  </div>
-                )}
-              </div>
-            ))}
+          {/* REVIEWS SECTION nested in main column flow to avoid sticky overlap */}
+          <div className="pt-2">
+            <ReviewSection recipeId={recipe.id} recipeTitle={localizedRecipe.title} />
           </div>
         </div>
-      </div>
-
-      {/* REVIEWS SECTION */}
-      <div className="pt-8">
-        <ReviewSection recipeId={recipe.id} recipeTitle={localizedRecipe.title} />
       </div>
 
       {/* RELATED RECIPES */}

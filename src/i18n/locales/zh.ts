@@ -33,7 +33,10 @@ export const zh: TranslationSchema = {
     clear: '清空',
     viewAll: '查看全部',
     recipesCount: '道食谱',
-    articlesCount: '篇文章'
+    articlesCount: '篇文章',
+    timerPause: '暂停',
+    timerStart: '启动计时',
+    timerReset: '重置计时'
   },
   nav: {
     home: '首页',
@@ -165,7 +168,12 @@ export const zh: TranslationSchema = {
     wellDone: '大功告成！趁热享用美食吧！ 🥳',
     wellDoneDesc: '你已完成了所有制作步骤，快去品尝美味吧！',
     soundOn: '提示音开启',
-    soundOff: '提示音静音'
+    soundOff: '提示音静音',
+    ingredientsBtn: '食材清单',
+    voiceRead: '朗读步骤',
+    voiceStop: '停止朗读',
+    screenAwake: '屏幕常亮已开启',
+    backToRecipe: '返回食谱'
   },
   shoppingList: {
     title: '采购清单',
@@ -228,7 +236,10 @@ export const zh: TranslationSchema = {
     languageTitle: '系统语言 (Language)',
     exportBackup: '数据备份与导出',
     exportDesc: '将你的收藏、合集及购物清单导出为本地 JSON 备份文件。',
-    downloadBackup: '下载备份数据'
+    downloadBackup: '下载备份数据',
+    stapleAdded: '常备食材已保存',
+    backupExported: '备份文件下载成功',
+    backupError: '生成备份文件失败'
   },
   filters: {
     title: '条件筛选',

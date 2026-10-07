@@ -66,30 +66,32 @@ export const ArticlesPage: React.FC = () => {
       </div>
 
       {/* Category Filter Pills */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-        <button
-          onClick={() => setSelectedCategory('')}
-          className={`shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
-            !selectedCategory
-              ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
-              : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
-          }`}
-        >
-          {t('common.all')} ({articles.length})
-        </button>
-        {categories.map(cat => (
+      <div className="w-full overflow-hidden">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
           <button
-            key={cat}
-            onClick={() => setSelectedCategory(cat === selectedCategory ? '' : cat)}
-            className={`shrink-0 px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
-              selectedCategory === cat
+            onClick={() => setSelectedCategory('')}
+            className={`shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
+              !selectedCategory
                 ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
                 : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
             }`}
           >
-            {cat}
+            {t('common.all')} ({articles.length})
           </button>
-        ))}
+          {categories.map(cat => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat === selectedCategory ? '' : cat)}
+              className={`shrink-0 px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
+                selectedCategory === cat
+                  ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
+                  : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
+              }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
       </div>
 
       {/* Articles Grid */}

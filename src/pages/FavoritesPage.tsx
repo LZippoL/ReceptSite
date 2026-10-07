@@ -106,54 +106,56 @@ export const FavoritesPage: React.FC = () => {
       </div>
 
       {/* Collections Tabs Bar */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-        <button
-          onClick={() => setActiveTab('all')}
-          className={`shrink-0 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all border ${
-            activeTab === 'all'
-              ? 'bg-rose-500 border-rose-500 text-white shadow-md'
-              : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-stone-300'
-          }`}
-        >
-          ❤️ {t('favorites.allFavorites')} ({favorites.length})
-        </button>
+      <div className="w-full overflow-hidden">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <button
+            onClick={() => setActiveTab('all')}
+            className={`shrink-0 px-4 py-2.5 rounded-2xl text-xs sm:text-sm font-bold transition-all border ${
+              activeTab === 'all'
+                ? 'bg-rose-500 border-rose-500 text-white shadow-md'
+                : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-stone-300'
+            }`}
+          >
+            ❤️ {t('favorites.allFavorites')} ({favorites.length})
+          </button>
 
-        {collections.map(col => {
-          const isSelected = activeTab === col.id;
-          return (
-            <div key={col.id} className="relative group shrink-0">
-              <button
-                onClick={() => setActiveTab(col.id)}
-                className={`px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all border flex items-center gap-1.5 ${
-                  isSelected
-                    ? 'bg-brand-600 border-brand-600 text-white shadow-md'
-                    : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-stone-300'
-                }`}
-              >
-                <span>{col.icon || '📁'}</span>
-                <span>{getCollectionTitle(col)}</span>
-                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/30 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500'}`}>
-                  {col.recipeIds.length}
-                </span>
-              </button>
-
-              {/* Delete custom collection button */}
-              {col.id.startsWith('col-') && !['col-fav', 'col-breakfast', 'col-holiday', 'col-try', 'col-quick-dinner'].includes(col.id) && (
+          {collections.map(col => {
+            const isSelected = activeTab === col.id;
+            return (
+              <div key={col.id} className="relative group shrink-0">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    deleteCollection(col.id);
-                    setActiveTab('all');
-                  }}
-                  className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity"
-                  title={t('common.delete')}
+                  onClick={() => setActiveTab(col.id)}
+                  className={`px-3.5 py-2.5 rounded-2xl text-xs sm:text-sm font-semibold transition-all border flex items-center gap-1.5 ${
+                    isSelected
+                      ? 'bg-brand-600 border-brand-600 text-white shadow-md'
+                      : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-stone-300'
+                  }`}
                 >
-                  <Trash2 className="w-3 h-3" />
+                  <span>{col.icon || '📁'}</span>
+                  <span>{getCollectionTitle(col)}</span>
+                  <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/30 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500'}`}>
+                    {col.recipeIds.length}
+                  </span>
                 </button>
-              )}
-            </div>
-          );
-        })}
+
+                {/* Delete custom collection button */}
+                {col.id.startsWith('col-') && !['col-fav', 'col-breakfast', 'col-holiday', 'col-try', 'col-quick-dinner'].includes(col.id) && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteCollection(col.id);
+                      setActiveTab('all');
+                    }}
+                    className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity"
+                    title={t('common.delete')}
+                  >
+                    <Trash2 className="w-3 h-3" />
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
       </div>
 
       {/* Grid of recipes */}

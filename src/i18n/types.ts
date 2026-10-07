@@ -48,6 +48,9 @@ export interface TranslationSchema {
     viewAll: string;
     recipesCount: string;
     articlesCount: string;
+    timerPause: string;
+    timerStart: string;
+    timerReset: string;
   };
   nav: {
     home: string;
@@ -180,6 +183,11 @@ export interface TranslationSchema {
     wellDoneDesc: string;
     soundOn: string;
     soundOff: string;
+    ingredientsBtn: string;
+    voiceRead: string;
+    voiceStop: string;
+    screenAwake: string;
+    backToRecipe: string;
   };
   shoppingList: {
     title: string;
@@ -243,6 +251,9 @@ export interface TranslationSchema {
     exportBackup: string;
     exportDesc: string;
     downloadBackup: string;
+    stapleAdded: string;
+    backupExported: string;
+    backupError: string;
   };
   filters: {
     title: string;

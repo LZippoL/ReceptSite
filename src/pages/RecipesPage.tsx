@@ -179,38 +179,40 @@ export const RecipesPage: React.FC = () => {
       </div>
 
       {/* Horizontal categories scrollable chips */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
-        <button
-          onClick={() => setFilters(prev => ({ ...prev, category: '' }))}
-          className={`shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
-            !filters.category
-              ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
-              : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
-          }`}
-        >
-          {t('common.all')} ({recipes.length})
-        </button>
-        {CATEGORIES.map(c => {
-          const isSelected = filters.category === c.id;
-          const count = recipes.filter(r => r.category === c.id).length;
-          return (
-            <button
-              key={c.id}
-              onClick={() => setFilters(prev => ({ ...prev, category: isSelected ? '' : (c.id as RecipeCategory) }))}
-              className={`shrink-0 px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border flex items-center gap-1.5 ${
-                isSelected
-                  ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
-                  : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
-              }`}
-            >
-              <span>{c.icon}</span>
-              <span>{getCategoryName(c.id)}</span>
-              <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/30 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500'}`}>
-                {count}
-              </span>
-            </button>
-          );
-        })}
+      <div className="w-full overflow-hidden">
+        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <button
+            onClick={() => setFilters(prev => ({ ...prev, category: '' }))}
+            className={`shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
+              !filters.category
+                ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
+                : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
+            }`}
+          >
+            {t('common.all')} ({recipes.length})
+          </button>
+          {CATEGORIES.map(c => {
+            const isSelected = filters.category === c.id;
+            const count = recipes.filter(r => r.category === c.id).length;
+            return (
+              <button
+                key={c.id}
+                onClick={() => setFilters(prev => ({ ...prev, category: isSelected ? '' : (c.id as RecipeCategory) }))}
+                className={`shrink-0 px-3.5 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border flex items-center gap-1.5 ${
+                  isSelected
+                    ? 'bg-brand-600 border-brand-600 text-white shadow-sm'
+                    : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
+                }`}
+              >
+                <span>{c.icon}</span>
+                <span>{getCategoryName(c.id)}</span>
+                <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/30 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500'}`}>
+                  {count}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
       {/* Grid of recipes */}

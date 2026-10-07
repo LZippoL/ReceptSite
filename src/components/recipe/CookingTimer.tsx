@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Play, Pause, RotateCcw, Bell } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { cn } from '../../utils/cn';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface CookingTimerProps {
   initialMinutes: number;
@@ -16,6 +17,7 @@ export const CookingTimer: React.FC<CookingTimerProps> = ({
   size = 'md',
   autoStart = false
 }) => {
+  const { t } = useLanguage();
   const totalSeconds = initialMinutes * 60;
   const [secondsLeft, setSecondsLeft] = useState(totalSeconds);
   const [isRunning, setIsRunning] = useState(autoStart);
@@ -116,7 +118,7 @@ export const CookingTimer: React.FC<CookingTimerProps> = ({
               ? 'bg-amber-200 dark:bg-amber-800 text-amber-900 dark:text-amber-100'
               : 'bg-brand-600 text-white hover:bg-brand-700'
           )}
-          aria-label={isRunning ? 'Пауза' : 'Запустити таймер'}
+          aria-label={isRunning ? t('common.timerPause') : t('common.timerStart')}
         >
           {isRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5 fill-current" />}
         </button>
@@ -125,7 +127,7 @@ export const CookingTimer: React.FC<CookingTimerProps> = ({
           type="button"
           onClick={reset}
           className="p-1.5 rounded-xl text-stone-500 hover:text-stone-900 dark:hover:text-stone-100 hover:bg-black/5 dark:hover:bg-white/5 transition-colors"
-          aria-label="Скинути таймер"
+          aria-label={t('common.timerReset')}
         >
           <RotateCcw className="w-3.5 h-3.5" />
         </button>

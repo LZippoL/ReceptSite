@@ -60,7 +60,7 @@ export const ProfilePage: React.FC = () => {
     if (!newStapleInput.trim()) return;
     addStaple(newStapleInput.trim());
     setNewStapleInput('');
-    success('Додано', 'Базовий продукт збережено');
+    success(t('common.save'), t('profile.stapleAdded'));
   };
 
   const handleExportData = async () => {
@@ -80,9 +80,9 @@ export const ProfilePage: React.FC = () => {
       a.download = `smakolyk-backup-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
-      success('Експортовано', 'Резервну копію ваших даних завантажено');
+      success(t('profile.downloadBackup'), t('profile.backupExported'));
     } catch {
-      error('Помилка', 'Не вдалося створити файл експорту');
+      error(t('common.error'), t('profile.backupError'));
     }
   };
 

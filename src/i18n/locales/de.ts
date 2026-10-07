@@ -33,7 +33,10 @@ export const de: TranslationSchema = {
     clear: 'Löschen',
     viewAll: 'Alle anzeigen',
     recipesCount: 'Rezepte',
-    articlesCount: 'Artikel'
+    articlesCount: 'Artikel',
+    timerPause: 'Pause',
+    timerStart: 'Timer starten',
+    timerReset: 'Timer zurücksetzen'
   },
   nav: {
     home: 'Startseite',
@@ -165,7 +168,12 @@ export const de: TranslationSchema = {
     wellDone: 'Guten Appetit! Das Gericht ist fertig! 🥳',
     wellDoneDesc: 'Sie haben alle Schritte gemeistert. Genießen Sie Ihre Mahlzeit!',
     soundOn: 'Ton an',
-    soundOff: 'Ton aus'
+    soundOff: 'Ton aus',
+    ingredientsBtn: 'Zutaten',
+    voiceRead: 'Schritt vorlesen',
+    voiceStop: 'Vorlesen stoppen',
+    screenAwake: 'Bildschirm aktiv',
+    backToRecipe: 'Zurück zum Rezept'
   },
   shoppingList: {
     title: 'Einkaufsliste',
@@ -228,7 +236,10 @@ export const de: TranslationSchema = {
     languageTitle: 'Sprache (Language)',
     exportBackup: 'Datensicherung',
     exportDesc: 'Exportieren Sie Favoriten und Einkaufslisten in eine JSON-Datei.',
-    downloadBackup: 'Backup herunterladen'
+    downloadBackup: 'Backup herunterladen',
+    stapleAdded: 'Grundzutat gespeichert',
+    backupExported: 'Datensicherung erfolgreich heruntergeladen',
+    backupError: 'Fehler beim Erstellen der Sicherungsdatei'
   },
   filters: {
     title: 'Rezeptfilter',
