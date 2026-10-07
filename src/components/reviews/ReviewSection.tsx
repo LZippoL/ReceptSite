@@ -9,6 +9,7 @@ import { Modal } from '../common/Modal';
 import { ImageUpload } from '../common/ImageUpload';
 import { useToast } from '../../context/ToastContext';
 import { useLanguage } from '../../context/LanguageContext';
+import { cn } from '../../utils/cn';
 
 interface ReviewSectionProps {
   recipeId: string;
@@ -93,7 +94,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
 
   const avgRating = reviews.length > 0
     ? (reviews.reduce((acc, r) => acc + r.rating, 0) / reviews.length).toFixed(1)
-    : '5.0';
+    : '0';
 
   return (
     <section id="reviews-section" className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800/90 rounded-3xl p-5 sm:p-8 shadow-card scroll-mt-24">
@@ -107,9 +108,9 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
             </span>
           </h3>
           <div className="flex items-center gap-3 mt-1.5">
-            <div className="flex items-center gap-1.5 text-amber-500 font-extrabold text-lg">
-              <Star className="w-5 h-5 fill-amber-400 text-amber-400" />
-              <span>{avgRating}</span>
+            <div className="flex items-center gap-1.5 font-extrabold text-lg text-stone-400 dark:text-stone-500">
+              <Star className={cn('w-5 h-5', reviews.length > 0 ? 'fill-amber-400 text-amber-400' : 'text-stone-300 dark:text-stone-600')} />
+              <span className={reviews.length > 0 ? 'text-amber-500' : 'text-stone-500 dark:text-stone-400'}>{avgRating}</span>
             </div>
             <span className="text-stone-300 dark:text-stone-700">•</span>
             <span className="text-xs sm:text-sm text-stone-500">
