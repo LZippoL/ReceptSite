@@ -7,8 +7,11 @@ import { supabase, isSupabaseConfigured } from './supabaseClient';
 const STORAGE_KEY = 'smakolyk_reviews_custom';
 
 export interface IReviewService {
+  getAll(): Promise<Review[]>;
   getByRecipeId(recipeId: string): Promise<Review[]>;
   addReview(reviewData: Omit<Review, 'id' | 'createdAt' | 'likes'>): Promise<Review>;
+  updateReview(reviewId: string, updates: Partial<Pick<Review, 'userName' | 'rating' | 'comment' | 'photoUrl'>>): Promise<Review>;
+  deleteReview(reviewId: string): Promise<boolean>;
   likeReview(reviewId: string): Promise<number>;
 }
 
@@ -127,6 +130,98 @@ class ReviewService implements IReviewService {
     }
 
     return newReview;
+  }
+
+  async updateReview(
+    reviewId: string, 
+    updates: Partial<Pick<Review, 'userName' | 'rating' | 'comment' | 'photoUrl'>>
+  ): Promise<Review> {
+    if (isSupabaseConfigured) {
+      try {
+        const dbUpdates: any = {};
+        if (updates.userName !== undefined) dbUpdates.user_name = updates.userName;
+        if (updates.rating !== undefined) dbUpdates.rating = updates.rating;
+        if (updates.comment !== undefined) dbUpdates.comment = updates.comment;
+        if (updates.photoUrl !== undefined) dbUpdates.photo_url = updates.photoUrl;
+
+        const { data: updated, error } = await supabase
+          .from('reviews')
+          .update(dbUpdates)
+          .eq('id', reviewId)
+          .select()
+          .single();
+
+        if (!error && updated) {
+          const result = mapDbToReview(updated);
+          // Recalculate recipe average rating
+          const recipeReviews = await this.getByRecipeId(result.recipeId);
+          if (recipeReviews.length > 0) {
+            const totalScore = recipeReviews.reduce((acc, r) => acc + r.rating, 0);
+            const newRating = Number((totalScore / recipeReviews.length).toFixed(1));
+            await recipeService.update(result.recipeId, {
+              rating: newRating,
+              reviewsCount: recipeReviews.length
+            });
+          }
+          return result;
+        }
+      } catch (err) {
+        console.warn('Supabase updateReview failed:', err);
+      }
+    }
+
+    // Local fallback
+    const custom = await storage.get<Review[]>(STORAGE_KEY, []);
+    const idx = custom.findIndex(r => r.id === reviewId);
+    if (idx !== -1) {
+      const updated = { ...custom[idx], ...updates };
+      custom[idx] = updated;
+      await storage.set(STORAGE_KEY, custom);
+      return updated;
+    }
+    throw new Error('Review not found');
+  }
+
+  async deleteReview(reviewId: string): Promise<boolean> {
+    let recipeId: string | null = null;
+
+    if (isSupabaseConfigured) {
+      try {
+        const { data: rev } = await supabase
+          .from('reviews')
+          .select('recipe_id')
+          .eq('id', reviewId)
+          .maybeSingle();
+
+        if (rev) recipeId = rev.recipe_id;
+
+        const { error } = await supabase
+          .from('reviews')
+          .delete()
+          .eq('id', reviewId);
+
+        if (!error) {
+          if (recipeId) {
+            const remaining = await this.getByRecipeId(recipeId);
+            const newRating = remaining.length > 0
+              ? Number((remaining.reduce((acc, r) => acc + r.rating, 0) / remaining.length).toFixed(1))
+              : 5.0;
+            await recipeService.update(recipeId, {
+              rating: newRating,
+              reviewsCount: remaining.length
+            });
+          }
+          return true;
+        }
+      } catch (err) {
+        console.warn('Supabase deleteReview failed:', err);
+      }
+    }
+
+    const custom = await storage.get<Review[]>(STORAGE_KEY, []);
+    const filtered = custom.filter(r => r.id !== reviewId);
+    await storage.set(STORAGE_KEY, filtered);
+    return true;
   }
 
   async likeReview(reviewId: string): Promise<number> {

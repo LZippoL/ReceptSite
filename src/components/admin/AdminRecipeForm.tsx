@@ -4,6 +4,7 @@ import { Recipe, RecipeIngredient, CookingStep, RecipeCategory, CuisineType, Dif
 import { CATEGORIES, CUISINES } from '../../data/categories';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
+import { ImageUpload } from '../common/ImageUpload';
 
 interface AdminRecipeFormProps {
   initialRecipe?: Partial<Recipe>;
@@ -271,12 +272,11 @@ export const AdminRecipeForm: React.FC<AdminRecipeFormProps> = ({
           </div>
         </div>
 
-        <Input
-          label="Посилання на головне фото (URL)"
+        <ImageUpload
+          label="Головне фото страви"
           value={image}
-          onChange={(e) => setImage(e.target.value)}
-          placeholder="https://images.unsplash.com/..."
-          required
+          onChange={setImage}
+          folder="recipes"
         />
 
         <div className="flex flex-col gap-1.5">

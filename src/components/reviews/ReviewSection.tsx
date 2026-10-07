@@ -6,6 +6,7 @@ import { RatingStars } from '../common/RatingStars';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Modal } from '../common/Modal';
+import { ImageUpload } from '../common/ImageUpload';
 import { useToast } from '../../context/ToastContext';
 import { useLanguage } from '../../context/LanguageContext';
 
@@ -260,11 +261,11 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
             />
           </div>
 
-          <Input
-            label="Photo URL (optional)"
+          <ImageUpload
+            label="Фото страви (необов'язково)"
             value={photoUrl}
-            onChange={(e) => setPhotoUrl(e.target.value)}
-            placeholder="https://images.unsplash.com/..."
+            onChange={setPhotoUrl}
+            folder="reviews"
           />
 
           <div className="pt-2 sticky bottom-0 bg-white dark:bg-stone-900 pb-1">
