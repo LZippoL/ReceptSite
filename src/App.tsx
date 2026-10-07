@@ -16,7 +16,6 @@ import { ShoppingListPage } from './pages/ShoppingListPage';
 import { ArticlesPage } from './pages/ArticlesPage';
 import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
-import { AdminPage } from './pages/AdminPage';
 import { NotFoundPage } from './pages/NotFoundPage';
 
 // Scroll to top on route change
@@ -51,7 +50,6 @@ export function App() {
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/articles/:slug" element={<ArticleDetailPage />} />
             <Route path="/profile" element={<ProfilePage />} />
-            <Route path="/admin" element={<AdminPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>
