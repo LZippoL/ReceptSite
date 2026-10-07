@@ -194,9 +194,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   };
 
+  const getOAuthRedirectUrl = () => {
+    const base = window.location.origin + (import.meta.env.BASE_URL || '/');
+    return base.endsWith('/') ? base : `${base}/`;
+  };
+
   const signInWithGoogle = async () => {
     try {
-      const redirectUrl = window.location.origin + window.location.pathname;
+      const redirectUrl = getOAuthRedirectUrl();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
@@ -211,7 +216,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signInWithApple = async () => {
     try {
-      const redirectUrl = window.location.origin + window.location.pathname;
+      const redirectUrl = getOAuthRedirectUrl();
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'apple',
         options: {
