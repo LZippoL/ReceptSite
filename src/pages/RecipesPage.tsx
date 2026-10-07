@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { SlidersHorizontal, Search, RotateCcw, Frown } from 'lucide-react';
+import { SlidersHorizontal, Search, RotateCcw, Frown, Tag } from 'lucide-react';
 import { Recipe, FilterState, RecipeCategory } from '../types';
 import { recipeService } from '../services/recipeService';
 import { CATEGORIES } from '../data/categories';
@@ -9,12 +9,13 @@ import { FilterSheet } from '../components/search/FilterSheet';
 import { Button } from '../components/common/Button';
 import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
+import { POPULAR_SEARCH_TAGS } from '../i18n/tags';
 
 export const RecipesPage: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const { t, localizeRecipe, getCategoryName } = useLanguage();
+  const { t, language, localizeRecipe, getCategoryName } = useLanguage();
 
   // Extract filters from URL search params
   const initialCategory = searchParams.get('category') || '';
@@ -36,6 +37,10 @@ export const RecipesPage: React.FC = () => {
     },
     sortBy: initialSort
   });
+
+  const popularTags = useMemo(() => {
+    return POPULAR_SEARCH_TAGS[language] || POPULAR_SEARCH_TAGS.uk;
+  }, [language]);
 
   useEffect(() => {
     updateMetaTags({
@@ -79,16 +84,27 @@ export const RecipesPage: React.FC = () => {
     });
   };
 
+  const handleTagClick = (tagRaw: string) => {
+    if (filters.query.toLowerCase() === tagRaw.toLowerCase()) {
+      setFilters(prev => ({ ...prev, query: '' }));
+    } else {
+      setFilters(prev => ({ ...prev, query: tagRaw }));
+    }
+  };
+
   // Filter recipes
   const filteredRecipes = useMemo(() => {
     return recipes.filter(r => {
       // Query filter
       if (filters.query.trim()) {
         const q = filters.query.toLowerCase().trim();
+        const loc = localizeRecipe(r);
         const matchesQuery =
-          r.title.toLowerCase().includes(q) ||
-          r.description.toLowerCase().includes(q) ||
+          loc.title.toLowerCase().includes(q) ||
+          loc.description.toLowerCase().includes(q) ||
+          loc.tags.some(t => t.toLowerCase().includes(q)) ||
           r.tags.some(t => t.toLowerCase().includes(q)) ||
+          loc.ingredients.some(i => i.name.toLowerCase().includes(q)) ||
           r.ingredients.some(i => i.name.toLowerCase().includes(q));
         if (!matchesQuery) return false;
       }
@@ -126,7 +142,7 @@ export const RecipesPage: React.FC = () => {
       if (filters.sortBy === 'cookTime') return a.totalTime - b.totalTime;
       return b.reviewsCount - a.reviewsCount; // popularity
     });
-  }, [recipes, filters]);
+  }, [recipes, filters, localizeRecipe]);
 
   const activeFiltersCount =
     (filters.category ? 1 : 0) +
@@ -134,6 +150,8 @@ export const RecipesPage: React.FC = () => {
     (filters.maxTime !== null ? 1 : 0) +
     (filters.difficulty ? 1 : 0) +
     Object.values(filters.dietary).filter(Boolean).length;
+
+  const popularTagsLabel = language === 'zh' ? '热门标签' : language === 'de' ? 'Beliebte Tags' : language === 'en' ? 'Popular Tags' : 'Популярні теги';
 
   return (
     <div className="space-y-6 pb-12 animate-fade-in">
@@ -159,6 +177,14 @@ export const RecipesPage: React.FC = () => {
               placeholder={`${t('common.search')}...`}
               className="w-full h-11 pl-9 pr-4 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl outline-none focus:border-brand-500"
             />
+            {filters.query && (
+              <button
+                onClick={() => setFilters(prev => ({ ...prev, query: '' }))}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
+              >
+                ×
+              </button>
+            )}
           </div>
 
           {/* Filter button for mobile and desktop */}
@@ -180,7 +206,7 @@ export const RecipesPage: React.FC = () => {
 
       {/* Horizontal categories scrollable chips */}
       <div className="w-full overflow-hidden">
-        <div className="flex items-center gap-2 overflow-x-auto pb-2 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
           <button
             onClick={() => setFilters(prev => ({ ...prev, category: '' }))}
             className={`shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm font-semibold transition-all border ${
@@ -215,6 +241,32 @@ export const RecipesPage: React.FC = () => {
         </div>
       </div>
 
+      {/* Popular Tags Quick Filter Row */}
+      <div className="w-full overflow-hidden">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
+          <span className="text-xs font-semibold text-stone-400 dark:text-stone-500 shrink-0 mr-1 flex items-center gap-1">
+            <Tag className="w-3.5 h-3.5 text-brand-500" />
+            {popularTagsLabel}:
+          </span>
+          {popularTags.map(tagObj => {
+            const isTagActive = filters.query.toLowerCase() === tagObj.raw.toLowerCase();
+            return (
+              <button
+                key={tagObj.raw}
+                onClick={() => handleTagClick(tagObj.raw)}
+                className={`shrink-0 px-3 py-1 rounded-xl text-xs font-medium transition-all border flex items-center gap-1 ${
+                  isTagActive
+                    ? 'bg-brand-600 border-brand-600 text-white shadow-sm font-bold'
+                    : 'bg-stone-100 dark:bg-stone-800/80 border-transparent text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-stone-700'
+                }`}
+              >
+                {tagObj.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* Grid of recipes */}
       {filteredRecipes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
@@ -234,21 +286,19 @@ export const RecipesPage: React.FC = () => {
           <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
             {t('recipes.noRecipesDesc')}
           </p>
-          <div className="flex justify-center gap-3 pt-2">
-            <Button onClick={handleResetFilters} variant="secondary">
-              <RotateCcw className="w-4 h-4 mr-2" />
-              {t('recipes.resetFilters')}
-            </Button>
-          </div>
+          <Button onClick={handleResetFilters} variant="secondary" className="mt-2">
+            <RotateCcw className="w-4 h-4 mr-2" />
+            {t('recipes.resetFilters')}
+          </Button>
         </div>
       )}
 
-      {/* Filter modal sheet */}
+      {/* Filter Bottom Sheet / Modal */}
       <FilterSheet
         isOpen={isFilterOpen}
         onClose={() => setIsFilterOpen(false)}
         filters={filters}
-        onChange={setFilters}
+        onChange={(newFilters) => setFilters(newFilters)}
         onReset={handleResetFilters}
       />
     </div>

@@ -45,24 +45,29 @@ export const FridgeSearchPage: React.FC = () => {
     localStorage.setItem('smakolyk_fridge_selected', JSON.stringify(selectedIngredients));
   }, [selectedIngredients]);
 
+  // Localized recipes list
+  const localizedRecipes = useMemo(() => {
+    return recipes.map(localizeRecipe);
+  }, [recipes, localizeRecipe]);
+
   // Extract all unique ingredients from database for autocomplete suggestions
   const allAvailableIngredients = useMemo(() => {
     const set = new Set<string>();
-    recipes.forEach(r => {
+    localizedRecipes.forEach(r => {
       r.ingredients.forEach(i => set.add(i.name));
     });
     return Array.from(set).sort();
-  }, [recipes]);
+  }, [localizedRecipes]);
 
   // Match recipes
   const matchedResults = useMemo(() => {
     if (selectedIngredients.length === 0) return [];
     return matchRecipesByIngredients(
-      recipes,
+      localizedRecipes,
       selectedIngredients,
       ignoreStaples ? userStaples : []
     );
-  }, [recipes, selectedIngredients, ignoreStaples, userStaples]);
+  }, [localizedRecipes, selectedIngredients, ignoreStaples, userStaples]);
 
   // Group matched results into 3 categories
   const readyNow = matchedResults.filter(r => r.matchType === 'ready_now');

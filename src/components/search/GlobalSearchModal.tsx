@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Search, X, Clock, Flame, ChevronRight, Tag } from 'lucide-react';
+import { Search, X, Clock, Flame, ChevronRight, Tag, Sparkles, History } from 'lucide-react';
 import { Recipe } from '../../types';
 import { recipeService } from '../../services/recipeService';
 import { useLanguage } from '../../context/LanguageContext';
+import { POPULAR_SEARCH_TAGS } from '../../i18n/tags';
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -18,21 +19,18 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const { t, language, localizeRecipe } = useLanguage();
 
-  const defaultRecent = useMemo(() => {
-    if (language === 'zh') return ['番茄炒蛋', '意大利面', '鸡肉', '汤'];
-    if (language === 'de') return ['Pasta', 'Borschtsch', 'Hähnchen', 'Suppe'];
-    if (language === 'en') return ['Borscht', 'Pasta', 'Chicken', 'Salad'];
-    return ['борщ', 'сирники', 'паста', 'курка'];
-  }, [language]);
-
   const [recentQueries, setRecentQueries] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('smakolyk_recent_searches');
-      return saved ? JSON.parse(saved) : ['борщ', 'сирники', 'паста', 'курка'];
+      return saved ? JSON.parse(saved) : [];
     } catch {
-      return ['борщ', 'сирники'];
+      return [];
     }
   });
+
+  const popularTags = useMemo(() => {
+    return POPULAR_SEARCH_TAGS[language] || POPULAR_SEARCH_TAGS.uk;
+  }, [language]);
 
   const navigate = useNavigate();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -82,9 +80,9 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
           suggestions.push(i.name);
         }
       });
-      r.tags.forEach(t => {
-        if (t.toLowerCase().includes(trimmed) && !suggestions.includes(t)) {
-          suggestions.push(t);
+      r.tags.forEach(tag => {
+        if (tag.toLowerCase().includes(trimmed) && !suggestions.includes(tag)) {
+          suggestions.push(tag);
         }
       });
     });
@@ -92,13 +90,16 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
   // Filtered recipes
   const filteredRecipes = trimmed.length > 0
-    ? localizedRecipes.filter(r => {
+    ? localizedRecipes.filter((r, idx) => {
+        const orig = recipes[idx];
         return (
           r.title.toLowerCase().includes(trimmed) ||
           r.description.toLowerCase().includes(trimmed) ||
           r.tags.some(t => t.toLowerCase().includes(trimmed)) ||
+          (orig && orig.tags.some(t => t.toLowerCase().includes(trimmed))) ||
           r.author.name.toLowerCase().includes(trimmed) ||
-          r.ingredients.some(i => i.name.toLowerCase().includes(trimmed))
+          r.ingredients.some(i => i.name.toLowerCase().includes(trimmed)) ||
+          (orig && orig.ingredients.some(i => i.name.toLowerCase().includes(trimmed)))
         );
       }).slice(0, 8)
     : [];
@@ -110,9 +111,9 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   };
 
   const saveRecentSearch = (term: string) => {
-    const t = term.trim();
-    if (t.length > 1) {
-      const next = [t, ...recentQueries.filter(q => q !== t)].slice(0, 6);
+    const clean = term.trim();
+    if (clean.length > 1) {
+      const next = [clean, ...recentQueries.filter(q => q !== clean)].slice(0, 6);
       setRecentQueries(next);
       localStorage.setItem('smakolyk_recent_searches', JSON.stringify(next));
     }
@@ -125,11 +126,10 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
   const suggestionsLabel = language === 'zh' ? '搜索建议' : language === 'de' ? 'Vorschläge' : language === 'en' ? 'Suggestions' : 'Підказки';
   const foundLabel = language === 'zh' ? '搜索结果' : language === 'de' ? 'Gefundene Rezepte' : language === 'en' ? 'Found Recipes' : 'Знайдені рецепти';
-  const popularLabel = language === 'zh' ? '热门搜索' : language === 'de' ? 'Beliebte Suchanfragen' : language === 'en' ? 'Popular Searches' : 'Популярні запити';
+  const popularTagsLabel = language === 'zh' ? '热门标签与推荐' : language === 'de' ? 'Beliebte Tags' : language === 'en' ? 'Popular Tags' : 'Популярні теги';
+  const recentSearchesLabel = language === 'zh' ? '最近搜索' : language === 'de' ? 'Kürzliche Suchen' : language === 'en' ? 'Recent Searches' : 'Недавні пошуки';
   const noFoundTitle = language === 'zh' ? `未找到与 “${query}” 相关的食谱` : language === 'de' ? `Keine Rezepte gefunden für "${query}"` : language === 'en' ? `No recipes found for "${query}"` : `Нічого не знайдено за запитом "${query}"`;
   const noFoundDesc = language === 'zh' ? '尝试搜索其他关键词或使用冰箱食材查找' : language === 'de' ? 'Versuchen Sie einen anderen Begriff oder durchsuchen Sie Ihren Kühlschrank' : language === 'en' ? 'Try a different term or search by ingredients in your fridge' : 'Спробуйте інше слово або скористайтеся пошуком за наявними продуктами у холодильнику';
-
-  const queriesToShow = recentQueries.length > 0 ? recentQueries : defaultRecent;
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-stone-950/70 backdrop-blur-md animate-fade-in">
@@ -244,22 +244,58 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
               )}
             </div>
           ) : (
-            /* Recent searches when empty query */
-            <div>
-              <p className="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">
-                {popularLabel}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {queriesToShow.map((term, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setQuery(term)}
-                    className="px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs font-medium transition-colors"
-                  >
-                    {term}
-                  </button>
-                ))}
+            /* Popular tags & Recent searches when empty query */
+            <div className="space-y-5">
+              {/* Multilingual Popular Tags */}
+              <div>
+                <p className="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-2.5 flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-amber-500" />
+                  {popularTagsLabel}
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {popularTags.map((tagObj) => (
+                    <button
+                      key={tagObj.raw}
+                      onClick={() => handleSuggestionClick(tagObj.raw)}
+                      className="px-3 py-1.5 rounded-xl bg-brand-50 dark:bg-brand-950/40 hover:bg-brand-100 dark:hover:bg-brand-900/50 text-brand-800 dark:text-brand-200 text-xs font-medium border border-brand-200/80 dark:border-brand-800/50 transition-colors flex items-center gap-1.5"
+                    >
+                      {tagObj.label}
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Recent searches if user searched anything */}
+              {recentQueries.length > 0 && (
+                <div>
+                  <div className="flex items-center justify-between mb-2.5">
+                    <p className="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 flex items-center gap-1.5">
+                      <History className="w-3.5 h-3.5 text-stone-400" />
+                      {recentSearchesLabel}
+                    </p>
+                    <button
+                      onClick={() => {
+                        setRecentQueries([]);
+                        localStorage.removeItem('smakolyk_recent_searches');
+                      }}
+                      className="text-[11px] text-stone-400 hover:text-stone-600 dark:hover:text-stone-300"
+                    >
+                      {t('common.clear')}
+                    </button>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {recentQueries.map((term, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setQuery(term)}
+                        className="px-3 py-1.5 rounded-xl bg-stone-100 dark:bg-stone-800 hover:bg-stone-200 dark:hover:bg-stone-700 text-stone-700 dark:text-stone-300 text-xs font-medium transition-colors"
+                      >
+                        {term}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </div>
