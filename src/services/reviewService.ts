@@ -2,6 +2,7 @@ import { Review } from '../types';
 import { INITIAL_REVIEWS } from '../data/reviews/initialReviews';
 import { storage } from './storageService';
 import { recipeService } from './recipeService';
+import { supabase, isSupabaseConfigured } from './supabaseClient';
 
 const STORAGE_KEY = 'smakolyk_reviews_custom';
 
@@ -11,18 +12,97 @@ export interface IReviewService {
   likeReview(reviewId: string): Promise<number>;
 }
 
+function mapDbToReview(row: any): Review {
+  return {
+    id: row.id,
+    recipeId: row.recipe_id,
+    userName: row.user_name,
+    rating: row.rating,
+    comment: row.comment,
+    photoUrl: row.photo_url || undefined,
+    likes: row.likes || 0,
+    createdAt: row.created_at
+  };
+}
+
 class ReviewService implements IReviewService {
   async getAll(): Promise<Review[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          return data.map(mapDbToReview);
+        }
+      } catch (err) {
+        console.warn('Supabase fetch reviews failed:', err);
+      }
+    }
+
     const custom = await storage.get<Review[]>(STORAGE_KEY, []);
     return [...custom, ...INITIAL_REVIEWS];
   }
 
   async getByRecipeId(recipeId: string): Promise<Review[]> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('*')
+          .eq('recipe_id', recipeId)
+          .order('created_at', { ascending: false });
+
+        if (!error && data) {
+          return data.map(mapDbToReview);
+        }
+      } catch (err) {
+        console.warn('Supabase fetch reviews by recipe failed:', err);
+      }
+    }
+
     const all = await this.getAll();
     return all.filter(r => r.recipeId === recipeId);
   }
 
   async addReview(data: Omit<Review, 'id' | 'createdAt' | 'likes'>): Promise<Review> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data: inserted, error } = await supabase
+          .from('reviews')
+          .insert({
+            recipe_id: data.recipeId,
+            user_name: data.userName,
+            rating: data.rating,
+            comment: data.comment,
+            photo_url: data.photoUrl || null,
+            likes: 0
+          })
+          .select()
+          .single();
+
+        if (!error && inserted) {
+          const newReview = mapDbToReview(inserted);
+
+          // Update recipe average rating
+          const recipeReviews = await this.getByRecipeId(data.recipeId);
+          const totalScore = recipeReviews.reduce((acc, r) => acc + r.rating, 0);
+          const newRating = Number((totalScore / recipeReviews.length).toFixed(1));
+          await recipeService.update(data.recipeId, {
+            rating: newRating,
+            reviewsCount: recipeReviews.length
+          });
+
+          return newReview;
+        }
+      } catch (err) {
+        console.warn('Supabase addReview failed, saving to local:', err);
+      }
+    }
+
+    // Local fallback
     const custom = await storage.get<Review[]>(STORAGE_KEY, []);
     const newReview: Review = {
       ...data,
@@ -34,7 +114,6 @@ class ReviewService implements IReviewService {
     custom.unshift(newReview);
     await storage.set(STORAGE_KEY, custom);
 
-    // Recalculate recipe average rating and reviews count
     try {
       const allReviewsForRecipe = await this.getByRecipeId(data.recipeId);
       const totalScore = allReviewsForRecipe.reduce((acc, r) => acc + r.rating, 0);
@@ -51,6 +130,27 @@ class ReviewService implements IReviewService {
   }
 
   async likeReview(reviewId: string): Promise<number> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('reviews')
+          .select('likes')
+          .eq('id', reviewId)
+          .maybeSingle();
+
+        if (!error && data) {
+          const newLikes = (data.likes || 0) + 1;
+          await supabase
+            .from('reviews')
+            .update({ likes: newLikes })
+            .eq('id', reviewId);
+          return newLikes;
+        }
+      } catch (err) {
+        console.warn('Supabase likeReview failed:', err);
+      }
+    }
+
     const custom = await storage.get<Review[]>(STORAGE_KEY, []);
     const target = custom.find(r => r.id === reviewId);
     if (target) {
