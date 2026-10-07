@@ -2,7 +2,8 @@ import React from 'react';
 import { FilterState } from '../../types';
 import { CUISINES } from '../../data/categories';
 import { Button } from '../common/Button';
-import { X, RotateCcw } from 'lucide-react';
+import { Modal } from '../common/Modal';
+import { RotateCcw } from 'lucide-react';
 import { useLanguage } from '../../context/LanguageContext';
 import { cn } from '../../utils/cn';
 
@@ -46,20 +47,7 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
 
   const content = (
     <div className="space-y-6">
-      {/* Header if modal */}
-      {onClose && (
-        <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
-          <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100">
-            {t('filters.title')}
-          </h3>
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl text-stone-400 hover:text-stone-700 dark:hover:text-stone-200"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
-      )}
+
 
       {/* Sorting */}
       <div>
@@ -239,14 +227,15 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
   );
 
   if (onClose) {
-    if (!isOpen) return null;
     return (
-      <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 bg-stone-950/60 backdrop-blur-sm animate-fade-in">
-        <div className="fixed inset-0" onClick={onClose} />
-        <div className="relative w-full max-w-lg bg-white dark:bg-stone-900 rounded-t-3xl sm:rounded-3xl p-5 sm:p-6 max-h-[85vh] overflow-y-auto shadow-2xl z-10 animate-slide-up sm:animate-scale-up">
-          {content}
-        </div>
-      </div>
+      <Modal
+        isOpen={isOpen}
+        onClose={onClose}
+        title={t('filters.title')}
+        maxWidth="lg"
+      >
+        {content}
+      </Modal>
     );
   }
 

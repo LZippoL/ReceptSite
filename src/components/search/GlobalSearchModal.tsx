@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Clock, Flame, ChevronRight, Tag, Sparkles, History } from 'lucide-react';
 import { Recipe } from '../../types';
@@ -39,10 +40,22 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
     if (isOpen) {
       recipeService.getAll().then(setRecipes);
       setTimeout(() => inputRef.current?.focus(), 100);
+
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalTouchAction = document.body.style.touchAction;
+
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
+
+      return () => {
+        document.body.style.overflow = originalBodyOverflow;
+        document.documentElement.style.overflow = originalHtmlOverflow;
+        document.body.style.touchAction = originalTouchAction;
+      };
     } else {
       setQuery('');
-      document.body.style.overflow = 'unset';
     }
   }, [isOpen]);
 
@@ -131,8 +144,8 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   const noFoundTitle = language === 'zh' ? `未找到与 “${query}” 相关的食谱` : language === 'de' ? `Keine Rezepte gefunden für "${query}"` : language === 'en' ? `No recipes found for "${query}"` : `Нічого не знайдено за запитом "${query}"`;
   const noFoundDesc = language === 'zh' ? '尝试搜索其他关键词或使用冰箱食材查找' : language === 'de' ? 'Versuchen Sie einen anderen Begriff oder durchsuchen Sie Ihren Kühlschrank' : language === 'en' ? 'Try a different term or search by ingredients in your fridge' : 'Спробуйте інше слово або скористайтеся пошуком за наявними продуктами у холодильнику';
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-stone-950/70 backdrop-blur-md animate-fade-in">
+  return createPortal(
+    <div className="fixed inset-0 z-[100] flex items-start justify-center pt-12 sm:pt-20 px-4 bg-stone-950/70 backdrop-blur-md animate-fade-in">
       <div
         className="fixed inset-0"
         onClick={onClose}
@@ -300,6 +313,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
           )}
         </div>
       </div>
-    </div>
+    </div>,
+    document.body
   );
 };

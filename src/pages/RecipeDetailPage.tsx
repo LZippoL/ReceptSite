@@ -208,6 +208,16 @@ export const RecipeDetailPage: React.FC = () => {
                 showScore
                 reviewsCount={localizedRecipe.reviewsCount}
               />
+              <button
+                type="button"
+                onClick={() => {
+                  const elem = document.getElementById('reviews-section');
+                  if (elem) elem.scrollIntoView({ behavior: 'smooth' });
+                }}
+                className="text-xs font-semibold text-brand-600 dark:text-brand-400 hover:underline cursor-pointer"
+              >
+                {t('reviews.writeReview')}
+              </button>
             </div>
           </div>
 

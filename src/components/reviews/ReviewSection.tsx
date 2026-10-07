@@ -267,22 +267,26 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
             placeholder="https://images.unsplash.com/..."
           />
 
-          <div className="flex gap-2 pt-2">
-            <Button
-              type="button"
-              variant="secondary"
-              onClick={() => setIsModalOpen(false)}
-              className="flex-1"
-            >
-              {t('common.cancel')}
-            </Button>
-            <Button
-              type="submit"
-              isLoading={isSubmitting}
-              className="flex-1"
-            >
-              {t('reviews.submit')}
-            </Button>
+          <div className="pt-2 sticky bottom-0 bg-white dark:bg-stone-900 pb-1">
+            <div className="flex gap-2.5">
+              <Button
+                type="button"
+                variant="secondary"
+                size="lg"
+                onClick={() => setIsModalOpen(false)}
+                className="flex-1 rounded-2xl"
+              >
+                {t('common.cancel')}
+              </Button>
+              <Button
+                type="submit"
+                size="lg"
+                isLoading={isSubmitting}
+                className="flex-1 rounded-2xl bg-brand-600 hover:bg-brand-500 font-bold shadow-md shadow-brand-500/30"
+              >
+                {t('reviews.submit')}
+              </Button>
+            </div>
           </div>
         </form>
       </Modal>

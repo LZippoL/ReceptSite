@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { 
   X, 
   ChevronLeft, 
@@ -44,7 +45,13 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
   // Screen WakeLock management to keep display awake while hands are busy cooking
   useEffect(() => {
     if (isOpen) {
+      const originalBodyOverflow = document.body.style.overflow;
+      const originalHtmlOverflow = document.documentElement.style.overflow;
+      const originalTouchAction = document.body.style.touchAction;
+
       document.body.style.overflow = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      document.body.style.touchAction = 'none';
 
       const requestWakeLock = async () => {
         if ('wakeLock' in navigator) {
@@ -67,6 +74,9 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
       document.addEventListener('visibilitychange', handleVisibilityChange);
 
       return () => {
+        document.body.style.overflow = originalBodyOverflow;
+        document.documentElement.style.overflow = originalHtmlOverflow;
+        document.body.style.touchAction = originalTouchAction;
         document.removeEventListener('visibilitychange', handleVisibilityChange);
         if (wakeLockRef.current) {
           wakeLockRef.current.release().catch(() => {});
@@ -77,7 +87,6 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
         }
       };
     } else {
-      document.body.style.overflow = 'unset';
       setIsFinished(false);
       setCurrentStepIndex(0);
       setCompletedSteps([]);
@@ -215,9 +224,9 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
     }, 200);
   };
 
-  return (
+  return createPortal(
     <div 
-      className="fixed inset-0 z-50 bg-stone-950 text-stone-100 flex flex-col justify-between p-3 sm:p-6 lg:p-8 animate-fade-in select-none overflow-hidden"
+      className="fixed inset-0 z-[100] w-screen h-[100dvh] bg-stone-950 text-stone-100 flex flex-col justify-between p-3 sm:p-6 lg:p-8 animate-fade-in select-none overflow-hidden"
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
     >
@@ -515,6 +524,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
           </div>
         </div>
       )}
-    </div>
+    </div>,
+    document.body
   );
 };
