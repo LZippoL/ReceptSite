@@ -17,6 +17,7 @@ import { articleService } from '../services/articleService';
 import { CATEGORIES } from '../data/categories';
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { Button } from '../components/common/Button';
+import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
 
 interface HomePageProps {
@@ -28,11 +29,12 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [searchInput, setSearchInput] = useState('');
   const navigate = useNavigate();
+  const { t, localizeRecipe, localizeArticle, getCategoryName } = useLanguage();
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Смаколик — Сучасна Книга Рецептів & Розумний Пошук',
-      description: 'Сучасна кулінарна платформа: розумний пошук за продуктами з холодильника, перевірені покрокові рецепти, списки покупок та секрети шеф-кухарів.'
+      title: `${t('common.siteName')} — ${t('common.siteTagline')}`,
+      description: t('hero.subtitle')
     });
 
     Promise.all([
@@ -42,7 +44,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
       setRecipes(recList);
       setArticles(artList);
     });
-  }, []);
+  }, [t]);
 
   const handleSearchSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,7 +55,8 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
     }
   };
 
-  const recipeOfTheDay = recipes.find(r => r.id === 'rec-1') || recipes[0];
+  const rawRecipeOfTheDay = recipes.find(r => r.id === 'rec-1') || recipes[0];
+  const recipeOfTheDay = rawRecipeOfTheDay ? localizeRecipe(rawRecipeOfTheDay) : null;
   const quickRecipes = recipes.filter(r => r.totalTime <= 20).slice(0, 4);
   const popularRecipes = [...recipes].sort((a, b) => b.reviewsCount - a.reviewsCount).slice(0, 4);
   const topRatedRecipes = [...recipes].sort((a, b) => b.rating - a.rating).slice(0, 4);
@@ -68,15 +71,16 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
         <div className="relative z-10 max-w-3xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-bold uppercase tracking-wider">
             <Sparkles className="w-4 h-4 text-amber-300" />
-            Більше 40 перевірених домашніх страв
+            {t('hero.badge')}
           </div>
 
           <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.1] text-white">
-            Що хочете приготувати <br className="hidden sm:inline" />сьогодні?
+            {t('hero.titleLine1')} <br className="hidden sm:inline" />
+            <span className="text-amber-200">{t('hero.titleHighlight')}</span>
           </h1>
 
           <p className="text-sm sm:text-lg text-amber-100 max-w-xl font-normal leading-relaxed">
-            Знайдіть ідеальний сніданок, ситний обід або вишукану вечерю. А якщо не знаєте — введіть те, що є вдома!
+            {t('hero.subtitle')}
           </p>
 
           {/* Quick Search Bar */}
@@ -87,11 +91,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
                 type="text"
                 value={searchInput}
                 onChange={(e) => setSearchInput(e.target.value)}
-                placeholder="Введіть назву страви, інгредієнт чи кухню..."
+                placeholder={t('hero.searchPlaceholder')}
                 className="w-full px-3 py-2 text-sm sm:text-base outline-none bg-transparent placeholder:text-stone-400"
               />
               <Button type="submit" size="md" className="shrink-0 rounded-xl px-5">
-                Знайти
+                {t('common.search')}
               </Button>
             </div>
           </form>
@@ -107,11 +111,11 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
               </div>
               <div>
                 <p className="text-xs sm:text-sm font-bold text-white flex items-center gap-1.5">
-                  Що є у вашому холодильнику?
+                  {t('hero.fridgeTitle')}
                   <ChevronRight className="w-4 h-4 text-amber-300 group-hover:translate-x-1 transition-transform" />
                 </p>
                 <p className="text-[11px] sm:text-xs text-amber-100">
-                  Виберіть продукти, які є вдома — ми підберемо готові рецепти без походу в магазин
+                  {t('hero.fridgeDesc')}
                 </p>
               </div>
             </Link>
@@ -124,17 +128,17 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-              Популярні категорії
+              {t('home.categoriesTitle')}
             </h2>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
-              Обирайте страви за настроєм, часом доби або типом харчування
+              {t('home.categoriesSubtitle')}
             </p>
           </div>
           <Link
             to="/categories"
             className="text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1"
           >
-            Усі категорії
+            {t('common.viewAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
@@ -150,7 +154,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
                 {cat.icon}
               </div>
               <span className="text-xs sm:text-sm font-bold text-stone-900 dark:text-stone-100 group-hover:text-brand-600 transition-colors">
-                {cat.name}
+                {getCategoryName(cat.id)}
               </span>
             </Link>
           ))}
@@ -163,7 +167,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
             <div className="space-y-4">
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl bg-amber-500 text-white text-xs font-bold uppercase tracking-wider shadow-sm">
-                ⭐ Рецепт дня
+                ⭐ {t('home.recipeOfTheDay')}
               </div>
               <h3 className="text-2xl sm:text-4xl font-extrabold text-stone-900 dark:text-stone-100 leading-tight">
                 {recipeOfTheDay.title}
@@ -175,21 +179,21 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
               <div className="flex flex-wrap items-center gap-4 text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-300 pt-2">
                 <span className="flex items-center gap-1.5 bg-white dark:bg-stone-800 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700">
                   <Clock className="w-4 h-4 text-amber-500" />
-                  {recipeOfTheDay.totalTime} хв
+                  {recipeOfTheDay.totalTime} {t('common.min')}
                 </span>
                 <span className="flex items-center gap-1.5 bg-white dark:bg-stone-800 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700">
                   <Flame className="w-4 h-4 text-brand-500" />
-                  {recipeOfTheDay.calories} ккал
+                  {recipeOfTheDay.calories} {t('common.calories')}
                 </span>
                 <span className="flex items-center gap-1.5 bg-white dark:bg-stone-800 px-3 py-1.5 rounded-xl border border-stone-200 dark:border-stone-700 text-amber-600 dark:text-amber-400 font-bold">
-                  ★ {recipeOfTheDay.rating} ({recipeOfTheDay.reviewsCount} відгуків)
+                  ★ {recipeOfTheDay.rating} ({recipeOfTheDay.reviewsCount} {t('reviews.count')})
                 </span>
               </div>
 
               <div className="pt-4 flex gap-3">
                 <Link to={`/recipes/${recipeOfTheDay.slug}`}>
                   <Button size="lg" className="shadow-lg shadow-brand-500/20">
-                    Переглянути рецепт
+                    {t('common.view')}
                     <ArrowRight className="w-4 h-4 ml-2" />
                   </Button>
                 </Link>
@@ -214,25 +218,25 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
             <div className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-amber-500 fill-amber-500" />
               <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-                Швидко за 20 хвилин
+                {t('home.quickRecipes')}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
-              Коли обмаль часу: смачні повноцінні страви за чверть години
+              {t('home.quickSubtitle')}
             </p>
           </div>
           <Link
             to="/recipes?maxTime=20"
             className="text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1"
           >
-            Більше швидких
+            {t('common.viewAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {quickRecipes.map(recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={localizeRecipe(recipe)} />
           ))}
         </div>
       </section>
@@ -244,25 +248,25 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
             <div className="flex items-center gap-2">
               <TrendingUp className="w-5 h-5 text-brand-600" />
               <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-                Популярні рецепти
+                {t('home.popularRecipes')}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
-              Страви, які найчастіше готують та зберігають кулінари
+              {t('home.popularSubtitle')}
             </p>
           </div>
           <Link
             to="/recipes?sortBy=popularity"
             className="text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1"
           >
-            Всі популярні
+            {t('common.viewAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {popularRecipes.map(recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={localizeRecipe(recipe)} />
           ))}
         </div>
       </section>
@@ -272,24 +276,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-              Найкраще оцінені кулінарами
+              {t('recipes.sortRating')}
             </h2>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
-              Рецепти з найвищим рейтингом 4.9+ та відгуками
+              ★ 4.9+
             </p>
           </div>
           <Link
             to="/recipes?sortBy=rating"
             className="text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1"
           >
-            Усі з топ-рейтингом
+            {t('common.viewAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {topRatedRecipes.map(recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={localizeRecipe(recipe)} />
           ))}
         </div>
       </section>
@@ -299,24 +303,24 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-              Бюджетні та прості страви
+              {t('home.budgetRecipes')}
             </h2>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
-              Доступні інгредієнти, максимум смаку та користі для щоденного меню
+              {t('home.budgetSubtitle')}
             </p>
           </div>
           <Link
             to="/recipes"
             className="text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1"
           >
-            Усі рецепти
+            {t('common.viewAll')}
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {budgetRecipes.map(recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={localizeRecipe(recipe)} />
           ))}
         </div>
       </section>
@@ -328,67 +332,70 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
             <div className="flex items-center gap-2">
               <BookOpen className="w-5 h-5 text-brand-600" />
               <h2 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-                Корисні статті та секрети шефів
+                {t('home.articlesTitle')}
               </h2>
             </div>
             <p className="text-xs sm:text-sm text-stone-500 mt-1">
-              Як правильно варити рис, смажити соковитий стейк, вибирати оливкову олію та зберігати продукти
+              {t('home.articlesSubtitle')}
             </p>
           </div>
           <Link
             to="/articles"
             className="text-xs sm:text-sm font-bold text-brand-600 dark:text-brand-400 hover:text-brand-700 flex items-center gap-1"
           >
-            Усі {articles.length} статей
+            {t('common.viewAll')} ({articles.length})
             <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {articles.slice(0, 3).map(article => (
-            <article
-              key={article.id}
-              className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-3xl overflow-hidden shadow-card hover:shadow-warm hover:-translate-y-1 transition-all flex flex-col justify-between"
-            >
-              <div>
-                <Link to={`/articles/${article.slug}`} className="block relative aspect-video overflow-hidden">
-                  <img
-                    src={article.image}
-                    alt={article.title}
-                    loading="lazy"
-                    className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
-                  />
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-xl bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-xs font-semibold text-brand-700 dark:text-brand-300">
-                    {article.category}
-                  </div>
-                </Link>
+          {articles.slice(0, 3).map(rawArt => {
+            const article = localizeArticle(rawArt);
+            return (
+              <article
+                key={article.id}
+                className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-3xl overflow-hidden shadow-card hover:shadow-warm hover:-translate-y-1 transition-all flex flex-col justify-between"
+              >
+                <div>
+                  <Link to={`/articles/${article.slug}`} className="block relative aspect-video overflow-hidden">
+                    <img
+                      src={article.image}
+                      alt={article.title}
+                      loading="lazy"
+                      className="w-full h-full object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                    <div className="absolute top-3 left-3 px-2.5 py-1 rounded-xl bg-white/90 dark:bg-stone-900/90 backdrop-blur-md text-xs font-semibold text-brand-700 dark:text-brand-300">
+                      {article.category}
+                    </div>
+                  </Link>
 
-                <div className="p-5">
-                  <div className="flex items-center gap-2 text-xs text-stone-500 mb-2">
-                    <Clock className="w-3.5 h-3.5" />
-                    <span>{article.readTime} хв читання</span>
+                  <div className="p-5">
+                    <div className="flex items-center gap-2 text-xs text-stone-500 mb-2">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{article.readTime} {t('articles.readTime')}</span>
+                    </div>
+                    <h3 className="font-bold text-lg text-stone-900 dark:text-stone-100 hover:text-brand-600 transition-colors line-clamp-2 leading-snug">
+                      <Link to={`/articles/${article.slug}`}>
+                        {article.title}
+                      </Link>
+                    </h3>
+                    <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 line-clamp-2 mt-2 leading-relaxed">
+                      {article.summary}
+                    </p>
                   </div>
-                  <h3 className="font-bold text-lg text-stone-900 dark:text-stone-100 hover:text-brand-600 transition-colors line-clamp-2 leading-snug">
-                    <Link to={`/articles/${article.slug}`}>
-                      {article.title}
-                    </Link>
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-600 dark:text-stone-400 line-clamp-2 mt-2 leading-relaxed">
-                    {article.summary}
-                  </p>
                 </div>
-              </div>
 
-              <div className="px-5 pb-5 pt-0">
-                <Link
-                  to={`/articles/${article.slug}`}
-                  className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline inline-flex items-center gap-1"
-                >
-                  Читати повністю →
-                </Link>
-              </div>
-            </article>
-          ))}
+                <div className="px-5 pb-5 pt-0">
+                  <Link
+                    to={`/articles/${article.slug}`}
+                    className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline inline-flex items-center gap-1"
+                  >
+                    {t('home.readArticle')} →
+                  </Link>
+                </div>
+              </article>
+            );
+          })}
         </div>
       </section>
     </div>

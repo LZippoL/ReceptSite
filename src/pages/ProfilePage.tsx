@@ -21,6 +21,8 @@ import { recipeService } from '../services/recipeService';
 import { Recipe } from '../types';
 import { Button } from '../components/common/Button';
 import { RecipeCard } from '../components/recipe/RecipeCard';
+import { LanguageSelector } from '../components/common/LanguageSelector';
+import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
 
 export const ProfilePage: React.FC = () => {
@@ -35,14 +37,15 @@ export const ProfilePage: React.FC = () => {
   const { totalCount, uncompletedCount } = useShoppingList();
   const { theme, setTheme } = useTheme();
   const { success, error } = useToast();
+  const { t, localizeRecipe } = useLanguage();
 
   const [recentRecipes, setRecentRecipes] = useState<Recipe[]>([]);
   const [newStapleInput, setNewStapleInput] = useState('');
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Профіль кулінара & Налаштування',
-      description: 'Ваш особистий кулінарний профіль, збережені інгредієнти та налаштування сайту.'
+      title: `${t('profile.title')} | ${t('common.siteName')}`,
+      description: t('profile.subtitle')
     });
 
     if (recentlyViewed.length > 0) {
@@ -50,7 +53,7 @@ export const ProfilePage: React.FC = () => {
         setRecentRecipes(list.filter((r): r is Recipe => r !== null));
       });
     }
-  }, [recentlyViewed]);
+  }, [recentlyViewed, t]);
 
   const handleAddStaple = (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,19 +94,19 @@ export const ProfilePage: React.FC = () => {
           <User className="w-10 h-10" />
         </div>
         <div className="text-center sm:text-left space-y-1">
-          <h1 className="text-2xl sm:text-3xl font-extrabold">Мій кулінарний профіль</h1>
+          <h1 className="text-2xl sm:text-3xl font-extrabold">{t('profile.title')}</h1>
           <p className="text-xs sm:text-sm text-amber-100">
-            Зручне місце для управління улюбленими рецептами, покупками та базовими інгредієнтами
+            {t('profile.subtitle')}
           </p>
           <div className="pt-2 flex flex-wrap justify-center sm:justify-start gap-2 text-xs font-semibold">
             <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
-              ❤️ {favorites.length} улюблених
+              ❤️ {favorites.length} {t('profile.savedRecipes')}
             </span>
             <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
-              📁 {collections.length} колекцій
+              📁 {collections.length} {t('favorites.collections')}
             </span>
             <span className="px-3 py-1 rounded-full bg-white/20 backdrop-blur-md">
-              🛒 {uncompletedCount} у списку покупок
+              🛒 {uncompletedCount} {t('profile.activeShoppingList')}
             </span>
           </div>
         </div>
@@ -119,8 +122,8 @@ export const ProfilePage: React.FC = () => {
             <Heart className="w-6 h-6 fill-current" />
           </div>
           <div>
-            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">Улюблені рецепти</h3>
-            <p className="text-xs text-stone-500">{favorites.length} збережених</p>
+            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">{t('favorites.title')}</h3>
+            <p className="text-xs text-stone-500">{favorites.length} {t('profile.savedRecipes')}</p>
           </div>
         </Link>
 
@@ -132,8 +135,8 @@ export const ProfilePage: React.FC = () => {
             <ShoppingBag className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">Список покупок</h3>
-            <p className="text-xs text-stone-500">{totalCount} товарів</p>
+            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">{t('shoppingList.title')}</h3>
+            <p className="text-xs text-stone-500">{totalCount} {t('shoppingList.itemsTotal')}</p>
           </div>
         </Link>
 
@@ -145,22 +148,35 @@ export const ProfilePage: React.FC = () => {
             <Settings className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">Панель автора (CMS)</h3>
-            <p className="text-xs text-stone-500">Додати свій рецепт</p>
+            <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100">{t('nav.admin')}</h3>
+            <p className="text-xs text-stone-500">{t('admin.addRecipeBtn')}</p>
           </div>
         </Link>
+      </div>
+
+      {/* LANGUAGE SETTINGS */}
+      <div className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-3xl p-6 shadow-card space-y-4">
+        <div>
+          <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
+            {t('profile.languageTitle')}
+          </h3>
+          <p className="text-xs text-stone-500 mt-0.5">
+            Choose your preferred language for recipes, articles, and application interface.
+          </p>
+        </div>
+        <LanguageSelector variant="inline" />
       </div>
 
       {/* THEME SETTINGS */}
       <div className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-3xl p-6 shadow-card space-y-4">
         <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
-          Тема оформлення інтерфейсу
+          {t('profile.themeTitle')}
         </h3>
         <div className="grid grid-cols-3 gap-3">
           {[
-            { id: 'light', label: 'Світла', icon: Sun },
-            { id: 'dark', label: 'Темна', icon: Moon },
-            { id: 'system', label: 'Системна', icon: Laptop }
+            { id: 'light', label: 'Light', icon: Sun },
+            { id: 'dark', label: 'Dark', icon: Moon },
+            { id: 'system', label: 'System', icon: Laptop }
           ].map(opt => {
             const isSelected = theme === opt.id;
             return (
@@ -185,10 +201,10 @@ export const ProfilePage: React.FC = () => {
       <div className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-3xl p-6 shadow-card space-y-4">
         <div>
           <h3 className="text-base font-bold text-stone-900 dark:text-stone-100">
-            Базові продукти на кухні
+            {t('profile.myStaplesTitle')}
           </h3>
           <p className="text-xs text-stone-500 mt-0.5">
-            Ці інгредієнти вважаються наявними за замовчуванням у функції «Що є у холодильнику?» (не блокують приготування)
+            {t('profile.myStaplesDesc')}
           </p>
         </div>
 
@@ -203,7 +219,7 @@ export const ProfilePage: React.FC = () => {
               <button
                 onClick={() => removeStaple(staple)}
                 className="w-4 h-4 rounded-full hover:bg-stone-200 dark:hover:bg-stone-700 flex items-center justify-center text-stone-500"
-                aria-label={`Видалити ${staple}`}
+                aria-label={`Remove ${staple}`}
               >
                 <X className="w-3 h-3" />
               </button>
@@ -217,12 +233,12 @@ export const ProfilePage: React.FC = () => {
             type="text"
             value={newStapleInput}
             onChange={(e) => setNewStapleInput(e.target.value)}
-            placeholder="Додати базовий продукт..."
+            placeholder={t('profile.addStaplePlaceholder')}
             className="flex-1 h-10 px-3 text-xs bg-stone-50 dark:bg-stone-800 border border-stone-200 dark:border-stone-700 rounded-xl outline-none focus:border-brand-500"
           />
           <Button type="submit" size="sm" className="rounded-xl">
             <Plus className="w-4 h-4 mr-1" />
-            Додати
+            {t('common.save')}
           </Button>
         </form>
       </div>
@@ -232,11 +248,11 @@ export const ProfilePage: React.FC = () => {
         <div className="space-y-4">
           <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
             <Clock className="w-5 h-5 text-amber-500" />
-            Нещодавно переглянуті страви
+            {t('profile.recentViewed')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {recentRecipes.map(r => (
-              <RecipeCard key={r.id} recipe={r} />
+              <RecipeCard key={r.id} recipe={localizeRecipe(r)} />
             ))}
           </div>
         </div>
@@ -246,10 +262,10 @@ export const ProfilePage: React.FC = () => {
       <div className="p-6 rounded-3xl bg-stone-100/70 dark:bg-stone-800/40 border border-stone-200 dark:border-stone-700/80 flex flex-col sm:flex-row items-center justify-between gap-4">
         <div>
           <h4 className="font-bold text-sm text-stone-800 dark:text-stone-200">
-            Резервна копія та перенесення даних
+            {t('profile.exportBackup')}
           </h4>
           <p className="text-xs text-stone-500 mt-0.5">
-            Збережіть усі ваші колекції, обрані рецепти та список покупок у файл JSON.
+            {t('profile.exportDesc')}
           </p>
         </div>
         <Button
@@ -259,7 +275,7 @@ export const ProfilePage: React.FC = () => {
           className="shrink-0"
         >
           <Download className="w-4 h-4 mr-2" />
-          Завантажити резервну копію
+          {t('profile.downloadBackup')}
         </Button>
       </div>
     </div>

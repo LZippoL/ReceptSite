@@ -2,6 +2,7 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import { Home, Search, Sparkles, Heart, User } from 'lucide-react';
 import { useFavorites } from '../../context/FavoritesContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { cn } from '../../utils/cn';
 
 interface MobileBottomNavProps {
@@ -11,6 +12,7 @@ interface MobileBottomNavProps {
 export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }) => {
   const location = useLocation();
   const { favorites } = useFavorites();
+  const { t } = useLanguage();
 
   const isCurrent = (path: string) => {
     if (path === '/' && location.pathname !== '/') return false;
@@ -29,7 +31,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
           )}
         >
           <Home className="w-5 h-5 mb-1" />
-          <span className="text-[11px] leading-tight">Головна</span>
+          <span className="text-[11px] leading-tight truncate max-w-[64px]">{t('nav.home')}</span>
           {isCurrent('/') && (
             <span className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-500" />
           )}
@@ -42,10 +44,10 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
           className="flex flex-col items-center justify-center flex-1 py-1 text-center select-none text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-100 transition-colors min-h-[44px]"
         >
           <Search className="w-5 h-5 mb-1" />
-          <span className="text-[11px] leading-tight">Пошук</span>
+          <span className="text-[11px] leading-tight truncate max-w-[64px]">{t('common.search')}</span>
         </button>
 
-        {/* Що приготувати (Prominent centerpiece button!) */}
+        {/* Що приготувати (Centerpiece button) */}
         <NavLink
           to="/what-to-cook"
           className={cn(
@@ -56,7 +58,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
           <div className="w-10 h-10 -mt-5 rounded-2xl bg-gradient-to-tr from-brand-600 to-amber-500 text-white flex items-center justify-center shadow-lg shadow-brand-500/30">
             <Sparkles className="w-5 h-5 animate-pulse" />
           </div>
-          <span className="text-[10px] leading-tight font-semibold mt-0.5">В холодильнику</span>
+          <span className="text-[10px] leading-tight font-semibold mt-0.5 truncate max-w-[70px]">{t('nav.fridge')}</span>
         </NavLink>
 
         {/* Улюблене */}
@@ -75,7 +77,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
               </span>
             )}
           </div>
-          <span className="text-[11px] leading-tight">Улюблене</span>
+          <span className="text-[11px] leading-tight truncate max-w-[64px]">{t('nav.favorites')}</span>
           {isCurrent('/favorites') && (
             <span className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-500" />
           )}
@@ -90,7 +92,7 @@ export const MobileBottomNav: React.FC<MobileBottomNavProps> = ({ onOpenSearch }
           )}
         >
           <User className="w-5 h-5 mb-1" />
-          <span className="text-[11px] leading-tight">Профіль</span>
+          <span className="text-[11px] leading-tight truncate max-w-[64px]">{t('nav.profile')}</span>
           {isCurrent('/profile') && (
             <span className="absolute bottom-1 w-1 h-1 rounded-full bg-brand-500" />
           )}

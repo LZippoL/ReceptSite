@@ -17,6 +17,7 @@ import { AdminRecipeForm } from '../components/admin/AdminRecipeForm';
 import { AdminArticleForm } from '../components/admin/AdminArticleForm';
 import { Button } from '../components/common/Button';
 import { useToast } from '../context/ToastContext';
+import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
 
 export const AdminPage: React.FC = () => {
@@ -35,6 +36,7 @@ export const AdminPage: React.FC = () => {
   const [selectedArticle, setSelectedArticle] = useState<Article | null>(null);
 
   const { success, error } = useToast();
+  const { t, language } = useLanguage();
 
   const loadData = () => {
     recipeService.getAll().then(setRecipes);
@@ -43,11 +45,11 @@ export const AdminPage: React.FC = () => {
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Панель редактора контенту (CMS)',
-      description: 'Управління рецептами та кулінарними статтями сайту.'
+      title: `${t('admin.title')} — ${t('common.siteName')}`,
+      description: t('admin.title')
     });
     loadData();
-  }, []);
+  }, [language, t]);
 
   const handleTabChange = (tab: 'recipes' | 'articles') => {
     setActiveTab(tab);
@@ -60,23 +62,23 @@ export const AdminPage: React.FC = () => {
     try {
       if (mode === 'edit_recipe' && selectedRecipe) {
         await recipeService.update(selectedRecipe.id, data);
-        success('Успіх', `Рецепт "${data.title}" оновлено`);
+        success(t('admin.savedSuccess'), `"${data.title}"`);
       } else {
         await recipeService.create(data);
-        success('Створено', `Новий рецепт "${data.title}" опубліковано!`);
+        success(t('admin.savedSuccess'), `"${data.title}"`);
       }
       setMode('list');
       setSelectedRecipe(null);
       loadData();
     } catch {
-      error('Помилка', 'Не вдалося зберегти рецепт');
+      error(t('common.error'), 'Error saving recipe');
     }
   };
 
   const handleDeleteRecipe = async (id: string, title: string) => {
-    if (window.confirm(`Ви впевнені, що хочете видалити рецепт "${title}"?`)) {
+    if (window.confirm(`${t('admin.deleteConfirm')} ("${title}")`)) {
       await recipeService.delete(id);
-      success('Видалено', `Рецепт "${title}" видалено`);
+      success(t('admin.deletedSuccess'), `"${title}"`);
       loadData();
     }
   };
@@ -86,23 +88,23 @@ export const AdminPage: React.FC = () => {
     try {
       if (mode === 'edit_article' && selectedArticle) {
         await articleService.update(selectedArticle.id, data);
-        success('Успіх', `Статтю "${data.title}" оновлено`);
+        success(t('admin.savedSuccess'), `"${data.title}"`);
       } else {
         await articleService.create(data);
-        success('Створено', `Нову статтю "${data.title}" опубліковано!`);
+        success(t('admin.savedSuccess'), `"${data.title}"`);
       }
       setMode('list');
       setSelectedArticle(null);
       loadData();
     } catch {
-      error('Помилка', 'Не вдалося зберегти статтю');
+      error(t('common.error'), 'Error saving article');
     }
   };
 
   const handleDeleteArticle = async (id: string, title: string) => {
-    if (window.confirm(`Ви впевнені, що хочете видалити статтю "${title}"?`)) {
+    if (window.confirm(`${t('admin.deleteConfirm')} ("${title}")`)) {
       await articleService.delete(id);
-      success('Видалено', `Статтю "${title}" видалено`);
+      success(t('admin.deletedSuccess'), `"${title}"`);
       loadData();
     }
   };
@@ -117,14 +119,14 @@ export const AdminPage: React.FC = () => {
     a.download = `recipes-export-${new Date().toISOString().split('T')[0]}.json`;
     a.click();
     URL.revokeObjectURL(url);
-    success('Експортовано', 'Базу рецептів збережено у JSON');
+    success(t('profile.downloadBackup'), 'JSON');
   };
 
   const handleResetDefaults = async () => {
-    if (window.confirm('Скинути всі модифікації рецептів до початкових 42 страв?')) {
+    if (window.confirm('Reset all recipes to default 42 recipes?')) {
       await recipeService.resetToDefault();
       loadData();
-      success('Скинуто', 'Відновлено початкову бібліотеку страв');
+      success(t('common.reset'), 'OK');
     }
   };
 
@@ -145,10 +147,10 @@ export const AdminPage: React.FC = () => {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-stone-200 dark:border-stone-800">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100 flex items-center gap-2.5">
-            Панель автора (CMS)
+            {t('admin.title')}
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Створюйте та редагуйте рецепти і статті без редагування вихідного коду
+            CMS — {t('admin.recipesTab')} & {t('admin.articlesTab')}
           </p>
         </div>
 
@@ -160,17 +162,17 @@ export const AdminPage: React.FC = () => {
               size="sm"
             >
               <Download className="w-4 h-4 mr-1.5" />
-              Експорт JSON
+              JSON
             </Button>
             <Button
               onClick={handleResetDefaults}
               variant="ghost"
               size="sm"
               className="text-stone-500 hover:text-amber-600"
-              title="Відновити 42 базових рецепти"
+              title="Reset"
             >
               <RotateCcw className="w-4 h-4 mr-1" />
-              Скинути
+              {t('common.reset')}
             </Button>
           </div>
         )}
@@ -230,7 +232,7 @@ export const AdminPage: React.FC = () => {
                 }`}
               >
                 <UtensilsCrossed className="w-4 h-4" />
-                Рецепти ({recipes.length})
+                {t('admin.recipesTab')} ({recipes.length})
               </button>
               <button
                 onClick={() => handleTabChange('articles')}
@@ -241,7 +243,7 @@ export const AdminPage: React.FC = () => {
                 }`}
               >
                 <BookOpen className="w-4 h-4" />
-                Кулінарні статті ({articles.length})
+                {t('admin.articlesTab')} ({articles.length})
               </button>
             </div>
 
@@ -251,7 +253,7 @@ export const AdminPage: React.FC = () => {
               className="rounded-xl mb-2"
             >
               <Plus className="w-4 h-4 mr-1.5" />
-              {activeTab === 'recipes' ? 'Новий рецепт' : 'Нова стаття'}
+              {activeTab === 'recipes' ? t('admin.addRecipeBtn') : t('admin.addArticleBtn')}
             </Button>
           </div>
 
@@ -262,7 +264,7 @@ export const AdminPage: React.FC = () => {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Швидкий фільтр за назвою..."
+              placeholder={t('admin.searchPlaceholder')}
               className="w-full h-10 pl-9 pr-4 text-xs bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-xl outline-none"
             />
           </div>
@@ -274,12 +276,12 @@ export const AdminPage: React.FC = () => {
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead className="bg-stone-50 dark:bg-stone-800/60 border-b border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 font-bold">
                     <tr>
-                      <th className="p-4">Страва</th>
-                      <th className="p-4 hidden sm:table-cell">Категорія</th>
-                      <th className="p-4 hidden md:table-cell">Час</th>
-                      <th className="p-4 hidden md:table-cell">Складність</th>
-                      <th className="p-4">Рейтинг</th>
-                      <th className="p-4 text-right">Дії</th>
+                      <th className="p-4">{t('nav.recipes')}</th>
+                      <th className="p-4 hidden sm:table-cell">{t('filters.category')}</th>
+                      <th className="p-4 hidden md:table-cell">{t('recipeDetail.totalTime')}</th>
+                      <th className="p-4 hidden md:table-cell">{t('filters.difficulty')}</th>
+                      <th className="p-4">Rating</th>
+                      <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 dark:divide-stone-800">
@@ -308,7 +310,7 @@ export const AdminPage: React.FC = () => {
                           </span>
                         </td>
                         <td className="p-4 hidden md:table-cell text-stone-500">
-                          {recipe.totalTime} хв
+                          {recipe.totalTime} {t('common.min')}
                         </td>
                         <td className="p-4 hidden md:table-cell capitalize text-stone-500">
                           {recipe.difficulty}
@@ -324,14 +326,14 @@ export const AdminPage: React.FC = () => {
                                 setMode('edit_recipe');
                               }}
                               className="p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:text-brand-600 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-                              title="Редагувати"
+                              title={t('common.edit')}
                             >
                               <Edit3 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteRecipe(recipe.id, recipe.title)}
                               className="p-2 rounded-xl text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                              title="Видалити"
+                              title={t('common.delete')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>
@@ -352,10 +354,10 @@ export const AdminPage: React.FC = () => {
                 <table className="w-full text-left text-xs sm:text-sm">
                   <thead className="bg-stone-50 dark:bg-stone-800/60 border-b border-stone-200 dark:border-stone-800 text-stone-600 dark:text-stone-300 font-bold">
                     <tr>
-                      <th className="p-4">Стаття</th>
-                      <th className="p-4 hidden sm:table-cell">Категорія</th>
-                      <th className="p-4 hidden md:table-cell">Час читання</th>
-                      <th className="p-4 text-right">Дії</th>
+                      <th className="p-4">{t('nav.articles')}</th>
+                      <th className="p-4 hidden sm:table-cell">{t('filters.category')}</th>
+                      <th className="p-4 hidden md:table-cell">{t('recipeDetail.totalTime')}</th>
+                      <th className="p-4 text-right">Actions</th>
                     </tr>
                   </thead>
                   <tbody className="divide-y divide-stone-100 dark:divide-stone-800">
@@ -384,7 +386,7 @@ export const AdminPage: React.FC = () => {
                           </span>
                         </td>
                         <td className="p-4 hidden md:table-cell text-stone-500">
-                          {article.readTime} хв
+                          {article.readTime} {t('common.min')}
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-1">
@@ -394,14 +396,14 @@ export const AdminPage: React.FC = () => {
                                 setMode('edit_article');
                               }}
                               className="p-2 rounded-xl text-stone-600 dark:text-stone-300 hover:text-brand-600 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-                              title="Редагувати"
+                              title={t('common.edit')}
                             >
                               <Edit3 className="w-4 h-4" />
                             </button>
                             <button
                               onClick={() => handleDeleteArticle(article.id, article.title)}
                               className="p-2 rounded-xl text-stone-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors"
-                              title="Видалити"
+                              title={t('common.delete')}
                             >
                               <Trash2 className="w-4 h-4" />
                             </button>

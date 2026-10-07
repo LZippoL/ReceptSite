@@ -11,12 +11,14 @@ import { recipeService } from '../services/recipeService';
 import { IngredientChipInput } from '../components/fridge/IngredientChipInput';
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { useFavorites } from '../context/FavoritesContext';
+import { useLanguage } from '../context/LanguageContext';
 import { matchRecipesByIngredients } from '../utils/ingredientMatcher';
 import { updateMetaTags } from '../utils/seo';
 
 export const FridgeSearchPage: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const { userStaples } = useFavorites();
+  const { t, localizeRecipe } = useLanguage();
 
   const [selectedIngredients, setSelectedIngredients] = useState<string[]>(() => {
     try {
@@ -33,11 +35,11 @@ export const FridgeSearchPage: React.FC = () => {
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Що приготувати? — Розумний пошук з холодильника',
-      description: 'Введіть наявні вдома продукти і дізнайтеся, що смачного можна приготувати прямо зараз без походу в магазин.'
+      title: `${t('fridge.title')} | ${t('common.siteName')}`,
+      description: t('fridge.subtitle')
     });
     recipeService.getAll().then(setRecipes);
-  }, []);
+  }, [t]);
 
   useEffect(() => {
     localStorage.setItem('smakolyk_fridge_selected', JSON.stringify(selectedIngredients));
@@ -74,13 +76,13 @@ export const FridgeSearchPage: React.FC = () => {
         <div className="max-w-2xl relative z-10 space-y-3">
           <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/20 text-white text-xs font-bold uppercase tracking-wider backdrop-blur-md">
             <Sparkles className="w-3.5 h-3.5 text-amber-300" />
-            Шеф-помічник
+            {t('hero.badge')}
           </div>
           <h1 className="text-2xl sm:text-4xl font-extrabold tracking-tight">
-            Що приготувати з того, що є вдома?
+            {t('fridge.title')}
           </h1>
           <p className="text-xs sm:text-base text-amber-100 leading-relaxed font-normal">
-            Введіть продукти, які є у вашому холодильнику. Розумний алгоритм підбере рецепти та підкаже, чого саме не вистачає.
+            {t('fridge.subtitle')}
           </p>
         </div>
       </div>
@@ -88,7 +90,7 @@ export const FridgeSearchPage: React.FC = () => {
       {/* Ingredient Chip Input Card */}
       <div className="bg-white dark:bg-stone-900 border border-stone-200/90 dark:border-stone-800 rounded-3xl p-5 sm:p-8 shadow-card space-y-5">
         <h2 className="text-base sm:text-lg font-bold text-stone-900 dark:text-stone-100">
-          Ваші наявні продукти:
+          {t('fridge.yourIngredients')}
         </h2>
 
         <IngredientChipInput
@@ -108,7 +110,7 @@ export const FridgeSearchPage: React.FC = () => {
                 onChange={(e) => setIgnoreStaples(e.target.checked)}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500"
               />
-              <span>Не враховувати базові продукти (сіль, перець, вода, олія)</span>
+              <span>{t('fridge.staplesModalDesc')}</span>
             </label>
 
             {/* Only ready recipes toggle */}
@@ -119,7 +121,7 @@ export const FridgeSearchPage: React.FC = () => {
                 onChange={(e) => setOnlyFullyReady(e.target.checked)}
                 className="w-4 h-4 rounded text-brand-600 focus:ring-brand-500"
               />
-              <span>Тільки рецепти, для яких є ВСІ продукти</span>
+              <span>{t('fridge.filterOnlyFullMatch')}</span>
             </label>
           </div>
 
@@ -129,7 +131,7 @@ export const FridgeSearchPage: React.FC = () => {
             className="flex items-center gap-1.5 text-brand-600 hover:text-brand-700"
           >
             <Settings2 className="w-3.5 h-3.5" />
-            <span>Налаштувати базові продукти</span>
+            <span>{t('fridge.manageStaples')}</span>
           </button>
         </div>
 
@@ -137,7 +139,7 @@ export const FridgeSearchPage: React.FC = () => {
         {showStaplesSettings && (
           <div className="p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/50 border border-stone-200 dark:border-stone-700 text-xs space-y-2 animate-slide-up">
             <p className="font-bold text-stone-800 dark:text-stone-200">
-              Базові інгредієнти (ми вважаємо, що вони завжди є вдома):
+              {t('fridge.staplesModalTitle')}:
             </p>
             <div className="flex flex-wrap gap-1.5">
               {userStaples.map((staple, i) => (
@@ -150,7 +152,7 @@ export const FridgeSearchPage: React.FC = () => {
               ))}
             </div>
             <p className="text-[11px] text-stone-500">
-              Ви можете змінити список своїх базових продуктів у вкладці «Профіль».
+              {t('profile.myStaplesDesc')}
             </p>
           </div>
         )}
@@ -168,10 +170,10 @@ export const FridgeSearchPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-extrabold text-stone-900 dark:text-stone-100">
-                    Можна приготувати прямо зараз
+                    {t('fridge.readyNowTitle')}
                   </h3>
                   <p className="text-xs text-stone-500">
-                    У вас є всі основні необхідні інгредієнти ({readyNow.length})
+                    {t('fridge.readyNowSubtitle')} ({readyNow.length})
                   </p>
                 </div>
               </div>
@@ -180,7 +182,7 @@ export const FridgeSearchPage: React.FC = () => {
                 {readyNow.map(result => (
                   <RecipeCard
                     key={result.recipe.id}
-                    recipe={result.recipe}
+                    recipe={localizeRecipe(result.recipe)}
                     matchInfo={result}
                   />
                 ))}
@@ -197,10 +199,10 @@ export const FridgeSearchPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-extrabold text-stone-900 dark:text-stone-100">
-                    Майже все є
+                    {t('fridge.almostReadyTitle')}
                   </h3>
                   <p className="text-xs text-stone-500">
-                    Не вистачає лише 1–2 інгредієнтів ({almostReady.length})
+                    {t('fridge.almostReadySubtitle')} ({almostReady.length})
                   </p>
                 </div>
               </div>
@@ -209,7 +211,7 @@ export const FridgeSearchPage: React.FC = () => {
                 {almostReady.map(result => (
                   <RecipeCard
                     key={result.recipe.id}
-                    recipe={result.recipe}
+                    recipe={localizeRecipe(result.recipe)}
                     matchInfo={result}
                   />
                 ))}
@@ -226,10 +228,10 @@ export const FridgeSearchPage: React.FC = () => {
                 </div>
                 <div>
                   <h3 className="text-xl font-extrabold text-stone-900 dark:text-stone-100">
-                    Схожі рецепти
+                    {t('fridge.partialTitle')}
                   </h3>
                   <p className="text-xs text-stone-500">
-                    Частковий збіг за обраними продуктами ({partialMatches.length})
+                    {t('fridge.partialSubtitle')} ({partialMatches.length})
                   </p>
                 </div>
               </div>
@@ -238,7 +240,7 @@ export const FridgeSearchPage: React.FC = () => {
                 {partialMatches.slice(0, 8).map(result => (
                   <RecipeCard
                     key={result.recipe.id}
-                    recipe={result.recipe}
+                    recipe={localizeRecipe(result.recipe)}
                     matchInfo={result}
                   />
                 ))}
@@ -250,10 +252,10 @@ export const FridgeSearchPage: React.FC = () => {
           {matchedResults.length === 0 && (
             <div className="p-10 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 text-center max-w-md mx-auto space-y-3">
               <p className="font-bold text-stone-800 dark:text-stone-200 text-base">
-                Ми не знайшли рецептів з цими продуктами
+                {t('fridge.noResultsTitle')}
               </p>
               <p className="text-xs text-stone-500">
-                Спробуйте додати базові інгредієнти: яйця, картоплю, сир чи курку.
+                {t('fridge.noResultsDesc')}
               </p>
             </div>
           )}
@@ -263,10 +265,10 @@ export const FridgeSearchPage: React.FC = () => {
         <div className="p-12 text-center max-w-lg mx-auto bg-stone-100/60 dark:bg-stone-900/40 rounded-3xl border border-dashed border-stone-300 dark:border-stone-800 space-y-3">
           <ChefHat className="w-12 h-12 text-stone-400 mx-auto" />
           <h3 className="text-lg font-bold text-stone-800 dark:text-stone-200">
-            Холодильник поки що порожній
+            {t('fridge.startPrompt')}
           </h3>
           <p className="text-xs sm:text-sm text-stone-500">
-            Додайте кілька продуктів вище, щоб ми знайшли для вас ідеальні страви.
+            {t('fridge.subtitle')}
           </p>
         </div>
       )}

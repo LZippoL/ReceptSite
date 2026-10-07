@@ -7,12 +7,14 @@ import { CATEGORIES } from '../data/categories';
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { FilterSheet } from '../components/search/FilterSheet';
 import { Button } from '../components/common/Button';
+import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
 
 export const RecipesPage: React.FC = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const { t, localizeRecipe, getCategoryName } = useLanguage();
 
   // Extract filters from URL search params
   const initialCategory = searchParams.get('category') || '';
@@ -37,11 +39,11 @@ export const RecipesPage: React.FC = () => {
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Усі рецепти — Каталог страв',
-      description: 'Переглядайте понад 40 покрокових рецептів української та світової кухні з фільтрами за часом, складністю та дієтою.'
+      title: `${t('recipes.title')} | ${t('common.siteName')}`,
+      description: t('recipes.subtitle')
     });
     recipeService.getAll().then(setRecipes);
-  }, []);
+  }, [t]);
 
   // Sync state to URL search parameters
   useEffect(() => {
@@ -139,10 +141,10 @@ export const RecipesPage: React.FC = () => {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 pt-4">
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-            Каталог рецептів
+            {t('recipes.title')}
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Знайдено {filteredRecipes.length} з {recipes.length} страв
+            {filteredRecipes.length} / {recipes.length} {t('common.recipesCount')}
           </p>
         </div>
 
@@ -154,7 +156,7 @@ export const RecipesPage: React.FC = () => {
               type="text"
               value={filters.query}
               onChange={(e) => setFilters(prev => ({ ...prev, query: e.target.value }))}
-              placeholder="Пошук страви..."
+              placeholder={`${t('common.search')}...`}
               className="w-full h-11 pl-9 pr-4 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl outline-none focus:border-brand-500"
             />
           </div>
@@ -166,7 +168,7 @@ export const RecipesPage: React.FC = () => {
             className="shrink-0 h-11"
           >
             <SlidersHorizontal className="w-4 h-4 mr-2" />
-            Фільтри
+            {t('recipes.filterButton')}
             {activeFiltersCount > 0 && (
               <span className="ml-1.5 px-1.5 py-0.5 text-xs bg-white text-brand-700 font-bold rounded-full">
                 {activeFiltersCount}
@@ -186,7 +188,7 @@ export const RecipesPage: React.FC = () => {
               : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
           }`}
         >
-          Всі категорії ({recipes.length})
+          {t('common.all')} ({recipes.length})
         </button>
         {CATEGORIES.map(c => {
           const isSelected = filters.category === c.id;
@@ -202,7 +204,7 @@ export const RecipesPage: React.FC = () => {
               }`}
             >
               <span>{c.icon}</span>
-              <span>{c.name}</span>
+              <span>{getCategoryName(c.id)}</span>
               <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/30 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500'}`}>
                 {count}
               </span>
@@ -215,7 +217,7 @@ export const RecipesPage: React.FC = () => {
       {filteredRecipes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {filteredRecipes.map(recipe => (
-            <RecipeCard key={recipe.id} recipe={recipe} />
+            <RecipeCard key={recipe.id} recipe={localizeRecipe(recipe)} />
           ))}
         </div>
       ) : (
@@ -225,15 +227,15 @@ export const RecipesPage: React.FC = () => {
             <Frown className="w-8 h-8" />
           </div>
           <h3 className="text-xl font-bold text-stone-900 dark:text-stone-100">
-            Нічого не знайдено
+            {t('recipes.noRecipesFound')}
           </h3>
           <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
-            Ми не знайшли рецептів за вашими поточними фільтрами. Спробуйте скинути деякі параметри або спробуйте пошук за інгредієнтами з холодильника!
+            {t('recipes.noRecipesDesc')}
           </p>
           <div className="flex justify-center gap-3 pt-2">
             <Button onClick={handleResetFilters} variant="secondary">
               <RotateCcw className="w-4 h-4 mr-2" />
-              Скинути фільтри
+              {t('recipes.resetFilters')}
             </Button>
           </div>
         </div>

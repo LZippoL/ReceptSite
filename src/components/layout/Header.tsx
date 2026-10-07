@@ -13,8 +13,10 @@ import {
   ChefHat
 } from 'lucide-react';
 import { ThemeToggle } from '../common/ThemeToggle';
+import { LanguageSelector } from '../common/LanguageSelector';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useShoppingList } from '../../context/ShoppingListContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { cn } from '../../utils/cn';
 
 interface HeaderProps {
@@ -25,6 +27,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
   const location = useLocation();
   const { favorites } = useFavorites();
   const { uncompletedCount } = useShoppingList();
+  const { t } = useLanguage();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => {
@@ -33,16 +36,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
   };
 
   const navLinks = [
-    { to: '/recipes', label: 'Рецепти', icon: UtensilsCrossed },
-    { to: '/categories', label: 'Категорії', icon: BookOpen },
+    { to: '/recipes', label: t('nav.recipes'), icon: UtensilsCrossed },
+    { to: '/categories', label: t('nav.categories'), icon: BookOpen },
     { 
       to: '/what-to-cook', 
-      label: 'Що приготувати?', 
+      label: t('nav.fridge'), 
       icon: Sparkles,
       highlight: true 
     },
-    { to: '/articles', label: 'Статті', icon: BookOpen },
-    { to: '/favorites', label: 'Улюблене', icon: Heart, count: favorites.length },
+    { to: '/articles', label: t('nav.articles'), icon: BookOpen },
+    { to: '/favorites', label: t('nav.favorites'), icon: Heart, count: favorites.length },
   ];
 
   return (
@@ -59,10 +62,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           </div>
           <div>
             <span className="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 via-amber-600 to-brand-700 dark:from-brand-400 dark:to-amber-400 bg-clip-text text-transparent">
-              Смаколик
+              {t('common.siteName')}
             </span>
             <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-stone-600 dark:text-stone-300 -mt-1">
-              Рецепти щодня
+              {t('common.siteTagline')}
             </span>
           </div>
         </Link>
@@ -102,10 +105,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           <button
             onClick={onOpenSearch}
             className="flex items-center gap-2 h-10 px-3 sm:px-4 rounded-2xl bg-stone-100 dark:bg-stone-900 hover:bg-stone-200/80 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-800 text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium transition-all group"
-            aria-label="Пошук рецептів"
+            aria-label={t('common.search')}
           >
             <Search className="w-4 h-4 text-stone-500 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors" />
-            <span className="hidden md:inline">Пошук...</span>
+            <span className="hidden md:inline">{t('common.search')}...</span>
             <kbd className="hidden md:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono font-semibold bg-stone-200 dark:bg-stone-800 text-stone-500 rounded border border-stone-300 dark:border-stone-700">
               Ctrl+K
             </kbd>
@@ -115,8 +118,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           <Link
             to="/shopping-list"
             className="relative p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-brand-600 transition-colors"
-            title="Список покупок"
-            aria-label="Список покупок"
+            title={t('nav.shoppingList')}
+            aria-label={t('nav.shoppingList')}
           >
             <ShoppingBag className="w-5 h-5" />
             {uncompletedCount > 0 && (
@@ -126,6 +129,9 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
             )}
           </Link>
 
+          {/* Language Selector Dropdown */}
+          <LanguageSelector variant="header" />
+
           {/* Theme Switcher */}
           <ThemeToggle />
 
@@ -133,8 +139,8 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           <Link
             to="/admin"
             className="hidden sm:flex p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-brand-600 transition-colors"
-            title="Панель автора / редактора"
-            aria-label="Редактор контенту"
+            title={t('nav.admin')}
+            aria-label={t('nav.admin')}
           >
             <Settings className="w-5 h-5" />
           </Link>
@@ -143,7 +149,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="lg:hidden p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-            aria-label="Меню сайту"
+            aria-label="Menu"
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -152,7 +158,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
 
       {/* Mobile Drawer Menu for extra links */}
       {mobileMenuOpen && (
-        <div className="lg:hidden bg-stone-50/98 dark:bg-stone-950/98 border-b border-stone-200 dark:border-stone-800 p-4 animate-slide-up">
+        <div className="lg:hidden bg-stone-50/98 dark:bg-stone-950/98 border-b border-stone-200 dark:border-stone-800 p-4 animate-slide-up space-y-3">
           <div className="flex flex-col gap-1.5">
             {navLinks.map((link) => {
               const active = isActive(link.to);
@@ -187,7 +193,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
                 className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-900"
               >
                 <ShoppingBag className="w-5 h-5" />
-                <span>Список покупок</span>
+                <span>{t('nav.shoppingList')}</span>
                 {uncompletedCount > 0 && (
                   <span className="ml-auto text-xs font-bold px-2 py-0.5 rounded-full bg-brand-500 text-white">
                     {uncompletedCount}
@@ -200,9 +206,16 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
                 className="flex items-center gap-3 px-4 py-3 rounded-2xl text-sm font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-100 dark:hover:bg-stone-900"
               >
                 <Settings className="w-5 h-5" />
-                <span>Панель автора (CMS)</span>
+                <span>{t('nav.admin')}</span>
               </Link>
             </div>
+          </div>
+
+          <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
+            <div className="text-xs font-semibold text-stone-500 mb-2">
+              {t('profile.languageTitle')}
+            </div>
+            <LanguageSelector variant="inline" />
           </div>
         </div>
       )}

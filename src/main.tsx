@@ -8,17 +8,20 @@ import { ThemeProvider } from './context/ThemeContext';
 import { ToastProvider } from './context/ToastContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import { ShoppingListProvider } from './context/ShoppingListContext';
+import { LanguageProvider } from './context/LanguageContext';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider>
-      <ToastProvider>
-        <FavoritesProvider>
-          <ShoppingListProvider>
-            <App />
-          </ShoppingListProvider>
-        </FavoritesProvider>
-      </ToastProvider>
+      <LanguageProvider>
+        <ToastProvider>
+          <FavoritesProvider>
+            <ShoppingListProvider>
+              <App />
+            </ShoppingListProvider>
+          </FavoritesProvider>
+        </ToastProvider>
+      </LanguageProvider>
     </ThemeProvider>
   </React.StrictMode>
 );

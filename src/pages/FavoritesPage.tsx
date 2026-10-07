@@ -4,6 +4,7 @@ import { Heart, Plus, FolderHeart, Trash2 } from 'lucide-react';
 import { Recipe } from '../types';
 import { recipeService } from '../services/recipeService';
 import { useFavorites } from '../context/FavoritesContext';
+import { useLanguage } from '../context/LanguageContext';
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { Button } from '../components/common/Button';
 import { Modal } from '../components/common/Modal';
@@ -18,6 +19,7 @@ export const FavoritesPage: React.FC = () => {
     createCollection, 
     deleteCollection 
   } = useFavorites();
+  const { t, language, localizeRecipe } = useLanguage();
 
   const [activeTab, setActiveTab] = useState<string>('all');
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
@@ -26,11 +28,11 @@ export const FavoritesPage: React.FC = () => {
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Мої улюблені рецепти та колекції',
-      description: 'Збережені смачні рецепти та персональні кулінарні колекції.'
+      title: `${t('favorites.title')} — ${t('common.siteName')}`,
+      description: t('favorites.subtitle')
     });
     recipeService.getAll().then(setAllRecipes);
-  }, []);
+  }, [language, t]);
 
   const handleCreateCollection = (e: React.FormEvent) => {
     e.preventDefault();
@@ -40,6 +42,30 @@ export const FavoritesPage: React.FC = () => {
     setNewColName('');
     setNewColDesc('');
     setIsCreateModalOpen(false);
+  };
+
+  const getCollectionTitle = (col: { id: string; name: string }) => {
+    if (col.id === 'col-fav') return t('favorites.allFavorites');
+    if (col.id === 'col-breakfast') return t('categoriesList.breakfast.name');
+    if (col.id === 'col-holiday') {
+      if (language === 'en') return 'Holidays';
+      if (language === 'de') return 'Feiertage';
+      if (language === 'zh') return '节日盛宴';
+      return col.name;
+    }
+    if (col.id === 'col-try') {
+      if (language === 'en') return 'To Try';
+      if (language === 'de') return 'Ausprobieren';
+      if (language === 'zh') return '想尝试';
+      return col.name;
+    }
+    if (col.id === 'col-quick-dinner') {
+      if (language === 'en') return 'Quick Dinner';
+      if (language === 'de') return 'Schnelles Abendessen';
+      if (language === 'zh') return '快手晚餐';
+      return col.name;
+    }
+    return col.name;
   };
 
   // Get active recipes to display
@@ -53,6 +79,8 @@ export const FavoritesPage: React.FC = () => {
     }
   }
 
+  const localizedDisplayedRecipes = displayedRecipes.map(localizeRecipe);
+
   return (
     <div className="space-y-8 pb-14 animate-fade-in pt-4">
       {/* Title & Action */}
@@ -60,10 +88,10 @@ export const FavoritesPage: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-stone-900 dark:text-stone-100 flex items-center gap-2.5">
             <Heart className="w-8 h-8 text-rose-500 fill-rose-500" />
-            Мої збережені рецепти
+            {t('favorites.title')}
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Колекції ваших улюблених страв для будь-якої нагоди
+            {t('favorites.subtitle')}
           </p>
         </div>
 
@@ -73,7 +101,7 @@ export const FavoritesPage: React.FC = () => {
           className="border-brand-300 text-brand-700 dark:text-brand-300"
         >
           <Plus className="w-4 h-4 mr-2" />
-          Нова колекція
+          {t('favorites.createCollection')}
         </Button>
       </div>
 
@@ -87,7 +115,7 @@ export const FavoritesPage: React.FC = () => {
               : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-stone-300'
           }`}
         >
-          ❤️ Всі улюблені ({favorites.length})
+          ❤️ {t('favorites.allFavorites')} ({favorites.length})
         </button>
 
         {collections.map(col => {
@@ -103,7 +131,7 @@ export const FavoritesPage: React.FC = () => {
                 }`}
               >
                 <span>{col.icon || '📁'}</span>
-                <span>{col.name}</span>
+                <span>{getCollectionTitle(col)}</span>
                 <span className={`text-[10px] px-1.5 py-0.2 rounded-full ${isSelected ? 'bg-white/30 text-white' : 'bg-stone-100 dark:bg-stone-800 text-stone-500'}`}>
                   {col.recipeIds.length}
                 </span>
@@ -118,7 +146,7 @@ export const FavoritesPage: React.FC = () => {
                     setActiveTab('all');
                   }}
                   className="absolute -top-1.5 -right-1.5 w-5 h-5 rounded-full bg-rose-500 text-white flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition-opacity"
-                  title="Видалити колекцію"
+                  title={t('common.delete')}
                 >
                   <Trash2 className="w-3 h-3" />
                 </button>
@@ -129,9 +157,9 @@ export const FavoritesPage: React.FC = () => {
       </div>
 
       {/* Grid of recipes */}
-      {displayedRecipes.length > 0 ? (
+      {localizedDisplayedRecipes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-          {displayedRecipes.map(recipe => (
+          {localizedDisplayedRecipes.map(recipe => (
             <RecipeCard key={recipe.id} recipe={recipe} />
           ))}
         </div>
@@ -142,13 +170,13 @@ export const FavoritesPage: React.FC = () => {
             <FolderHeart className="w-8 h-8" />
           </div>
           <h3 className="text-lg font-bold text-stone-800 dark:text-stone-200">
-            У цій колекції ще немає страв
+            {t('favorites.emptyTitle')}
           </h3>
           <p className="text-xs sm:text-sm text-stone-500">
-            Натискайте значок серця ❤️ на картках рецептів, щоб зберігати їх сюди.
+            {t('favorites.emptyDesc')}
           </p>
           <Link to="/recipes">
-            <Button variant="primary">Переглянути каталог страв</Button>
+            <Button variant="primary">{t('favorites.exploreBtn')}</Button>
           </Link>
         </div>
       )}
@@ -157,22 +185,22 @@ export const FavoritesPage: React.FC = () => {
       <Modal
         isOpen={isCreateModalOpen}
         onClose={() => setIsCreateModalOpen(false)}
-        title="Створити нову колекцію"
-        description="Наприклад: Романтична вечеря, Дитяче меню або Швидкі перекуси"
+        title={t('favorites.createCollection')}
+        description={t('favorites.collectionNamePlaceholder')}
       >
         <form onSubmit={handleCreateCollection} className="space-y-4 pt-2">
           <Input
-            label="Назва колекції"
+            label={t('favorites.collections')}
             value={newColName}
             onChange={(e) => setNewColName(e.target.value)}
-            placeholder="На свята / Сніданки / Для гостей"
+            placeholder={t('favorites.collectionNamePlaceholder')}
             required
           />
           <Input
-            label="Опис (необов'язково)"
+            label={t('common.edit')}
             value={newColDesc}
             onChange={(e) => setNewColDesc(e.target.value)}
-            placeholder="Короткий опис або примітка"
+            placeholder={t('favorites.collectionNamePlaceholder')}
           />
 
           <div className="flex gap-2 pt-2">
@@ -182,14 +210,14 @@ export const FavoritesPage: React.FC = () => {
               onClick={() => setIsCreateModalOpen(false)}
               className="flex-1"
             >
-              Скасувати
+              {t('common.cancel')}
             </Button>
             <Button
               type="submit"
               disabled={!newColName.trim()}
               className="flex-1"
             >
-              Створити
+              {t('common.save')}
             </Button>
           </div>
         </form>

@@ -2,15 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ChefHat, ArrowLeft, Search } from 'lucide-react';
 import { Button } from '../components/common/Button';
+import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
 
 export const NotFoundPage: React.FC = () => {
+  const { t, language } = useLanguage();
+
   React.useEffect(() => {
     updateMetaTags({
-      title: '404 — Сторінку не знайдено',
-      description: 'Сторінку, яку ви шукаєте, не знайдено.'
+      title: `404 — ${t('notFound.title')} — ${t('common.siteName')}`,
+      description: t('notFound.desc')
     });
-  }, []);
+  }, [language, t]);
 
   return (
     <div className="min-h-[60vh] flex flex-col items-center justify-center text-center p-6 space-y-6 animate-fade-in">
@@ -23,10 +26,10 @@ export const NotFoundPage: React.FC = () => {
           404
         </span>
         <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100">
-          Упс! Цю страву ще не приготували
+          {t('notFound.title')}
         </h1>
         <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
-          Сторінка, яку ви шукаєте, не існує або була переміщена. Спробуйте скористатися пошуком або поверніться на головну.
+          {t('notFound.desc')}
         </p>
       </div>
 
@@ -34,13 +37,13 @@ export const NotFoundPage: React.FC = () => {
         <Link to="/">
           <Button size="lg" className="rounded-2xl">
             <ArrowLeft className="w-4 h-4 mr-2" />
-            На головну сторінку
+            {t('notFound.homeBtn')}
           </Button>
         </Link>
         <Link to="/what-to-cook">
           <Button variant="outline" size="lg" className="rounded-2xl">
             <Search className="w-4 h-4 mr-2" />
-            Що у холодильнику?
+            {t('nav.fridge')}
           </Button>
         </Link>
       </div>

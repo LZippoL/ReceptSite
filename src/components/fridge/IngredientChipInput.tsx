@@ -1,5 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Plus, X, Sparkles, Check } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
+import { Language } from '../../i18n/types';
 import { cn } from '../../utils/cn';
 
 interface IngredientChipInputProps {
@@ -8,19 +10,24 @@ interface IngredientChipInputProps {
   availableSuggestions: string[];
 }
 
-const POPULAR_PANTRY_PRESETS = [
-  'Яйця',
-  'Картопля',
-  'Цибуля',
-  'Куряче філе',
-  'Сир',
-  'Помідори',
-  'Молоко',
-  'Вершкове масло',
-  'Борошно',
-  'Часник',
-  'Морква'
-];
+const LOCALIZED_PRESETS: Record<Language, string[]> = {
+  uk: [
+    'Яйця', 'Картопля', 'Цибуля', 'Куряче філе', 'Сир', 
+    'Помідори', 'Молоко', 'Вершкове масло', 'Борошно', 'Часник', 'Морква'
+  ],
+  en: [
+    'Eggs', 'Potatoes', 'Onion', 'Chicken', 'Cheese', 
+    'Tomatoes', 'Milk', 'Butter', 'Flour', 'Garlic', 'Carrots'
+  ],
+  de: [
+    'Eier', 'Kartoffeln', 'Zwiebeln', 'Hähnchen', 'Käse', 
+    'Tomaten', 'Milch', 'Butter', 'Mehl', 'Knoblauch', 'Karotten'
+  ],
+  zh: [
+    '鸡蛋', '土豆', '洋葱', '鸡肉', '奶酪', 
+    '西红柿', '牛奶', '黄油', '面粉', '大蒜', '胡萝卜'
+  ]
+};
 
 export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
   ingredients,
@@ -31,6 +38,11 @@ export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { language, t } = useLanguage();
+
+  const presets = useMemo(() => {
+    return LOCALIZED_PRESETS[language] || LOCALIZED_PRESETS.uk;
+  }, [language]);
 
   // Filter autocomplete suggestions based on current input
   const query = inputValue.trim().toLowerCase();
@@ -103,7 +115,7 @@ export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
                 removeIngredient(idx);
               }}
               className="w-4 h-4 rounded-full bg-white/20 hover:bg-white/40 flex items-center justify-center transition-colors"
-              aria-label={`Видалити ${ing}`}
+              aria-label={`Remove ${ing}`}
             >
               <X className="w-3 h-3 stroke-[3]" />
             </button>
@@ -119,7 +131,7 @@ export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
             onChange={(e) => setInputValue(e.target.value)}
             onFocus={() => setIsFocused(true)}
             onKeyDown={handleKeyDown}
-            placeholder={ingredients.length === 0 ? "Введіть продукт (наприклад: яйця, сир, молоко)..." : "Ще продукт..."}
+            placeholder={ingredients.length === 0 ? t('fridge.inputPlaceholder') : "..."}
             className="w-full bg-transparent text-sm sm:text-base text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 outline-none p-1"
           />
         </div>
@@ -134,7 +146,7 @@ export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
             }}
             className="text-xs text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 font-semibold px-2 py-1"
           >
-            Очистити все
+            {t('fridge.clearAll')}
           </button>
         )}
 
@@ -142,7 +154,7 @@ export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
         {isFocused && suggestions.length > 0 && (
           <div className="absolute top-full left-0 right-0 mt-2 bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl shadow-xl z-30 overflow-hidden divide-y divide-stone-100 dark:divide-stone-800 max-h-60 overflow-y-auto animate-slide-up">
             <div className="p-2 text-[11px] font-bold uppercase tracking-wider text-stone-400 bg-stone-50 dark:bg-stone-950/40">
-              Виберіть продукт:
+              {t('common.search')}
             </div>
             {suggestions.map((s, i) => (
               <button
@@ -163,10 +175,10 @@ export const IngredientChipInput: React.FC<IngredientChipInputProps> = ({
       <div>
         <p className="text-xs font-semibold text-stone-500 dark:text-stone-400 mb-2 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-brand-500" />
-          Швидке додавання популярних продуктів:
+          {t('fridge.popularTitle')}
         </p>
         <div className="flex flex-wrap gap-1.5">
-          {POPULAR_PANTRY_PRESETS.map((preset) => {
+          {presets.map((preset) => {
             const isAlreadyAdded = ingredients.some(i => i.toLowerCase() === preset.toLowerCase());
             return (
               <button

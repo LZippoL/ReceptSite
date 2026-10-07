@@ -4,6 +4,7 @@ import { Clock, Calendar, ArrowLeft, Share2, ChefHat, Sparkles } from 'lucide-re
 import { Article, Recipe } from '../types';
 import { articleService } from '../services/articleService';
 import { recipeService } from '../services/recipeService';
+import { useLanguage } from '../context/LanguageContext';
 import { RecipeCard } from '../components/recipe/RecipeCard';
 import { ShareModal } from '../components/recipe/ShareModal';
 import { updateMetaTags, generateArticleSchema } from '../utils/seo';
@@ -14,6 +15,7 @@ export const ArticleDetailPage: React.FC = () => {
   const [relatedRecipes, setRelatedRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [isShareOpen, setIsShareOpen] = useState(false);
+  const { t, language, localizeArticle, localizeRecipe } = useLanguage();
 
   useEffect(() => {
     if (!slug) return;
@@ -24,13 +26,6 @@ export const ArticleDetailPage: React.FC = () => {
       setLoading(false);
 
       if (found) {
-        updateMetaTags({
-          title: found.title,
-          description: found.summary,
-          image: found.image,
-          url: window.location.href
-        });
-
         // Load related recipes if mentioned
         if (found.relatedRecipeSlugs && found.relatedRecipeSlugs.length > 0) {
           Promise.all(found.relatedRecipeSlugs.map(s => recipeService.getBySlug(s))).then(results => {
@@ -42,23 +37,40 @@ export const ArticleDetailPage: React.FC = () => {
     });
   }, [slug]);
 
+  const localizedArticle = article ? localizeArticle(article) : null;
+  const localizedRelated = relatedRecipes.map(localizeRecipe);
+
+  useEffect(() => {
+    if (localizedArticle) {
+      updateMetaTags({
+        title: `${localizedArticle.title} — ${t('common.siteName')}`,
+        description: localizedArticle.summary,
+        image: localizedArticle.image,
+        url: window.location.href
+      });
+    }
+  }, [localizedArticle, language, t]);
+
+  const localeDate = language === 'uk' ? 'uk-UA' : language === 'de' ? 'de-DE' : language === 'zh' ? 'zh-CN' : 'en-US';
+  const tagsLabel = language === 'zh' ? '标签:' : language === 'de' ? 'Schlagwörter:' : language === 'en' ? 'Tags:' : 'Теги:';
+
   if (loading) {
     return (
       <div className="py-20 text-center space-y-4">
         <div className="w-12 h-12 border-4 border-brand-500 border-t-transparent rounded-full animate-spin mx-auto" />
-        <p className="text-sm text-stone-500 font-medium">Завантажуємо статтю...</p>
+        <p className="text-sm text-stone-500 font-medium">{t('common.loading')}</p>
       </div>
     );
   }
 
-  if (!article) {
+  if (!article || !localizedArticle) {
     return (
       <div className="py-20 text-center space-y-4 max-w-md mx-auto">
         <h2 className="text-2xl font-bold text-stone-800 dark:text-stone-200">
-          Статтю не знайдено
+          {t('notFound.title')}
         </h2>
         <Link to="/articles" className="text-brand-600 hover:underline">
-          Повернутися до статей
+          {t('articles.title')}
         </Link>
       </div>
     );
@@ -69,7 +81,7 @@ export const ArticleDetailPage: React.FC = () => {
       {/* Schema.org Article Structured Data */}
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: generateArticleSchema(article) }}
+        dangerouslySetInnerHTML={{ __html: generateArticleSchema(localizedArticle) }}
       />
 
       {/* Back button */}
@@ -79,7 +91,7 @@ export const ArticleDetailPage: React.FC = () => {
           className="inline-flex items-center gap-1.5 text-xs font-semibold text-stone-500 hover:text-brand-600 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />
-          Всі кулінарні статті
+          {t('common.back')} ({t('nav.articles')})
         </Link>
       </div>
 
@@ -87,20 +99,20 @@ export const ArticleDetailPage: React.FC = () => {
       <div className="space-y-4">
         <div className="flex items-center gap-2">
           <span className="px-3 py-1 rounded-xl bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 text-xs font-bold">
-            {article.category}
+            {localizedArticle.category}
           </span>
           <span className="text-xs text-stone-600 dark:text-stone-300 flex items-center gap-1">
-            <Clock className="w-3.5 h-3.5" />
-            {article.readTime} хв читання
+            <Clock className="w-3.5 h-3.5 text-amber-500" />
+            {localizedArticle.readTime} {t('common.min')}
           </span>
         </div>
 
-        <h1 className="text-3xl sm:text-5xl font-extrabold text-stone-900 dark:text-stone-100 leading-tight">
-          {article.title}
+        <h1 className="text-3xl sm:5xl font-extrabold text-stone-900 dark:text-stone-100 leading-tight">
+          {localizedArticle.title}
         </h1>
 
         <p className="text-base sm:text-lg text-stone-600 dark:text-stone-300 leading-relaxed font-normal">
-          {article.summary}
+          {localizedArticle.summary}
         </p>
 
         {/* Author bar */}
@@ -111,10 +123,10 @@ export const ArticleDetailPage: React.FC = () => {
             </div>
             <div>
               <p className="font-bold text-stone-900 dark:text-stone-100 text-sm">
-                {article.author.name}
+                {localizedArticle.author.name}
               </p>
               <p className="text-[11px] text-stone-400">
-                {article.author.role || 'Кулінарний експерт'}
+                {localizedArticle.author.role || t('articles.byAuthor')}
               </p>
             </div>
           </div>
@@ -122,12 +134,12 @@ export const ArticleDetailPage: React.FC = () => {
           <div className="flex items-center gap-4">
             <span className="hidden sm:flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5" />
-              {new Date(article.createdAt).toLocaleDateString('uk-UA')}
+              {new Date(localizedArticle.createdAt).toLocaleDateString(localeDate)}
             </span>
             <button
               onClick={() => setIsShareOpen(true)}
               className="p-2 rounded-xl text-stone-500 hover:text-brand-600 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-              title="Поділитися"
+              title={t('articles.shareArticle')}
             >
               <Share2 className="w-4 h-4" />
             </button>
@@ -138,8 +150,8 @@ export const ArticleDetailPage: React.FC = () => {
       {/* Hero Image */}
       <div className="aspect-[16/9] rounded-3xl overflow-hidden shadow-xl">
         <img
-          src={article.image}
-          alt={article.title}
+          src={localizedArticle.image}
+          alt={localizedArticle.title}
           className="w-full h-full object-cover"
         />
       </div>
@@ -147,14 +159,14 @@ export const ArticleDetailPage: React.FC = () => {
       {/* Rich Content Render */}
       <div
         className="prose dark:prose-invert max-w-none text-stone-800 dark:text-stone-200 text-base leading-relaxed space-y-4"
-        dangerouslySetInnerHTML={{ __html: article.content }}
+        dangerouslySetInnerHTML={{ __html: localizedArticle.content }}
       />
 
       {/* Tags */}
-      {article.tags.length > 0 && (
+      {localizedArticle.tags.length > 0 && (
         <div className="pt-6 border-t border-stone-200 dark:border-stone-800 flex flex-wrap items-center gap-2">
-          <span className="text-xs font-bold text-stone-400 mr-1">Теги:</span>
-          {article.tags.map(tag => (
+          <span className="text-xs font-bold text-stone-400 mr-1">{tagsLabel}</span>
+          {localizedArticle.tags.map(tag => (
             <span
               key={tag}
               className="text-xs font-medium px-3 py-1 rounded-xl bg-stone-100 dark:bg-stone-800 text-stone-600 dark:text-stone-400"
@@ -166,14 +178,14 @@ export const ArticleDetailPage: React.FC = () => {
       )}
 
       {/* Related recipes */}
-      {relatedRecipes.length > 0 && (
+      {localizedRelated.length > 0 && (
         <div className="space-y-4 pt-10 border-t border-stone-200 dark:border-stone-800">
           <h3 className="text-xl font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
             <Sparkles className="w-5 h-5 text-brand-600" />
-            Спробуйте рецепти до цієї теми:
+            {t('articles.relatedRecipes')}
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-            {relatedRecipes.map(rec => (
+            {localizedRelated.map(rec => (
               <RecipeCard key={rec.id} recipe={rec} />
             ))}
           </div>
@@ -184,8 +196,8 @@ export const ArticleDetailPage: React.FC = () => {
       <ShareModal
         isOpen={isShareOpen}
         onClose={() => setIsShareOpen(false)}
-        title={article.title}
-        description={article.summary}
+        title={localizedArticle.title}
+        description={localizedArticle.summary}
       />
     </article>
   );

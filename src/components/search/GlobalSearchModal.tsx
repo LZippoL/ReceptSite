@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, X, Clock, Flame, ChevronRight, Tag } from 'lucide-react';
 import { Recipe } from '../../types';
 import { recipeService } from '../../services/recipeService';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface GlobalSearchModalProps {
   isOpen: boolean;
@@ -15,6 +16,15 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 }) => {
   const [query, setQuery] = useState('');
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const { t, language, localizeRecipe } = useLanguage();
+
+  const defaultRecent = useMemo(() => {
+    if (language === 'zh') return ['番茄炒蛋', '意大利面', '鸡肉', '汤'];
+    if (language === 'de') return ['Pasta', 'Borschtsch', 'Hähnchen', 'Suppe'];
+    if (language === 'en') return ['Borscht', 'Pasta', 'Chicken', 'Salad'];
+    return ['борщ', 'сирники', 'паста', 'курка'];
+  }, [language]);
+
   const [recentQueries, setRecentQueries] = useState<string[]>(() => {
     try {
       const saved = localStorage.getItem('smakolyk_recent_searches');
@@ -43,9 +53,6 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
       if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
         if (isOpen) onClose();
-        else {
-          // Trigger search modal from shortcut
-        }
       }
       if (e.key === 'Escape' && isOpen) {
         onClose();
@@ -55,6 +62,10 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, [isOpen, onClose]);
 
+  const localizedRecipes = useMemo(() => {
+    return recipes.map(localizeRecipe);
+  }, [recipes, localizeRecipe]);
+
   if (!isOpen) return null;
 
   const trimmed = query.trim().toLowerCase();
@@ -62,7 +73,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
   // Autocomplete suggestions based on title, ingredients, tags
   const suggestions: string[] = [];
   if (trimmed.length >= 2) {
-    recipes.forEach(r => {
+    localizedRecipes.forEach(r => {
       if (r.title.toLowerCase().includes(trimmed) && !suggestions.includes(r.title)) {
         suggestions.push(r.title);
       }
@@ -81,7 +92,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
 
   // Filtered recipes
   const filteredRecipes = trimmed.length > 0
-    ? recipes.filter(r => {
+    ? localizedRecipes.filter(r => {
         return (
           r.title.toLowerCase().includes(trimmed) ||
           r.description.toLowerCase().includes(trimmed) ||
@@ -112,6 +123,14 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
     saveRecentSearch(term);
   };
 
+  const suggestionsLabel = language === 'zh' ? '搜索建议' : language === 'de' ? 'Vorschläge' : language === 'en' ? 'Suggestions' : 'Підказки';
+  const foundLabel = language === 'zh' ? '搜索结果' : language === 'de' ? 'Gefundene Rezepte' : language === 'en' ? 'Found Recipes' : 'Знайдені рецепти';
+  const popularLabel = language === 'zh' ? '热门搜索' : language === 'de' ? 'Beliebte Suchanfragen' : language === 'en' ? 'Popular Searches' : 'Популярні запити';
+  const noFoundTitle = language === 'zh' ? `未找到与 “${query}” 相关的食谱` : language === 'de' ? `Keine Rezepte gefunden für "${query}"` : language === 'en' ? `No recipes found for "${query}"` : `Нічого не знайдено за запитом "${query}"`;
+  const noFoundDesc = language === 'zh' ? '尝试搜索其他关键词或使用冰箱食材查找' : language === 'de' ? 'Versuchen Sie einen anderen Begriff oder durchsuchen Sie Ihren Kühlschrank' : language === 'en' ? 'Try a different term or search by ingredients in your fridge' : 'Спробуйте інше слово або скористайтеся пошуком за наявними продуктами у холодильнику';
+
+  const queriesToShow = recentQueries.length > 0 ? recentQueries : defaultRecent;
+
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-12 sm:pt-20 px-4 bg-stone-950/70 backdrop-blur-md animate-fade-in">
       <div
@@ -129,7 +148,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Що ви хочете приготувати? (страва, продукт, автор...)"
+            placeholder={t('common.searchPlaceholder')}
             className="flex-1 bg-transparent text-base sm:text-lg text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-500 outline-none"
           />
           {query && (
@@ -154,7 +173,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
           {suggestions.length > 0 && (
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-2.5">
-                Підказки
+                {suggestionsLabel}
               </p>
               <div className="flex flex-wrap gap-2">
                 {suggestions.slice(0, 6).map((item, idx) => (
@@ -175,7 +194,7 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
           {trimmed.length > 0 ? (
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">
-                Знайдені рецепти ({filteredRecipes.length})
+                {foundLabel} ({filteredRecipes.length})
               </p>
 
               {filteredRecipes.length > 0 ? (
@@ -198,11 +217,11 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
                         <div className="flex items-center gap-3 text-xs text-stone-500 mt-1">
                           <span className="flex items-center gap-1">
                             <Clock className="w-3.5 h-3.5" />
-                            {recipe.totalTime} хв
+                            {recipe.totalTime} {t('common.min')}
                           </span>
                           <span className="flex items-center gap-1">
                             <Flame className="w-3.5 h-3.5 text-brand-500" />
-                            {recipe.calories} ккал
+                            {recipe.calories} {t('common.cal')}
                           </span>
                           <span className="text-amber-500 font-semibold">
                             ★ {recipe.rating}
@@ -216,10 +235,10 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
               ) : (
                 <div className="text-center py-8">
                   <p className="text-sm font-semibold text-stone-800 dark:text-stone-200">
-                    Нічого не знайдено за запитом "{query}"
+                    {noFoundTitle}
                   </p>
                   <p className="text-xs text-stone-500 mt-1">
-                    Спробуйте інше слово або скористайтеся пошуком за наявними продуктами у холодильнику
+                    {noFoundDesc}
                   </p>
                 </div>
               )}
@@ -228,10 +247,10 @@ export const GlobalSearchModal: React.FC<GlobalSearchModalProps> = ({
             /* Recent searches when empty query */
             <div>
               <p className="text-xs font-bold uppercase tracking-wider text-stone-400 dark:text-stone-500 mb-3">
-                Популярні запити
+                {popularLabel}
               </p>
               <div className="flex flex-wrap gap-2">
-                {recentQueries.map((term, i) => (
+                {queriesToShow.map((term, i) => (
                   <button
                     key={i}
                     onClick={() => setQuery(term)}

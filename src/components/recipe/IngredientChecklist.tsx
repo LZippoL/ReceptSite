@@ -4,6 +4,7 @@ import { Recipe } from '../../types';
 import { ServingsCalculator } from './ServingsCalculator';
 import { useShoppingList } from '../../context/ShoppingListContext';
 import { useToast } from '../../context/ToastContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { Button } from '../common/Button';
 import { Modal } from '../common/Modal';
 import { cn } from '../../utils/cn';
@@ -22,6 +23,7 @@ export const IngredientChecklist: React.FC<IngredientChecklistProps> = ({ recipe
 
   const { addMultipleItems } = useShoppingList();
   const { success } = useToast();
+  const { t } = useLanguage();
 
   const scalingRatio = servings / recipe.servings;
 
@@ -34,14 +36,12 @@ export const IngredientChecklist: React.FC<IngredientChecklistProps> = ({ recipe
   const formatScaledAmount = (amount: number): string => {
     if (!amount) return '';
     const scaled = amount * scalingRatio;
-    // Format to max 1 decimal place if fractional, or integer
     if (Number.isInteger(scaled)) return scaled.toString();
     const rounded = Math.round(scaled * 10) / 10;
     return rounded.toString();
   };
 
   const handleOpenAddModal = () => {
-    // By default select non-staple ingredients that are NOT checked off as prepared
     const initialSelected = recipe.ingredients
       .filter(i => !checkedIds.includes(i.id) && !i.isStaple)
       .map(i => i.id);
@@ -67,7 +67,7 @@ export const IngredientChecklist: React.FC<IngredientChecklistProps> = ({ recipe
 
     if (itemsToAdd.length > 0) {
       addMultipleItems(itemsToAdd);
-      success('Додано до списку покупок', `Успішно додано ${itemsToAdd.length} інгредієнтів`);
+      success(t('recipeDetail.addedToShoppingList'), `${itemsToAdd.length}`);
     }
 
     setIsAddModalOpen(false);
@@ -78,13 +78,13 @@ export const IngredientChecklist: React.FC<IngredientChecklistProps> = ({ recipe
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
         <div>
           <h3 className="text-lg sm:text-xl font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
-            Інгредієнти
+            {t('recipeDetail.ingredientsTitle')}
             <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300">
               {recipe.ingredients.length}
             </span>
           </h3>
           <p className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
-            Відмічайте підготовлені продукти під час готування
+            {t('common.servingsCount')}: {servings}
           </p>
         </div>
 
@@ -156,26 +156,26 @@ export const IngredientChecklist: React.FC<IngredientChecklistProps> = ({ recipe
         className="w-full border-brand-300 dark:border-brand-800 text-brand-700 dark:text-brand-300 hover:bg-brand-50 dark:hover:bg-brand-950/50"
       >
         <ShoppingCart className="w-4 h-4 mr-2" />
-        Додати інгредієнти у список покупок
+        {t('recipeDetail.addToShoppingList')}
       </Button>
 
       {/* Selection Modal */}
       <Modal
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
-        title="Виберіть продукти для списку"
-        description="Позначте лише ті інгредієнти, які вам потрібно докупити в магазині"
+        title={t('shoppingList.title')}
+        description={t('recipeDetail.addToShoppingList')}
       >
         <div className="space-y-4">
           <div className="flex items-center justify-between text-xs pb-2 border-b border-stone-100 dark:border-stone-800">
             <span className="font-semibold text-stone-500">
-              Обрано: {selectedForCart.length} з {recipe.ingredients.length}
+              {selectedForCart.length} / {recipe.ingredients.length}
             </span>
             <button
               onClick={() => setSelectedForCart(recipe.ingredients.map(i => i.id))}
               className="text-brand-600 dark:text-brand-400 font-semibold hover:underline"
             >
-              Вибрати всі
+              {t('recipeDetail.checkAll')}
             </button>
           </div>
 
@@ -212,14 +212,14 @@ export const IngredientChecklist: React.FC<IngredientChecklistProps> = ({ recipe
               onClick={() => setIsAddModalOpen(false)}
               className="flex-1"
             >
-              Скасувати
+              {t('common.cancel')}
             </Button>
             <Button
               onClick={handleConfirmAddToCart}
               disabled={selectedForCart.length === 0}
               className="flex-1"
             >
-              Додати ({selectedForCart.length})
+              {t('common.save')} ({selectedForCart.length})
             </Button>
           </div>
         </div>

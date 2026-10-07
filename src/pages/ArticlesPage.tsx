@@ -3,24 +3,27 @@ import { Link } from 'react-router-dom';
 import { BookOpen, Clock, Calendar, ArrowRight, Search } from 'lucide-react';
 import { Article } from '../types';
 import { articleService } from '../services/articleService';
+import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
 
 export const ArticlesPage: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [selectedCategory, setSelectedCategory] = useState<string>('');
   const [query, setQuery] = useState('');
+  const { t, language, localizeArticle } = useLanguage();
 
   useEffect(() => {
     updateMetaTags({
-      title: 'Кулінарні статті, посібники та секрети шефів',
-      description: 'Корисні поради від кулінарних експертів: як варити розсипчастий рис, смажити ідеальний стейк та обирати свіжі продукти.'
+      title: `${t('articles.title')} — ${t('common.siteName')}`,
+      description: t('articles.subtitle')
     });
     articleService.getAll().then(setArticles);
-  }, []);
+  }, [language, t]);
 
-  const categories = Array.from(new Set(articles.map(a => a.category)));
+  const localizedArticles = articles.map(localizeArticle);
+  const categories = Array.from(new Set(localizedArticles.map(a => a.category)));
 
-  const filteredArticles = articles.filter(a => {
+  const filteredArticles = localizedArticles.filter(a => {
     if (selectedCategory && a.category !== selectedCategory) return false;
     if (query.trim()) {
       const q = query.toLowerCase();
@@ -33,6 +36,8 @@ export const ArticlesPage: React.FC = () => {
     return true;
   });
 
+  const localeDate = language === 'uk' ? 'uk-UA' : language === 'de' ? 'de-DE' : language === 'zh' ? 'zh-CN' : 'en-US';
+
   return (
     <div className="space-y-8 pb-14 animate-fade-in pt-4">
       {/* Page Header */}
@@ -40,10 +45,10 @@ export const ArticlesPage: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-4xl font-extrabold text-stone-900 dark:text-stone-100 flex items-center gap-3">
             <BookOpen className="w-8 h-8 text-brand-600" />
-            Кулінарні статті та гіди
+            {t('articles.title')}
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Секрети професійних шефів, лайфхаки та корисні посібники для вашої кухні
+            {t('articles.subtitle')}
           </p>
         </div>
 
@@ -54,7 +59,7 @@ export const ArticlesPage: React.FC = () => {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Пошук статей..."
+            placeholder={t('common.searchPlaceholder')}
             className="w-full h-11 pl-9 pr-4 text-sm bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 rounded-2xl outline-none focus:border-brand-500"
           />
         </div>
@@ -70,7 +75,7 @@ export const ArticlesPage: React.FC = () => {
               : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-800 text-stone-700 dark:text-stone-300 hover:border-brand-300'
           }`}
         >
-          Усі теми ({articles.length})
+          {t('common.all')} ({articles.length})
         </button>
         {categories.map(cat => (
           <button
@@ -111,12 +116,12 @@ export const ArticlesPage: React.FC = () => {
                 <div className="flex items-center gap-3 text-xs text-stone-600 dark:text-stone-300 mb-2">
                   <span className="flex items-center gap-1">
                     <Clock className="w-3.5 h-3.5 text-amber-500" />
-                    {article.readTime} хв читання
+                    {article.readTime} {t('common.min')}
                   </span>
                   <span>•</span>
                   <span className="flex items-center gap-1">
                     <Calendar className="w-3.5 h-3.5" />
-                    {new Date(article.createdAt).toLocaleDateString('uk-UA')}
+                    {new Date(article.createdAt).toLocaleDateString(localeDate)}
                   </span>
                 </div>
 
@@ -134,13 +139,13 @@ export const ArticlesPage: React.FC = () => {
 
             <div className="px-5 pb-5 pt-0 flex items-center justify-between border-t border-stone-100 dark:border-stone-800/60 mt-2">
               <span className="text-xs text-stone-400">
-                Автор: {article.author.name}
+                {t('articles.byAuthor')} {article.author.name}
               </span>
               <Link
                 to={`/articles/${article.slug}`}
                 className="text-xs font-bold text-brand-600 dark:text-brand-400 hover:underline flex items-center gap-1"
               >
-                Читати
+                {t('common.view')}
                 <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>

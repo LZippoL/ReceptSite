@@ -4,6 +4,7 @@ import confetti from 'canvas-confetti';
 import { Recipe } from '../../types';
 import { CookingTimer } from './CookingTimer';
 import { Button } from '../common/Button';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface CookingModeModalProps {
   recipe: Recipe;
@@ -18,6 +19,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
 }) => {
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
   const [completedSteps, setCompletedSteps] = useState<number[]>([]);
+  const { t } = useLanguage();
 
   useEffect(() => {
     if (isOpen) {
@@ -70,7 +72,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
           </div>
           <div>
             <span className="text-xs uppercase tracking-wider text-brand-400 font-bold block">
-              Режим шеф-кухаря
+              {t('cookingMode.title')}
             </span>
             <h2 className="text-sm sm:text-base font-bold text-white truncate max-w-xs sm:max-w-md">
               {recipe.title}
@@ -81,7 +83,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
         <button
           onClick={onClose}
           className="p-3 rounded-2xl bg-stone-800 hover:bg-stone-700 text-stone-300 hover:text-white transition-colors"
-          aria-label="Вийти з режиму приготування"
+          aria-label={t('cookingMode.exit')}
         >
           <X className="w-6 h-6" />
         </button>
@@ -95,12 +97,12 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
         />
       </div>
 
-      {/* Main Step Card: extra large text for wet/busy hands */}
+      {/* Main Step Card */}
       <div className="flex-1 max-w-3xl mx-auto w-full flex flex-col justify-center py-6">
         <div className="bg-stone-800/80 border border-stone-700/80 rounded-3xl p-6 sm:p-10 shadow-2xl relative">
           <div className="flex items-center justify-between mb-4">
             <span className="text-sm sm:text-base font-bold px-3 py-1 rounded-xl bg-brand-500 text-white">
-              Крок {currentStep.stepNumber} з {steps.length}
+              {t('cookingMode.stepOf')} {currentStep.stepNumber} / {steps.length}
             </span>
 
             {/* Timer if available */}
@@ -108,7 +110,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
               <CookingTimer
                 initialMinutes={currentStep.timerMinutes}
                 size="lg"
-                label="Таймер кроку"
+                label={t('recipeDetail.startTimer')}
               />
             )}
           </div>
@@ -126,7 +128,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
             <div className="mt-6 p-4 rounded-2xl bg-amber-500/10 border border-amber-500/30 flex items-start gap-3">
               <Sparkles className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
               <p className="text-sm sm:text-base text-amber-200 leading-snug">
-                <strong className="text-amber-300">Підказка: </strong>
+                <strong className="text-amber-300">{t('recipeDetail.tip')}: </strong>
                 {currentStep.tip}
               </p>
             </div>
@@ -134,7 +136,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
         </div>
       </div>
 
-      {/* Bottom Controls: large touch targets for thumbs */}
+      {/* Bottom Controls */}
       <div className="max-w-3xl mx-auto w-full pt-4 border-t border-stone-800 flex items-center justify-between gap-4">
         <Button
           onClick={handlePrev}
@@ -144,7 +146,7 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
           className="min-h-[56px] text-base px-6 rounded-2xl bg-stone-800 text-stone-200 hover:bg-stone-700"
         >
           <ChevronLeft className="w-6 h-6 mr-1" />
-          Назад
+          {t('cookingMode.prevStep')}
         </Button>
 
         <span className="text-sm text-stone-400 font-medium">
@@ -159,11 +161,11 @@ export const CookingModeModal: React.FC<CookingModeModalProps> = ({
           {isLast ? (
             <>
               <CheckCircle2 className="w-6 h-6 mr-2" />
-              Готово!
+              {t('cookingMode.finishCooking')}
             </>
           ) : (
             <>
-              Далі
+              {t('cookingMode.nextStep')}
               <ChevronRight className="w-6 h-6 ml-1" />
             </>
           )}

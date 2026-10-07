@@ -3,6 +3,7 @@ import { FilterState } from '../../types';
 import { CUISINES } from '../../data/categories';
 import { Button } from '../common/Button';
 import { X, RotateCcw } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 import { cn } from '../../utils/cn';
 
 interface FilterSheetProps {
@@ -20,6 +21,8 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
   isOpen = false,
   onClose
 }) => {
+  const { t, getCuisineName } = useLanguage();
+
   const updateFilter = <K extends keyof FilterState>(key: K, value: FilterState[K]) => {
     onChange({ ...filters, [key]: value });
   };
@@ -47,7 +50,7 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
       {onClose && (
         <div className="flex items-center justify-between pb-3 border-b border-stone-200 dark:border-stone-800">
           <h3 className="text-lg font-bold text-stone-900 dark:text-stone-100">
-            Фільтри та сортування
+            {t('filters.title')}
           </h3>
           <button
             onClick={onClose}
@@ -61,14 +64,14 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
       {/* Sorting */}
       <div>
         <label className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2.5 block">
-          Сортувати за
+          {t('recipes.sortBy')}
         </label>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
           {[
-            { id: 'popularity', label: 'Популярністю' },
-            { id: 'rating', label: 'Рейтингом ★' },
-            { id: 'newest', label: 'Новизною' },
-            { id: 'cookTime', label: 'Швидкістю ⚡' }
+            { id: 'popularity', label: t('recipes.sortPopular') },
+            { id: 'rating', label: `${t('recipes.sortRating')} ★` },
+            { id: 'newest', label: t('recipes.sortNewest') },
+            { id: 'cookTime', label: `${t('recipes.sortCookTime')} ⚡` }
           ].map(opt => (
             <button
               key={opt.id}
@@ -90,27 +93,27 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
       {/* Cooking Time */}
       <div>
         <label className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2.5 block">
-          Час приготування
+          {t('filters.maxTime')}
         </label>
         <div className="flex flex-wrap gap-2">
           {[
-            { value: null, label: 'Будь-який' },
-            { value: 15, label: 'до 15 хв' },
-            { value: 30, label: 'до 30 хв' },
-            { value: 60, label: 'до 60 хв' }
-          ].map((t, idx) => (
+            { value: null, label: t('common.all') },
+            { value: 15, label: t('filters.upTo15') },
+            { value: 30, label: t('filters.upTo30') },
+            { value: 60, label: t('filters.upTo60') }
+          ].map((item, idx) => (
             <button
               key={idx}
               type="button"
-              onClick={() => updateFilter('maxTime', t.value)}
+              onClick={() => updateFilter('maxTime', item.value)}
               className={cn(
                 'text-xs font-semibold px-3.5 py-2 rounded-xl border transition-all',
-                filters.maxTime === t.value
+                filters.maxTime === item.value
                   ? 'bg-brand-600 border-brand-600 text-white'
                   : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300'
               )}
             >
-              {t.label}
+              {item.label}
             </button>
           ))}
         </div>
@@ -119,14 +122,14 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
       {/* Difficulty */}
       <div>
         <label className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2.5 block">
-          Складність
+          {t('filters.difficulty')}
         </label>
         <div className="flex flex-wrap gap-2">
           {[
-            { id: '', label: 'Всі' },
-            { id: 'easy', label: 'Легко' },
-            { id: 'medium', label: 'Середньо' },
-            { id: 'hard', label: 'Складно' }
+            { id: '', label: t('common.all') },
+            { id: 'easy', label: t('recipeDetail.difficultyEasy') },
+            { id: 'medium', label: t('recipeDetail.difficultyMedium') },
+            { id: 'hard', label: t('recipeDetail.difficultyHard') }
           ].map(d => (
             <button
               key={d.id}
@@ -148,14 +151,14 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
       {/* Dietary */}
       <div>
         <label className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2.5 block">
-          Особливості харчування
+          {t('filters.dietary')}
         </label>
         <div className="grid grid-cols-2 gap-2">
           {[
-            { key: 'vegetarian', label: '🌱 Вегетаріанське' },
-            { key: 'vegan', label: '🥑 Vegan' },
-            { key: 'glutenFree', label: '🌾 Без глютену' },
-            { key: 'lactoseFree', label: '🥛 Без лактози' }
+            { key: 'vegetarian', label: `🌱 ${t('recipeDetail.dietVegetarian')}` },
+            { key: 'vegan', label: `🥑 ${t('recipeDetail.dietVegan')}` },
+            { key: 'glutenFree', label: `🌾 ${t('recipeDetail.dietGlutenFree')}` },
+            { key: 'lactoseFree', label: `🥛 ${t('recipeDetail.dietLactoseFree')}` }
           ].map(item => {
             const active = filters.dietary[item.key as keyof FilterState['dietary']];
             return (
@@ -180,7 +183,7 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
       {/* Cuisine */}
       <div>
         <label className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400 mb-2.5 block">
-          Кухня світу
+          {t('filters.cuisine')}
         </label>
         <div className="flex flex-wrap gap-1.5 max-h-36 overflow-y-auto">
           <button
@@ -193,7 +196,7 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
                 : 'bg-white dark:bg-stone-900 border-stone-200 dark:border-stone-700 text-stone-700 dark:text-stone-300'
             )}
           >
-            Всі кухні
+            {t('common.all')}
           </button>
           {CUISINES.map(c => (
             <button
@@ -208,7 +211,7 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
               )}
             >
               <span>{c.flag}</span>
-              <span>{c.name}</span>
+              <span>{getCuisineName(c.id)}</span>
             </button>
           ))}
         </div>
@@ -223,12 +226,12 @@ export const FilterSheet: React.FC<FilterSheetProps> = ({
             className="flex-1 text-xs text-rose-600 hover:text-rose-700"
           >
             <RotateCcw className="w-3.5 h-3.5 mr-1" />
-            Скинути
+            {t('common.reset')}
           </Button>
         )}
         {onClose && (
           <Button onClick={onClose} className="flex-1">
-            Застосувати
+            {t('filters.showResults')}
           </Button>
         )}
       </div>

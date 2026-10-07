@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useShoppingList } from '../context/ShoppingListContext';
 import { useToast } from '../context/ToastContext';
+import { useLanguage } from '../context/LanguageContext';
 import { Button } from '../components/common/Button';
 import { updateMetaTags } from '../utils/seo';
 
@@ -25,15 +26,16 @@ export const ShoppingListPage: React.FC = () => {
   } = useShoppingList();
 
   const { success } = useToast();
+  const { t, language } = useLanguage();
   const [customName, setCustomName] = useState('');
   const [customAmount, setCustomAmount] = useState('');
 
   React.useEffect(() => {
     updateMetaTags({
-      title: 'Список покупок — Смаколик',
-      description: 'Зручний список покупок для супермаркету. Відмічайте придбані товари, додавайте свої та діліться списком.'
+      title: `${t('shoppingList.title')} — ${t('common.siteName')}`,
+      description: t('shoppingList.subtitle')
     });
-  }, []);
+  }, [language, t]);
 
   const handleAddCustom = (e: React.FormEvent) => {
     e.preventDefault();
@@ -51,12 +53,17 @@ export const ShoppingListPage: React.FC = () => {
     const text = items
       .map(i => `${i.completed ? '✓ ' : '☐ '} ${i.name} ${i.amount ? `(${i.amount})` : ''}`)
       .join('\n');
-    navigator.clipboard.writeText(`🛒 Список покупок від «Смаколик»:\n\n${text}`);
-    success('Скопійовано!', 'Список покупок скопійовано для відправки');
+    navigator.clipboard.writeText(`🛒 ${t('shoppingList.title')} (${t('common.siteName')}):\n\n${text}`);
+    success(t('common.copied'), t('shoppingList.title'));
   };
 
   const completedItems = items.filter(i => i.completed);
   const pendingItems = items.filter(i => !i.completed);
+
+  const amountPlaceholder = language === 'zh' ? '1千克 / 2个' : language === 'de' ? '1 kg / 2 Stk' : language === 'en' ? '1 kg / 2 pcs' : '1 кг / 2 шт';
+  const toBuyLabel = language === 'zh' ? '待购清单' : language === 'de' ? 'Zu kaufen' : language === 'en' ? 'To Buy' : 'Купити';
+  const boughtLabel = language === 'zh' ? '已购买' : language === 'de' ? 'Bereits gekauft' : language === 'en' ? 'Purchased' : 'Вже куплено';
+  const fromRecipeLabel = language === 'zh' ? '来自食谱' : language === 'de' ? 'aus Rezept' : language === 'en' ? 'from recipe' : 'з рецепта';
 
   return (
     <div className="max-w-2xl mx-auto space-y-6 pb-16 animate-fade-in pt-4">
@@ -65,10 +72,11 @@ export const ShoppingListPage: React.FC = () => {
         <div>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-stone-900 dark:text-stone-100 flex items-center gap-2.5">
             <ShoppingBag className="w-7 h-7 text-brand-600" />
-            Список покупок
+            {t('shoppingList.title')}
           </h1>
           <p className="text-xs sm:text-sm text-stone-500 mt-1">
-            Залишилося купити: <strong className="text-brand-600">{uncompletedCount}</strong> з {items.length} товарів
+            {t('shoppingList.itemsRemaining')}{' '}
+            <strong className="text-brand-600">{uncompletedCount}</strong> / {items.length}
           </p>
         </div>
 
@@ -78,10 +86,10 @@ export const ShoppingListPage: React.FC = () => {
               onClick={handleCopyList}
               variant="outline"
               size="sm"
-              title="Скопіювати текстовий список"
+              title={t('shareModal.copyLink')}
             >
               <Copy className="w-4 h-4 mr-1.5" />
-              Копіювати
+              {t('common.share')}
             </Button>
             {completedItems.length > 0 && (
               <Button
@@ -90,7 +98,7 @@ export const ShoppingListPage: React.FC = () => {
                 size="sm"
                 className="text-stone-500 hover:text-rose-500"
               >
-                Очистити куплене
+                {t('shoppingList.clearChecked')}
               </Button>
             )}
           </div>
@@ -104,7 +112,7 @@ export const ShoppingListPage: React.FC = () => {
             type="text"
             value={customName}
             onChange={(e) => setCustomName(e.target.value)}
-            placeholder="Додати свій товар (напр. хліб, яблука)..."
+            placeholder={t('shoppingList.addItemPlaceholder')}
             className="w-full h-10 px-3 text-sm bg-transparent outline-none text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
             required
           />
@@ -114,11 +122,11 @@ export const ShoppingListPage: React.FC = () => {
             type="text"
             value={customAmount}
             onChange={(e) => setCustomAmount(e.target.value)}
-            placeholder="1 кг / 2 шт"
+            placeholder={amountPlaceholder}
             className="w-full h-10 px-2 text-xs sm:text-sm bg-stone-100 dark:bg-stone-800 rounded-xl outline-none text-stone-900 dark:text-stone-100 placeholder:text-stone-400 border border-stone-200 dark:border-stone-700"
           />
         </div>
-        <Button type="submit" size="sm" className="rounded-xl shrink-0">
+        <Button type="submit" size="sm" className="rounded-xl shrink-0" title={t('shoppingList.addItemBtn')}>
           <Plus className="w-4 h-4" />
         </Button>
       </form>
@@ -130,7 +138,7 @@ export const ShoppingListPage: React.FC = () => {
           {pendingItems.length > 0 && (
             <div className="space-y-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400 px-1">
-                Купити ({pendingItems.length})
+                {toBuyLabel} ({pendingItems.length})
               </h3>
               <div className="space-y-1.5">
                 {pendingItems.map(item => (
@@ -149,7 +157,7 @@ export const ShoppingListPage: React.FC = () => {
                         </p>
                         {item.recipeTitle && (
                           <p className="text-[11px] text-stone-400 truncate">
-                            з рецепта: {item.recipeTitle}
+                            {fromRecipeLabel}: {item.recipeTitle}
                           </p>
                         )}
                       </div>
@@ -167,7 +175,7 @@ export const ShoppingListPage: React.FC = () => {
                           removeItem(item.id);
                         }}
                         className="p-1.5 rounded-lg text-stone-400 hover:text-rose-500 transition-colors"
-                        aria-label="Видалити"
+                        aria-label={t('common.delete')}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -182,7 +190,7 @@ export const ShoppingListPage: React.FC = () => {
           {completedItems.length > 0 && (
             <div className="space-y-2 pt-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-stone-400 px-1">
-                Вже куплено ({completedItems.length})
+                {boughtLabel} ({completedItems.length})
               </h3>
               <div className="space-y-1.5">
                 {completedItems.map(item => (
@@ -212,6 +220,7 @@ export const ShoppingListPage: React.FC = () => {
                           removeItem(item.id);
                         }}
                         className="p-1.5 text-stone-400 hover:text-rose-500 transition-colors"
+                        aria-label={t('common.delete')}
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
@@ -228,7 +237,7 @@ export const ShoppingListPage: React.FC = () => {
               onClick={clearAll}
               className="text-xs text-rose-500 hover:underline"
             >
-              Видалити всі продукти зі списку
+              {t('shoppingList.clearAll')}
             </button>
           </div>
         </div>
@@ -239,13 +248,13 @@ export const ShoppingListPage: React.FC = () => {
             <CheckCircle2 className="w-8 h-8" />
           </div>
           <h3 className="text-lg font-bold text-stone-800 dark:text-stone-200">
-            Ваш список покупок порожній
+            {t('shoppingList.emptyTitle')}
           </h3>
           <p className="text-xs sm:text-sm text-stone-500">
-            Додавайте інгредієнти зі сторінок рецептів в один клік або впишіть вручну в поле вище.
+            {t('shoppingList.emptyDesc')}
           </p>
           <Link to="/recipes">
-            <Button variant="primary">Обрати смачний рецепт</Button>
+            <Button variant="primary">{t('shoppingList.browseRecipes')}</Button>
           </Link>
         </div>
       )}

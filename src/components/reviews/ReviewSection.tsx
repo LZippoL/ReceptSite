@@ -7,6 +7,7 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Modal } from '../common/Modal';
 import { useToast } from '../../context/ToastContext';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ReviewSectionProps {
   recipeId: string;
@@ -30,6 +31,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const { success, error } = useToast();
+  const { t, language } = useLanguage();
 
   const loadReviews = () => {
     reviewService.getByRecipeId(recipeId).then(data => {
@@ -49,11 +51,11 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!userName.trim()) {
-      error('Помилка', 'Вкажіть ваше ім\'я');
+      error(t('common.error'), t('reviews.yourName'));
       return;
     }
     if (!comment.trim()) {
-      error('Помилка', 'Напишіть відгук');
+      error(t('common.error'), t('reviews.comment'));
       return;
     }
 
@@ -67,13 +69,13 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
         photoUrl: photoUrl.trim() || undefined
       });
 
-      success('Відгук додано!', 'Дякуємо за вашу оцінку страви');
+      success(t('reviews.successToast'), recipeTitle);
       setIsModalOpen(false);
       setComment('');
       setPhotoUrl('');
       loadReviews();
     } catch {
-      error('Помилка', 'Не вдалося зберегти відгук');
+      error(t('common.error'), 'Failed to submit review');
     } finally {
       setIsSubmitting(false);
     }
@@ -98,7 +100,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-6 border-b border-stone-100 dark:border-stone-800">
         <div>
           <h3 className="text-xl sm:text-2xl font-bold text-stone-900 dark:text-stone-100 flex items-center gap-2">
-            Відгуки та оцінки
+            {t('reviews.title')}
             <span className="text-sm font-normal text-stone-500">
               ({reviews.length})
             </span>
@@ -110,7 +112,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
             </div>
             <span className="text-stone-300 dark:text-stone-700">•</span>
             <span className="text-xs sm:text-sm text-stone-500">
-              {reviews.length} відгуків від кулінарів
+              {reviews.length} {t('reviews.count')}
             </span>
           </div>
         </div>
@@ -120,39 +122,38 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           className="shadow-md shadow-brand-500/20"
         >
           <MessageSquarePlus className="w-4 h-4 mr-2" />
-          Залишити відгук
+          {t('reviews.writeReview')}
         </Button>
       </div>
 
-      {/* Sorting bar */}
-      {reviews.length > 0 && (
-        <div className="flex items-center justify-between py-4 border-b border-stone-100 dark:border-stone-800/60 text-xs">
-          <span className="text-stone-500 font-medium">Сортування:</span>
-          <div className="flex gap-1">
-            {[
-              { id: 'newest', label: 'Нові' },
-              { id: 'helpful', label: 'Найкорисніші' },
-              { id: 'highest', label: 'Найвища оцінка' },
-              { id: 'lowest', label: 'Найнижча оцінка' }
-            ].map(opt => (
-              <button
-                key={opt.id}
-                onClick={() => setSortBy(opt.id as typeof sortBy)}
-                className={`px-2.5 py-1 rounded-xl transition-colors ${
-                  sortBy === opt.id
-                    ? 'bg-brand-100 dark:bg-brand-950 text-brand-800 dark:text-brand-300 font-bold'
-                    : 'text-stone-600 dark:text-stone-400 hover:text-stone-900'
-                }`}
-              >
-                {opt.label}
-              </button>
-            ))}
-          </div>
-        </div>
-      )}
-
       {/* Reviews list */}
       <div className="pt-6 space-y-6">
+        {reviews.length > 1 && (
+          <div className="flex items-center gap-2 text-xs">
+            <span className="text-stone-400 font-semibold">{t('recipes.sortBy')}</span>
+            <button
+              onClick={() => setSortBy('newest')}
+              className={`px-2.5 py-1 rounded-lg font-medium transition-colors ${
+                sortBy === 'newest'
+                  ? 'bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 font-bold'
+                  : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
+              }`}
+            >
+              {t('recipes.sortNewest')}
+            </button>
+            <button
+              onClick={() => setSortBy('highest')}
+              className={`px-2.5 py-1 rounded-lg font-medium transition-colors ${
+                sortBy === 'highest'
+                  ? 'bg-brand-100 dark:bg-brand-950 text-brand-700 dark:text-brand-300 font-bold'
+                  : 'text-stone-500 hover:text-stone-800 dark:hover:text-stone-200'
+              }`}
+            >
+              {t('recipes.sortRating')}
+            </button>
+          </div>
+        )}
+
         {sortedReviews.length > 0 ? (
           sortedReviews.map(review => (
             <div
@@ -169,9 +170,9 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
                       {review.userName}
                     </h5>
                     <span className="text-[11px] text-stone-600 dark:text-stone-300">
-                      {new Date(review.createdAt).toLocaleDateString('uk-UA', {
+                      {new Date(review.createdAt).toLocaleDateString(language === 'uk' ? 'uk-UA' : language === 'de' ? 'de-DE' : language === 'zh' ? 'zh-CN' : 'en-US', {
                         year: 'numeric',
-                        month: 'long',
+                        month: 'short',
                         day: 'numeric'
                       })}
                     </span>
@@ -189,7 +190,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
                 <div className="mt-1">
                   <img
                     src={review.photoUrl}
-                    alt="Фото страви від автора відгуку"
+                    alt={review.userName}
                     className="w-24 h-24 object-cover rounded-xl border border-stone-200 dark:border-stone-700 shadow-sm"
                   />
                 </div>
@@ -201,7 +202,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
                   className="flex items-center gap-1.5 text-xs text-stone-500 hover:text-brand-600 dark:hover:text-brand-400 transition-colors"
                 >
                   <ThumbsUp className="w-3.5 h-3.5" />
-                  <span>Корисно ({review.likes})</span>
+                  <span>({review.likes})</span>
                 </button>
               </div>
             </div>
@@ -210,10 +211,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           <div className="text-center py-8">
             <MessageSquare className="w-10 h-10 text-stone-300 dark:text-stone-600 mx-auto mb-2" />
             <p className="text-sm font-semibold text-stone-700 dark:text-stone-300">
-              Ще немає відгуків на цю страву
-            </p>
-            <p className="text-xs text-stone-500 mt-1">
-              Будьте першим, хто приготує і оцінить цей рецепт!
+              {t('reviews.noReviewsYet')}
             </p>
           </div>
         )}
@@ -223,14 +221,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       <Modal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title="Ваш відгук"
-        description={`Поділіться враженнями про страву "${recipeTitle}"`}
+        title={t('reviews.writeReview')}
+        description={`"${recipeTitle}"`}
       >
         <form onSubmit={handleSubmitReview} className="space-y-4 pt-2">
           {/* Star selector */}
           <div className="flex flex-col items-center justify-center p-4 rounded-2xl bg-stone-50 dark:bg-stone-800/50 border border-stone-100 dark:border-stone-800">
             <span className="text-xs font-semibold text-stone-500 mb-2">
-              Ваша оцінка:
+              {t('reviews.yourRating')}
             </span>
             <RatingStars
               rating={rating}
@@ -241,21 +239,21 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           </div>
 
           <Input
-            label="Ваше ім'я"
+            label={t('reviews.yourName')}
             value={userName}
             onChange={(e) => setUserName(e.target.value)}
-            placeholder="Наприклад: Наталія"
+            placeholder={t('reviews.yourNamePlaceholder')}
             required
           />
 
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-semibold text-stone-700 dark:text-stone-300">
-              Текст відгуку
+              {t('reviews.comment')}
             </label>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="Як вам страва? Чи сподобалося поєднання інгредієнтів?"
+              placeholder={t('reviews.commentPlaceholder')}
               rows={4}
               required
               className="w-full p-3 text-sm bg-white dark:bg-stone-900 border border-stone-300 dark:border-stone-700 rounded-2xl outline-none focus:border-brand-500 focus:ring-2 focus:ring-brand-500/20 text-stone-900 dark:text-stone-100 placeholder:text-stone-400"
@@ -263,7 +261,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           </div>
 
           <Input
-            label="Фото готової страви (URL, необов'язково)"
+            label="Photo URL (optional)"
             value={photoUrl}
             onChange={(e) => setPhotoUrl(e.target.value)}
             placeholder="https://images.unsplash.com/..."
@@ -276,14 +274,14 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
               onClick={() => setIsModalOpen(false)}
               className="flex-1"
             >
-              Скасувати
+              {t('common.cancel')}
             </Button>
             <Button
               type="submit"
               isLoading={isSubmitting}
               className="flex-1"
             >
-              Опублікувати
+              {t('reviews.submit')}
             </Button>
           </div>
         </form>

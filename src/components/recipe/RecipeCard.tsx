@@ -4,6 +4,7 @@ import { Clock, Heart, Flame, Users, CheckCircle2, AlertCircle } from 'lucide-re
 import { Recipe, IngredientMatchResult } from '../../types';
 import { useFavorites } from '../../context/FavoritesContext';
 import { useToast } from '../../context/ToastContext';
+import { useLanguage } from '../../context/LanguageContext';
 import { RatingStars } from '../common/RatingStars';
 import { Badge } from '../common/Badge';
 import { cn } from '../../utils/cn';
@@ -21,6 +22,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
 }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { success, info } = useToast();
+  const { t } = useLanguage();
   const favorite = isFavorite(recipe.id);
 
   const handleFavoriteClick = (e: React.MouseEvent) => {
@@ -28,16 +30,16 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
     e.stopPropagation();
     toggleFavorite(recipe.id);
     if (!favorite) {
-      success('Додано в улюблені', `"${recipe.title}" тепер у ваших збережених`);
+      success(t('favorites.addedToast'), `"${recipe.title}"`);
     } else {
-      info('Вилучено з улюблених', `"${recipe.title}" видалено`);
+      info(t('favorites.removedToast'), `"${recipe.title}"`);
     }
   };
 
   const difficultyLabels = {
-    easy: { text: 'Легко', variant: 'success' as const },
-    medium: { text: 'Середньо', variant: 'warning' as const },
-    hard: { text: 'Складно', variant: 'primary' as const }
+    easy: { text: t('recipeDetail.difficultyEasy'), variant: 'success' as const },
+    medium: { text: t('recipeDetail.difficultyMedium'), variant: 'warning' as const },
+    hard: { text: t('recipeDetail.difficultyHard'), variant: 'primary' as const }
   };
 
   return (
@@ -65,19 +67,19 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
               ? 'bg-rose-500 text-white shadow-rose-500/40'
               : 'bg-white/80 dark:bg-stone-900/80 text-stone-700 dark:text-stone-300 hover:bg-white dark:hover:bg-stone-900 hover:text-rose-500'
           )}
-          aria-label={favorite ? 'Видалити з улюблених' : 'Додати в улюблені'}
+          aria-label={favorite ? t('favorites.removedToast') : t('favorites.addedToast')}
         >
           <Heart className={cn('w-5 h-5 transition-transform', favorite ? 'fill-current scale-110' : '')} />
         </button>
 
         {/* Difficulty & Quick badge top left */}
         <div className="absolute top-3 left-3 flex flex-wrap gap-1.5">
-          <Badge variant={difficultyLabels[recipe.difficulty].variant} size="sm" className="bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border-none shadow-sm">
-            {difficultyLabels[recipe.difficulty].text}
+          <Badge variant={difficultyLabels[recipe.difficulty]?.variant || 'default'} size="sm" className="bg-white/90 dark:bg-stone-900/90 backdrop-blur-md border-none shadow-sm">
+            {difficultyLabels[recipe.difficulty]?.text || recipe.difficulty}
           </Badge>
           {recipe.totalTime <= 20 && (
             <Badge variant="primary" size="sm" className="bg-amber-500 text-white border-none shadow-sm font-bold">
-              ⚡ 20 хв
+              ⚡ 20 {t('common.min')}
             </Badge>
           )}
         </div>
@@ -86,11 +88,11 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
         <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs font-semibold drop-shadow-sm pointer-events-none">
           <span className="flex items-center gap-1 bg-stone-950/40 backdrop-blur-md px-2.5 py-1 rounded-xl">
             <Clock className="w-3.5 h-3.5 text-amber-400" />
-            {recipe.totalTime} хв
+            {recipe.totalTime} {t('common.min')}
           </span>
           <span className="flex items-center gap-1 bg-stone-950/40 backdrop-blur-md px-2.5 py-1 rounded-xl">
             <Flame className="w-3.5 h-3.5 text-brand-400" />
-            {recipe.calories} ккал
+            {recipe.calories} {t('common.calories')}
           </span>
         </div>
       </Link>
@@ -108,7 +110,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
             />
             <span className="text-[11px] font-semibold text-stone-600 dark:text-stone-300 uppercase tracking-wider flex items-center gap-1">
               <Users className="w-3 h-3 text-stone-500" />
-              {recipe.servings} порц.
+              {recipe.servings} {t('common.servings')}
             </span>
           </div>
 
@@ -132,18 +134,18 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
               {matchInfo.matchType === 'ready_now' ? (
                 <span className="text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
                   <CheckCircle2 className="w-4 h-4" />
-                  Можна готувати! (є всі {matchInfo.matchedIngredients.length})
+                  {t('fridge.allIngredientsReady')} ({matchInfo.matchedIngredients.length})
                 </span>
               ) : (
                 <span className="text-amber-600 dark:text-amber-400 flex items-center gap-1">
                   <AlertCircle className="w-4 h-4" />
-                  У вас є {matchInfo.matchedIngredients.length} з {matchInfo.matchedIngredients.length + matchInfo.missingIngredients.length}
+                  {t('fridge.youHave')} {matchInfo.matchedIngredients.length} / {matchInfo.matchedIngredients.length + matchInfo.missingIngredients.length}
                 </span>
               )}
             </div>
             {matchInfo.missingIngredients.length > 0 && (
               <p className="text-[11px] text-stone-600 dark:text-stone-300 truncate">
-                <span className="font-medium text-stone-700 dark:text-stone-200">Не вистачає: </span>
+                <span className="font-medium text-stone-700 dark:text-stone-200">{t('fridge.missingIngredients')} </span>
                 {matchInfo.missingIngredients.join(', ')}
               </p>
             )}

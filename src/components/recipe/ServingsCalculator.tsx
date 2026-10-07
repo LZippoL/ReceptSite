@@ -1,5 +1,6 @@
 import React from 'react';
 import { Minus, Plus, Users } from 'lucide-react';
+import { useLanguage } from '../../context/LanguageContext';
 
 interface ServingsCalculatorProps {
   servings: number;
@@ -12,6 +13,8 @@ export const ServingsCalculator: React.FC<ServingsCalculatorProps> = ({
   baseServings,
   onChange
 }) => {
+  const { t } = useLanguage();
+
   const decrease = () => {
     if (servings > 1) onChange(servings - 1);
   };
@@ -27,11 +30,11 @@ export const ServingsCalculator: React.FC<ServingsCalculatorProps> = ({
       <div className="flex items-center gap-2">
         <Users className="w-4 h-4 text-brand-600 dark:text-brand-400" />
         <span className="text-xs sm:text-sm font-semibold text-stone-900 dark:text-stone-100">
-          Порції:
+          {t('common.servings')}:
         </span>
         {isModified && (
           <span className="text-[11px] text-stone-500 hidden sm:inline">
-            (базово: {baseServings})
+            ({baseServings})
           </span>
         )}
       </div>
@@ -42,7 +45,7 @@ export const ServingsCalculator: React.FC<ServingsCalculatorProps> = ({
           onClick={decrease}
           disabled={servings <= 1}
           className="w-8 h-8 rounded-xl bg-white dark:bg-stone-700 text-stone-800 dark:text-stone-100 flex items-center justify-center font-bold text-sm shadow-sm disabled:opacity-40 disabled:pointer-events-none hover:bg-stone-50 active:scale-95 transition-all"
-          aria-label="Зменшити кількість порцій"
+          aria-label="Decrease servings"
         >
           <Minus className="w-3.5 h-3.5" />
         </button>
@@ -56,7 +59,7 @@ export const ServingsCalculator: React.FC<ServingsCalculatorProps> = ({
           onClick={increase}
           disabled={servings >= 24}
           className="w-8 h-8 rounded-xl bg-white dark:bg-stone-700 text-stone-800 dark:text-stone-100 flex items-center justify-center font-bold text-sm shadow-sm disabled:opacity-40 disabled:pointer-events-none hover:bg-stone-50 active:scale-95 transition-all"
-          aria-label="Збільшити кількість порцій"
+          aria-label="Increase servings"
         >
           <Plus className="w-3.5 h-3.5" />
         </button>

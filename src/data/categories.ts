@@ -127,14 +127,15 @@ export const CUISINES: CuisineMeta[] = [
   { id: 'other', name: 'Інша', flag: '🌍' }
 ];
 
-// Default pantry staples that are assumed to be in every kitchen
+// Default pantry staples that are assumed to be in every kitchen (multilingual)
 export const DEFAULT_STAPLES: string[] = [
-  'вода',
-  'сіль',
-  'чорний перець',
-  'перець',
-  'рослинна олія',
-  'олія',
-  'соняшникова олія',
-  'цукор'
+  // Ukrainian
+  'вода', 'сіль', 'чорний перець', 'перець', 'рослинна олія', 'олія', 'соняшникова олія', 'цукор',
+  // English
+  'water', 'salt', 'black pepper', 'pepper', 'cooking oil', 'vegetable oil', 'sunflower oil', 'oil', 'sugar',
+  // German
+  'wasser', 'salz', 'schwarzer pfeffer', 'pfeffer', 'pflanzenöl', 'öl', 'speiseöl', 'zucker',
+  // Chinese
+  '水', '盐', '食用盐', '黑胡椒', '胡椒', '食用油', '植物油', '油', '白糖', '糖'
 ];
+
