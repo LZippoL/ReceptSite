@@ -22,10 +22,8 @@ export function updateMetaTags({
   const ogDesc = document.querySelector('meta[property="og:description"]');
   if (ogDesc) ogDesc.setAttribute('content', description);
 
-  if (image) {
-    const ogImg = document.querySelector('meta[property="og:image"]');
-    if (ogImg) ogImg.setAttribute('content', image);
-  }
+  const ogImg = document.querySelector('meta[property="og:image"]');
+  if (ogImg) ogImg.setAttribute('content', image || '');
 
   if (url) {
     const canonical = document.querySelector('link[rel="canonical"]');
@@ -39,7 +37,7 @@ export function generateRecipeSchema(recipe: Recipe): string {
     '@type': 'Recipe',
     name: recipe.title,
     description: recipe.description,
-    image: [recipe.image],
+    image: recipe.image ? [recipe.image] : undefined,
     author: {
       '@type': 'Person',
       name: recipe.author.name

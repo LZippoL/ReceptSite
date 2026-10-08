@@ -51,7 +51,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
     >
       <Link to={`/recipes/${recipe.slug}`} className="block relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800">
         <img
-          src={recipe.image}
+          src={recipe.image || `${import.meta.env.BASE_URL}images/recipe-placeholder.svg`}
           alt={recipe.title}
           loading="lazy"
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"

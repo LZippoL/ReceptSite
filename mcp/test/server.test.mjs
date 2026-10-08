@@ -12,6 +12,8 @@ const recipe = {
   slug: 'test-soup', title: 'Суп', description: 'Домашній суп', image: 'https://example.com/soup.webp',
   category: 'soup', cuisine: 'ukrainian', difficulty: 'easy', prepTime: 10, cookTime: 20,
   servings: 2, calories: 200, author: { name: 'Шеф' },
+  nutrition: { protein: 5, fat: 4, carbs: 30, calories: 200 }, tags: ['домашнє'],
+  seoTitle: 'Домашній овочевий суп — простий рецепт', seoDescription: 'Приготуйте домашній овочевий суп із морквою за 30 хвилин. Покроковий рецепт на дві порції з точними кількостями інгредієнтів.',
   ingredients: [{ name: 'Морква', amount: 100, unit: 'г' }],
   instructions: [{ title: 'Приготувати', instruction: 'Зваріть овочі.' }]
 };
@@ -28,7 +30,7 @@ test('repository produces frontend-compatible recipes and preserves ratings on e
   assert.equal(row.instructions[0].stepNumber, 1);
   assert.ok(row.ingredients[0].id);
   assert.equal(row.author.isDraft, false);
-  const fields = { prepTime: 'prep_time', cookTime: 'cook_time', totalTime: 'total_time', createdAt: 'created_at' };
+  const fields = { prepTime: 'prep_time', cookTime: 'cook_time', totalTime: 'total_time', createdAt: 'created_at', seoTitle: 'seo_title', seoDescription: 'seo_description' };
   const existing = mapFields({ ...row, rating: 4.8 }, fields, true);
   const update = repo.payload('recipes', { title: 'Оновлений суп' }, existing);
   assert.equal(update.title, 'Оновлений суп');
@@ -36,6 +38,22 @@ test('repository produces frontend-compatible recipes and preserves ratings on e
   assert.equal(update.rating, undefined);
   assert.equal(update.id, undefined);
   assert.equal(update.created_at, undefined);
+  assert.equal(row.image, '');
+  assert.equal(row.seo_title, recipe.seoTitle);
+  const withImage = repo.payload('recipes', { image: 'https://example.com/new.webp' }, { ...existing, image: 'https://example.com/original.webp' });
+  assert.equal(withImage.image, 'https://example.com/original.webp');
+});
+test('site JSON IDs and step numbers work; missing or empty SEO is rejected', () => {
+  const repo = new ContentRepository(null);
+  const { author, image, ...input } = recipe;
+  const row = repo.payload('recipes', { ...input, ingredients: [{ ...input.ingredients[0], id: '1' }], instructions: [{ ...input.instructions[0], stepNumber: 1 }] });
+  assert.equal(row.ingredients[0].id, '1');
+  assert.equal(row.instructions[0].stepNumber, 1);
+  assert.equal(row.author.name, 'Смаколик');
+  assert.equal(row.image, '');
+  assert.throws(() => repo.payload('recipes', { ...input, seoTitle: '' }));
+  const { seoDescription, ...withoutSeo } = input;
+  assert.throws(() => repo.payload('recipes', withoutSeo));
 });
 test('articles default to drafts and unsafe HTML is removed', () => {
   const repo = new ContentRepository(null);

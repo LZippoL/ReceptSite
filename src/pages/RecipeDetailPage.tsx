@@ -70,8 +70,8 @@ export const RecipeDetailPage: React.FC = () => {
   useEffect(() => {
     if (localizedRecipe) {
       updateMetaTags({
-        title: `${localizedRecipe.title} — ${t('common.siteName')}`,
-        description: localizedRecipe.description,
+        title: localizedRecipe.seoTitle || `${localizedRecipe.title} — ${t('common.siteName')}`,
+        description: localizedRecipe.seoDescription || localizedRecipe.description,
         image: localizedRecipe.image,
         url: window.location.href
       });
@@ -146,7 +146,7 @@ export const RecipeDetailPage: React.FC = () => {
         <div className="lg:col-span-7 space-y-4">
           <div className="relative aspect-[4/3] rounded-[2.5rem] overflow-hidden shadow-2xl bg-stone-100 dark:bg-stone-800">
             <img
-              src={localizedRecipe.image}
+              src={localizedRecipe.image || `${import.meta.env.BASE_URL}images/recipe-placeholder.svg`}
               alt={localizedRecipe.title}
               className="w-full h-full object-cover"
             />
