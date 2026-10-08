@@ -24,6 +24,10 @@ export interface IRecipeService {
 
 // Convert database snake_case to frontend Recipe camelCase
 function mapDbToRecipe(row: any): Recipe {
+  const authorData = typeof row.author === 'object' && row.author !== null ? row.author : {};
+  const status = row.status || authorData.status || (authorData.isDraft ? 'draft' : 'published');
+  const isDraft = row.is_draft ?? row.isDraft ?? authorData.isDraft ?? (status === 'draft');
+
   return {
     id: row.id,
     slug: row.slug,
@@ -55,6 +59,8 @@ function mapDbToRecipe(row: any): Recipe {
     featured: row.featured,
     budget: row.budget,
     quick20: row.quick20,
+    status: status,
+    isDraft: isDraft,
     createdAt: row.created_at || row.createdAt,
     updatedAt: row.updated_at || row.updatedAt
   };
@@ -80,7 +86,8 @@ class RecipeService implements IRecipeService {
         if (!error && data && data.length > 0) {
           const mapped = data
             .filter(row => !row.id?.startsWith('__SYSTEM_') && row.category !== 'system')
-            .map(mapDbToRecipe);
+            .map(mapDbToRecipe)
+            .filter(recipe => !recipe.isDraft && recipe.status !== 'draft');
           this.cache = mapped;
           this.lastFetchTime = Date.now();
           return mapped;
@@ -111,9 +118,12 @@ class RecipeService implements IRecipeService {
       result.unshift(custom);
     }
 
-    this.cache = result;
+    // Filter out drafts for public display
+    const publishedOnly = result.filter(r => !r.isDraft && r.status !== 'draft');
+
+    this.cache = publishedOnly;
     this.lastFetchTime = Date.now();
-    return result;
+    return publishedOnly;
   }
 
   async getBySlug(slug: string): Promise<Recipe | null> {
@@ -126,7 +136,11 @@ class RecipeService implements IRecipeService {
           .maybeSingle();
 
         if (!error && data) {
-          return mapDbToRecipe(data);
+          const recipe = mapDbToRecipe(data);
+          if (recipe.isDraft || recipe.status === 'draft') {
+            return null;
+          }
+          return recipe;
         }
       } catch (err) {
         console.warn('Supabase fetch by slug failed:', err);
