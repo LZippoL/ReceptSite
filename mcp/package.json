@@ -13,7 +13,6 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "@supabase/supabase-js": "^2.117.3",
-    "recept-site": "file:..",
     "sanitize-html": "^2.17.0",
     "zod": "^3.25.0"
   }

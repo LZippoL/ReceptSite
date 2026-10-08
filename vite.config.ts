@@ -18,35 +18,35 @@ export default defineConfig({
         background_color: '#fafaf9',
         display: 'standalone',
         orientation: 'portrait-primary',
-        scope: process.env.NODE_ENV === 'production' ? '/ReceptSite/' : '/',
-        start_url: process.env.NODE_ENV === 'production' ? '/ReceptSite/' : '/',
+        scope: process.env.NODE_ENV === 'production' ? '/Smacolik/' : '/',
+        start_url: process.env.NODE_ENV === 'production' ? '/Smacolik/' : '/',
         icons: [
           {
-            src: '/ReceptSite/icon-192.png',
+            src: '/Smacolik/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/ReceptSite/icon-192.png',
+            src: '/Smacolik/icon-192.png',
             sizes: '192x192',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/ReceptSite/icon-512.png',
+            src: '/Smacolik/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'any'
           },
           {
-            src: '/ReceptSite/icon-512.png',
+            src: '/Smacolik/icon-512.png',
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
           },
           {
-            src: '/ReceptSite/favicon.svg',
+            src: '/Smacolik/favicon.svg',
             sizes: 'any',
             type: 'image/svg+xml'
           }
@@ -62,7 +62,7 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src')
     }
   },
-  base: process.env.NODE_ENV === 'production' ? '/ReceptSite/' : '/',
+  base: process.env.NODE_ENV === 'production' ? '/Smacolik/' : '/',
   build: {
     rollupOptions: {
       output: {

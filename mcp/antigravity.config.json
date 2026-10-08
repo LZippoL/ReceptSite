@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "smakolyk-content": {
+      "command": "C:/Program Files/nodejs/node.exe",
+      "args": ["D:/antigravitypoj/siterecept/mcp/src/index.mjs"],
+      "disabled": true
+    }
+  }
+}
