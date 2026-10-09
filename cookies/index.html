@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/Smacolik/favicon.svg?v=2" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/Smacolik/icon-192.png?v=2" />
+    <link rel="icon" type="image/png" sizes="64x64" href="/Smacolik/favicon.png?v=2" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/Smacolik/icon-192.png?v=2" />
+    <link rel="apple-touch-icon" href="/Smacolik/icon-192.png?v=2" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes" />
+    <title>Cookies і локальне сховище | Смаколик</title>
+    <meta name="description" content="Як Смаколик зберігає налаштування, сесію входу й особисті списки у вашому браузері та як керувати цими даними." />
+    <meta name="theme-color" content="#ea580c" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Смаколик" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Cookies і локальне сховище" />
+    <meta property="og:description" content="Як Смаколик зберігає налаштування, сесію входу й особисті списки у вашому браузері та як керувати цими даними." />
+    <meta property="og:image" content="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Cookies і локальне сховище" />
+    <meta name="twitter:description" content="Як Смаколик зберігає налаштування, сесію входу й особисті списки у вашому браузері та як керувати цими даними." />
+    <meta name="twitter:image" content="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=1200&q=80" />
+
+    <!-- Google Fonts for Ukrainian/Cyrillic & clean modern typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- GitHub Pages Single Page Apps script to restore redirected path from 404.html -->
+    <script type="text/javascript">
+      (function(l) {
+        if (l.search[1] === '/' ) {
+          var decoded = l.search.slice(1).split('&').map(function(s) { 
+            return s.replace(/~and~/g, '&')
+          }).join('?');
+          window.history.replaceState(null, null,
+              l.pathname.slice(0, -1) + decoded + l.hash
+          );
+        }
+      }(window.location))
+    </script>
+    <script type="module" crossorigin src="/Smacolik/assets/index-BFE2vGGO.js"></script>
+    <link rel="modulepreload" crossorigin href="/Smacolik/assets/vendor-react-BSPkQ9qT.js">
+    <link rel="modulepreload" crossorigin href="/Smacolik/assets/vendor-utils-DQQ4AG3a.js">
+    <link rel="modulepreload" crossorigin href="/Smacolik/assets/vendor-icons-C1M_VkTp.js">
+    <link rel="stylesheet" crossorigin href="/Smacolik/assets/index-BYVw2uBa.css">
+  <link rel="manifest" href="/Smacolik/manifest.webmanifest"><script id="vite-plugin-pwa:register-sw" src="/Smacolik/registerSW.js"></script><link rel="canonical" href="https://lzippol.github.io/Smacolik/cookies/" /></head>
+  <body class="bg-stone-50 text-stone-900 dark:bg-stone-950 dark:text-stone-100 font-sans min-h-screen antialiased selection:bg-brand-500 selection:text-white">
+    <div id="root"><main lang="uk" class="max-w-3xl mx-auto px-4 py-12 space-y-8 break-words">
+    <a class="text-brand-700 hover:underline" href="/Smacolik/">← Смаколик</a>
+    <h1 class="text-3xl sm:text-4xl font-extrabold">Cookies і локальне сховище</h1>
+    <p class="leading-7 text-stone-600">Як Смаколик зберігає налаштування, сесію входу й особисті списки у вашому браузері та як керувати цими даними.</p>
+    <p class="text-sm text-stone-500">Оновлено: <time datetime="2026-10-09">9 жовтня 2026 р.</time></p>
+    <div class="rounded-3xl border border-stone-200 bg-white p-5 sm:p-8 space-y-8"><section class="space-y-3">
+    <h2 class="text-xl font-bold">Що зберігається у браузері</h2>
+    <p class="leading-7 text-stone-700">Cookies — невеликі записи, які браузер може передавати серверу. LocalStorage і sessionStorage зберігають записи у браузері для роботи сайту. Смаколик використовує локальне сховище для налаштувань і функцій, які ви обираєте.</p>
+    <ul class="list-disc pl-5 space-y-2 leading-7"><li>smakolyk_language та smakolyk_theme — вибрана мова й тема.</li><li>smakolyk_favorites, smakolyk_collections, smakolyk_history — улюблені рецепти, колекції та історія перегляду.</li><li>smakolyk_staples та smakolyk_shopping_list — запаси продуктів і список покупок.</li><li>Дані сесії Supabase Auth — підтримка входу в обліковий запис.</li><li>Локальні копії даних рецептів і статей — допоміжне зберігання для окремих функцій. Профілі інших користувачів у браузері не зберігаються.</li><li>smakolyk_guest_warning_dismissed у sessionStorage — вибір щодо повідомлення для гостя протягом поточної сесії.</li></ul>
+    
+  </section><section class="space-y-3">
+    <h2 class="text-xl font-bold">Як керувати збереженими даними</h2>
+    <p class="leading-7 text-stone-700">Ви можете змінити мову або тему в інтерфейсі, редагувати улюблені рецепти та список покупок, вийти з облікового запису. Щоб прибрати локальні записи й кеш, відкрийте налаштування браузера та очистьте дані цього сайту. Це може видалити ваші локальні списки, налаштування й сесію входу.</p><p class="leading-7 text-stone-700">LocalStorage не має автоматичного строку закінчення. SessionStorage зазвичай очищується після завершення сесії вкладки. Встановлений PWA також може кешувати файли сайту для повторного завантаження. Очищення даних браузера не видаляє серверний обліковий запис і публічні відгуки.</p>
+    
+    
+  </section><section class="space-y-3">
+    <h2 class="text-xl font-bold">Реклама та згода</h2>
+    <p class="leading-7 text-stone-700">На дату оновлення рекламні й аналітичні скрипти Google не підключені. Після підключення рекламних технологій інформація про їхніх провайдерів, цілі та збереження даних має бути доступна в повідомленні про згоду та політиці конфіденційності.</p><p class="leading-7 text-stone-700">Якщо рекламна платформа керування згодою активна, використовуйте її налаштування конфіденційності для зміни або відкликання згоди. Налаштування браузера є додатковим способом контролю й не замінюють цей механізм.</p>
+    
+    <ul class="space-y-2 text-brand-700"><li><a class="underline underline-offset-4" href="/Smacolik/privacy">Політика конфіденційності</a></li><li><a class="underline underline-offset-4" href="/Smacolik/contact">Запитання про ваші дані</a></li></ul>
+  </section></div>
+    <nav aria-label="Інформація про сайт" class="flex flex-wrap gap-4 text-brand-700"><a class="hover:underline" href="/Smacolik/about/">Про сайт</a> <a class="hover:underline" href="/Smacolik/contact/">Контакти</a> <a class="hover:underline" href="/Smacolik/privacy/">Політика конфіденційності</a> <a class="hover:underline" href="/Smacolik/cookies/">Cookies і локальне сховище</a> <a class="hover:underline" href="/Smacolik/terms/">Умови користування</a></nav>
+  </main></div>
+  </body>
+</html>

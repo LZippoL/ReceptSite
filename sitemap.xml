@@ -1,80 +1,85 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://lzippol.github.io/ReceptSite/</loc>
+    <loc>https://lzippol.github.io/Smacolik/</loc>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://lzippol.github.io/ReceptSite/recipes</loc>
+    <loc>https://lzippol.github.io/Smacolik/recipes</loc>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://lzippol.github.io/ReceptSite/what-to-cook</loc>
+    <loc>https://lzippol.github.io/Smacolik/what-to-cook</loc>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://lzippol.github.io/ReceptSite/categories</loc>
+    <loc>https://lzippol.github.io/Smacolik/categories</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://lzippol.github.io/ReceptSite/articles</loc>
+    <loc>https://lzippol.github.io/Smacolik/articles</loc>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   <!-- Recipes -->
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/ukrainian-red-borscht</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/fluffy-syrnyky</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/crispy-potato-deruny</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/varenyky-potato-onion</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/varenyky-with-cherries</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/authentic-pasta-carbonara</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/classic-pasta-bolognese</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/margherita-pizza</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/traditional-lasagna</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/aromatic-shakshuka</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/french-herb-omelette</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/french-toast-cinnamon</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/creamy-apple-oatmeal</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/caesar-salad-chicken</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/authentic-greek-salad</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/tuna-egg-cucumber-salad</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/homemade-chicken-noodle-soup</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/creamy-mushroom-soup</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/pumpkin-soup-seeds</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/crispy-baked-chicken-garlic</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/crispy-bbq-chicken-wings</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/perfect-ribeye-steak</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/homemade-juicy-cutlets</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/honey-mustard-pork-ribs</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/baked-salmon-lemon-dill</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/mediterranean-baked-dorado</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/tender-fish-cutlets</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/village-garlic-potatoes</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/traditional-uzbek-plov</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/egg-fried-rice-veggies</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/thin-crepes-mlyntsi</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/fluffy-american-pancakes</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/basque-burnt-cheesecake</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/authentic-tiramisu</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/chocolate-lava-cake</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/apple-pie-sharlotka</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/homemade-oatmeal-cookies</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/traditional-uzvar</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/fresh-strawberry-lemonade</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/green-energy-smoothie</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/quick-chicken-cheese-quesadilla</loc><priority>0.8</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/recipes/tomato-basil-bruschetta</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/ukrainian-red-borscht</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/fluffy-syrnyky</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/crispy-potato-deruny</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/varenyky-potato-onion</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/varenyky-with-cherries</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/authentic-pasta-carbonara</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/classic-pasta-bolognese</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/margherita-pizza</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/traditional-lasagna</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/aromatic-shakshuka</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/french-herb-omelette</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/french-toast-cinnamon</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/creamy-apple-oatmeal</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/caesar-salad-chicken</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/authentic-greek-salad</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/tuna-egg-cucumber-salad</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/homemade-chicken-noodle-soup</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/creamy-mushroom-soup</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/pumpkin-soup-seeds</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/crispy-baked-chicken-garlic</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/crispy-bbq-chicken-wings</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/perfect-ribeye-steak</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/homemade-juicy-cutlets</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/honey-mustard-pork-ribs</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/baked-salmon-lemon-dill</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/mediterranean-baked-dorado</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/tender-fish-cutlets</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/village-garlic-potatoes</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/traditional-uzbek-plov</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/egg-fried-rice-veggies</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/thin-crepes-mlyntsi</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/fluffy-american-pancakes</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/basque-burnt-cheesecake</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/authentic-tiramisu</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/chocolate-lava-cake</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/apple-pie-sharlotka</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/homemade-oatmeal-cookies</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/traditional-uzvar</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/fresh-strawberry-lemonade</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/green-energy-smoothie</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/quick-chicken-cheese-quesadilla</loc><priority>0.8</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/recipes/tomato-basil-bruschetta</loc><priority>0.8</priority></url>
   <!-- Articles -->
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/how-to-cook-perfect-rice</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/10-secrets-of-perfect-steak</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/how-to-choose-olive-oil</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/food-storage-fridge-guide</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/secrets-of-fluffy-syrnyky</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/spices-and-herbs-kitchen-guide</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/perfect-choux-pastry-varenyky</loc><priority>0.7</priority></url>
-  <url><loc>https://lzippol.github.io/ReceptSite/articles/how-to-make-crystal-clear-broth</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/how-to-cook-perfect-rice</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/10-secrets-of-perfect-steak</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/how-to-choose-olive-oil</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/food-storage-fridge-guide</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/secrets-of-fluffy-syrnyky</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/spices-and-herbs-kitchen-guide</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/perfect-choux-pastry-varenyky</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/articles/how-to-make-crystal-clear-broth</loc><priority>0.7</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/about/</loc><lastmod>2026-10-09</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/contact/</loc><lastmod>2026-10-09</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/privacy/</loc><lastmod>2026-10-09</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/cookies/</loc><lastmod>2026-10-09</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
+  <url><loc>https://lzippol.github.io/Smacolik/terms/</loc><lastmod>2026-10-09</lastmod><changefreq>monthly</changefreq><priority>0.3</priority></url>
 </urlset>
