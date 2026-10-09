@@ -1,5 +1,4 @@
 import { Recipe } from '../types';
-import { INITIAL_RECIPES } from '../data/recipes/initialRecipes';
 import { storage } from './storageService';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
@@ -103,6 +102,7 @@ class RecipeService implements IRecipeService {
     const customRecipes = await storage.get<Recipe[]>(STORAGE_KEY, []);
     const deletedIds = await storage.get<string[]>(DELETED_KEY, []);
 
+    const { INITIAL_RECIPES } = await import('../data/recipes/initialRecipes');
     const activeInitial = INITIAL_RECIPES.filter(r => !deletedIds.includes(r.id));
     const customMap = new Map(customRecipes.map(r => [r.id, r]));
     const result: Recipe[] = [];
@@ -328,6 +328,7 @@ class RecipeService implements IRecipeService {
     const filtered = customRecipes.filter(r => r.id !== id);
     await storage.set(STORAGE_KEY, filtered);
 
+    const { INITIAL_RECIPES } = await import('../data/recipes/initialRecipes');
     if (INITIAL_RECIPES.some(r => r.id === id)) {
       const deletedIds = await storage.get<string[]>(DELETED_KEY, []);
       if (!deletedIds.includes(id)) {

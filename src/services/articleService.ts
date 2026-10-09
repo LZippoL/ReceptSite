@@ -1,5 +1,4 @@
 import { Article } from '../types';
-import { INITIAL_ARTICLES } from '../data/articles/initialArticles';
 import { storage } from './storageService';
 import { supabase, isSupabaseConfigured } from './supabaseClient';
 
@@ -42,6 +41,7 @@ class ArticleService implements IArticleService {
   async getAll(): Promise<Article[]> {
     const custom = await storage.get<Article[]>(STORAGE_KEY, []);
     const deletedIds = await storage.get<string[]>(DELETED_KEY, []);
+    const { INITIAL_ARTICLES } = await import('../data/articles/initialArticles');
     const merged = new Map(INITIAL_ARTICLES.filter(a => !deletedIds.includes(a.id)).map(a => [a.id, a]));
     for (const article of custom) merged.set(article.id, article);
     if (isSupabaseConfigured) {

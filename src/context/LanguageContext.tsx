@@ -2,7 +2,7 @@ import React, { createContext, useContext, useState, useEffect, useMemo } from '
 import { Language, SUPPORTED_LANGUAGES, LanguageOption } from '../i18n/types';
 import { getTranslation, translations } from '../i18n';
 import { Recipe, Article } from '../types';
-import { getLocalizedRecipe } from '../i18n/recipeTranslations';
+import type { getLocalizedRecipe } from '../i18n/recipeTranslations';
 import { getLocalizedArticle } from '../i18n/articleTranslations';
 
 interface LanguageContextType {
@@ -22,6 +22,7 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 const STORAGE_KEY = 'smakolyk_language';
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [recipeLocalizer, setRecipeLocalizer] = useState<typeof getLocalizedRecipe | null>(null);
   const [language, setLanguageState] = useState<Language>(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as Language;
@@ -52,6 +53,17 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     document.documentElement.lang = language;
   }, [language]);
 
+  useEffect(() => {
+    if (language === 'uk' || recipeLocalizer) return;
+    let active = true;
+    import('../i18n/recipeTranslations')
+      .then(module => {
+        if (active) setRecipeLocalizer(() => module.getLocalizedRecipe);
+      })
+      .catch(error => console.warn('Recipe translations could not be loaded:', error));
+    return () => { active = false; };
+  }, [language, recipeLocalizer]);
+
   const t = useMemo(() => {
     return (path: string, params?: Record<string, string | number>) => {
       return getTranslation(language, path, params);
@@ -80,8 +92,8 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   }, [language]);
 
   const localizeRecipeFn = useMemo(() => {
-    return (recipe: Recipe) => getLocalizedRecipe(recipe, language);
-  }, [language]);
+    return (recipe: Recipe) => recipeLocalizer ? recipeLocalizer(recipe, language) : recipe;
+  }, [language, recipeLocalizer]);
 
   const localizeArticleFn = useMemo(() => {
     return (article: Article) => getLocalizedArticle(article, language);
