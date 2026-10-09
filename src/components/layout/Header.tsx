@@ -146,12 +146,13 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
             <Link
               to="/profile"
               className={cn(
-                'flex items-center gap-2 pl-1.5 pr-3 py-1 rounded-2xl border transition-all text-xs font-bold shrink-0',
+                'flex items-center justify-center gap-2 h-11 w-11 p-1.5 sm:w-auto sm:pr-3 rounded-2xl border transition-all text-xs font-bold shrink-0',
                 isActive('/profile')
                   ? 'bg-brand-500 text-white border-brand-500 shadow-sm'
                   : 'bg-stone-100 dark:bg-stone-900 border-stone-200/80 dark:border-stone-800 text-stone-700 dark:text-stone-200 hover:border-brand-500/50'
               )}
               title={t('profile.title')}
+              aria-label={t('profile.title')}
             >
               <div className="w-7 h-7 rounded-xl bg-gradient-to-tr from-brand-600 to-amber-500 text-white flex items-center justify-center font-bold text-xs shrink-0 shadow-sm">
                 {user.user_metadata?.full_name

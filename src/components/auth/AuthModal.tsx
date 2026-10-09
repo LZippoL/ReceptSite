@@ -13,8 +13,7 @@ export const AuthModal: React.FC = () => {
     authModalMode,
     signInWithEmail,
     signUpWithEmail,
-    signInWithGoogle,
-    signInWithApple
+    signInWithGoogle
   } = useAuth();
 
   const { success } = useToast();
@@ -93,17 +92,17 @@ export const AuthModal: React.FC = () => {
     }
   };
 
-  const handleOAuthLogin = async (provider: 'google' | 'apple') => {
+  const handleOAuthLogin = async () => {
     setFormError(null);
     setIsLoading(true);
     try {
-      const { error } = provider === 'google' ? await signInWithGoogle() : await signInWithApple();
+      const { error } = await signInWithGoogle();
       if (error) {
         const msg = (error as any).message || '';
         if (msg.includes('not enabled') || msg.includes('provider')) {
-          setFormError(`Авторизація через ${provider === 'google' ? 'Google' : 'Apple'} ще налаштовується в Supabase. Ви можете зареєструватися за допомогою Email та паролю.`);
+          setFormError('Авторизація через Google ще налаштовується. Ви можете зареєструватися за допомогою Email та паролю.');
         } else {
-          setFormError(msg || `Помилка входу через ${provider}`);
+          setFormError(msg || 'Помилка входу через Google');
         }
       }
     } catch (err: any) {
@@ -166,7 +165,7 @@ export const AuthModal: React.FC = () => {
           {/* Google Button */}
           <button
             type="button"
-            onClick={() => handleOAuthLogin('google')}
+            onClick={() => handleOAuthLogin()}
             disabled={isLoading}
             className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800/80 rounded-2xl text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-200 transition-all shadow-sm hover:shadow"
           >
@@ -189,19 +188,6 @@ export const AuthModal: React.FC = () => {
               />
             </svg>
             <span>Продовжити з Google</span>
-          </button>
-
-          {/* Apple Button */}
-          <button
-            type="button"
-            onClick={() => handleOAuthLogin('apple')}
-            disabled={isLoading}
-            className="w-full flex items-center justify-center gap-3 px-4 py-2.5 border border-stone-200 dark:border-stone-700 bg-white dark:bg-stone-900 hover:bg-stone-50 dark:hover:bg-stone-800/80 rounded-2xl text-xs sm:text-sm font-semibold text-stone-700 dark:text-stone-200 transition-all shadow-sm hover:shadow"
-          >
-            <svg className="w-5 h-5 fill-current" viewBox="0 0 24 24">
-              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 6.37c.62-.75 1.04-1.8 0.93-2.85-.9.04-1.99.6-2.63 1.35-.56.64-1.05 1.7-0.92 2.73 1 .08 2-.48 2.62-1.23z" />
-            </svg>
-            <span>Продовжити з Apple</span>
           </button>
         </div>
 
