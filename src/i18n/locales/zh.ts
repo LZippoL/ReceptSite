@@ -2,7 +2,7 @@ import { TranslationSchema } from '../types';
 
 export const zh: TranslationSchema = {
   common: {
-    siteName: '美味食光',
+    siteName: 'Culinorium',
     siteTagline: '每日精选美食食谱',
     search: '搜索',
     searchPlaceholder: '搜索菜名、食材、菜系...',

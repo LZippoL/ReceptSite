@@ -24,7 +24,7 @@ export const SiteInfoPage: React.FC<{ slug: string }> = ({ slug }) => {
   return (
     <article lang="uk" className="max-w-3xl mx-auto py-8 sm:py-12 space-y-8 break-words">
       <header className="space-y-4">
-        <Link to="/" className="text-sm text-brand-700 dark:text-brand-300 hover:underline">← Смаколик</Link>
+        <Link to="/" className="text-sm text-brand-700 dark:text-brand-300 hover:underline">← Кулінаріум</Link>
         <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-stone-900 dark:text-stone-100">{page.title}</h1>
         <p className="text-base leading-7 text-stone-600 dark:text-stone-300">{page.description}</p>
         <p className="text-sm text-stone-500 dark:text-stone-400">Оновлено: <time dateTime={siteInfo.updatedAt}>{new Intl.DateTimeFormat('uk-UA', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(siteInfo.updatedAt))}</time></p>

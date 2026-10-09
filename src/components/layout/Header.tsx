@@ -9,7 +9,6 @@ import {
   X,
   BookOpen,
   UtensilsCrossed,
-  ChefHat,
   User,
   LogIn
 } from 'lucide-react';
@@ -58,11 +57,15 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
         <Link 
           to="/" 
           className="flex items-center gap-2.5 group select-none shrink-0"
-          aria-label="Смаколик - Головна сторінка"
+          aria-label="Кулінаріум - Головна сторінка"
         >
-          <div className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-gradient-to-tr from-brand-600 to-amber-500 flex items-center justify-center text-white shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform">
-            <ChefHat className="w-6 h-6 sm:w-6.5 sm:h-6.5" />
-          </div>
+          <img
+            src={`${import.meta.env.BASE_URL}icon-192.png`}
+            alt=""
+            width={44}
+            height={44}
+            className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform"
+          />
           <div>
             <span className="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 via-amber-600 to-brand-700 dark:from-brand-400 dark:to-amber-400 bg-clip-text text-transparent">
               {t('common.siteName')}

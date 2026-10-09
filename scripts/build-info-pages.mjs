@@ -21,7 +21,7 @@ for (const page of data.pages) {
   </section>`).join('');
   const date = new Intl.DateTimeFormat('uk-UA', { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(data.updatedAt));
   const content = `<main lang="uk" class="max-w-3xl mx-auto px-4 py-12 space-y-8 break-words">
-    <a class="text-brand-700 hover:underline" href="${escape(base)}">← Смаколик</a>
+    <a class="text-brand-700 hover:underline" href="${escape(base)}">← Кулінаріум</a>
     <h1 class="text-3xl sm:text-4xl font-extrabold">${escape(page.title)}</h1>
     <p class="leading-7 text-stone-600">${escape(page.description)}</p>
     <p class="text-sm text-stone-500">Оновлено: <time datetime="${escape(data.updatedAt)}">${escape(date)}</time></p>
@@ -30,7 +30,7 @@ for (const page of data.pages) {
   </main>`;
   const canonical = new URL(`${page.slug}/`, data.siteUrl).href;
   const html = template
-    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escape(page.title)} | Смаколик</title>`)
+    .replace(/<title>[\s\S]*?<\/title>/, `<title>${escape(page.title)} | Кулінаріум</title>`)
     .replace(/(<meta name="description" content=")[^"]*("\s*\/?>)/, `$1${escape(page.description)}$2`)
     .replace(/(<meta property="og:title" content=")[^"]*("\s*\/?>)/, `$1${escape(page.title)}$2`)
     .replace(/(<meta property="og:description" content=")[^"]*("\s*\/?>)/, `$1${escape(page.description)}$2`)

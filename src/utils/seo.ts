@@ -11,7 +11,7 @@ export function updateMetaTags({
   image?: string;
   url?: string;
 }) {
-  document.title = `${title} | Смаколик`;
+  document.title = `${title} | Кулінаріум`;
 
   const metaDesc = document.querySelector('meta[name="description"]');
   if (metaDesc) metaDesc.setAttribute('content', description);

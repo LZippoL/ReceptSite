@@ -2,7 +2,7 @@ import { TranslationSchema } from '../types';
 
 export const uk: TranslationSchema = {
   common: {
-    siteName: 'Смаколик',
+    siteName: 'Кулінаріум',
     siteTagline: 'Рецепти щодня',
     search: 'Пошук',
     searchPlaceholder: 'Шукати страви, інгредієнти, кухні...',

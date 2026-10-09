@@ -12,10 +12,10 @@ export default defineConfig({
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: 'script-defer',
-      includeAssets: ['favicon.ico', 'robots.txt', 'sitemap.xml'],
+      includeAssets: ['icon-192.png', 'icon-512.png', 'robots.txt', 'sitemap.xml'],
       manifest: {
-        name: 'Смаколик — Сучасна Книга Рецептів',
-        short_name: 'Смаколик',
+        name: 'Кулінаріум — Сучасна Книга Рецептів',
+        short_name: 'Кулінаріум',
         description: 'Сучасний кулінарний портал: розумний пошук за холодильником, рецепти, списки покупок та статті',
         theme_color: '#ea580c',
         background_color: '#fafaf9',
@@ -47,11 +47,6 @@ export default defineConfig({
             sizes: '512x512',
             type: 'image/png',
             purpose: 'maskable'
-          },
-          {
-            src: `${siteBase}favicon.svg`,
-            sizes: 'any',
-            type: 'image/svg+xml'
           }
         ]
       },

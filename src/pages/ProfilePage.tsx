@@ -99,7 +99,7 @@ export const ProfilePage: React.FC = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `smakolyk-backup-${new Date().toISOString().split('T')[0]}.json`;
+      a.download = `culinorium-backup-${new Date().toISOString().split('T')[0]}.json`;
       a.click();
       URL.revokeObjectURL(url);
       success(t('profile.downloadBackup'), t('profile.backupExported'));
@@ -128,7 +128,7 @@ export const ProfilePage: React.FC = () => {
         <div className="p-6 rounded-3xl bg-white dark:bg-stone-900 border border-stone-200 dark:border-stone-800 shadow-card text-left space-y-4">
           <h3 className="font-bold text-sm text-stone-900 dark:text-stone-100 flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-brand-500" />
-            Що дає реєстрація у Смаколику?
+            Що дає реєстрація у Кулінаріумі?
           </h3>
           <ul className="space-y-2.5 text-xs sm:text-sm text-stone-600 dark:text-stone-300">
             <li className="flex items-start gap-2.5">
@@ -299,7 +299,7 @@ export const ProfilePage: React.FC = () => {
               <span>Причина блокування:</span>
             </div>
             <div className="pl-5 text-rose-900 dark:text-rose-100">
-              {userProfile?.banReason || 'Порушення правил спільноти Смаколик'}
+              {userProfile?.banReason || 'Порушення правил спільноти Кулінаріум'}
             </div>
           </div>
 

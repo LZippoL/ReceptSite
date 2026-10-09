@@ -2,7 +2,7 @@ import { TranslationSchema } from '../types';
 
 export const de: TranslationSchema = {
   common: {
-    siteName: 'Smakolyk',
+    siteName: 'Culinorium',
     siteTagline: 'Tägliche Rezeptideen',
     search: 'Suche',
     searchPlaceholder: 'Gerichte, Zutaten, Küchen suchen...',

@@ -61,7 +61,7 @@ export const AuthModal: React.FC = () => {
             setFormError(error.message);
           }
         } else {
-          success('Успішний вхід', 'Раді вітати вас знову у Смаколику!');
+          success('Успішний вхід', 'Раді вітати вас знову у Кулінаріумі!');
           closeAuthModal();
           setEmail('');
           setPassword('');
@@ -126,7 +126,7 @@ export const AuthModal: React.FC = () => {
             <ChefHat className="w-8 h-8" />
           </div>
           <h2 className="text-2xl font-extrabold text-stone-900 dark:text-stone-100">
-            {mode === 'login' ? 'Вхід у кулінарний профіль' : 'Реєстрація у Смаколику'}
+            {mode === 'login' ? 'Вхід у кулінарний профіль' : 'Реєстрація у Кулінаріумі'}
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 max-w-sm mx-auto">
             {mode === 'login'

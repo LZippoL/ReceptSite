@@ -55,7 +55,7 @@ function mapDbToRecipe(row: any): Recipe {
     ingredients: row.ingredients || [],
     instructions: row.instructions || [],
     tags: row.tags || [],
-    author: row.author || { name: 'Шеф Смаколик' },
+    author: row.author || { name: 'Шеф Кулінаріум' },
     nutrition: row.nutrition || undefined,
     featured: row.featured,
     budget: row.budget,
