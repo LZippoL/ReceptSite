@@ -25,7 +25,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const [, startTransition] = useTransition();
   const [sortBy, setSortBy] = useState<'newest' | 'helpful' | 'highest' | 'lowest'>('newest');
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user, isBanned, isMuted, userProfile } = useAuth();
+  const { user, isBanned, isMuted, userProfile, openAuthModal } = useAuth();
 
   // Form fields
   const [rating, setRating] = useState(5);
@@ -46,7 +46,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   const loadReviews = () => {
     reviewService.getByRecipeId(recipeId).then(data => {
       startTransition(() => setReviews(data));
-    });
+    }).catch(() => error(t('common.error'), 'Не вдалося завантажити відгуки'));
   };
 
   useEffect(() => {
@@ -54,12 +54,18 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
   }, [recipeId]);
 
   const handleLike = async (reviewId: string) => {
-    await reviewService.likeReview(reviewId);
-    loadReviews();
+    if (!user) { openAuthModal('login'); return; }
+    try {
+      await reviewService.likeReview(reviewId);
+      loadReviews();
+    } catch (err) {
+      error(t('common.error'), err instanceof Error ? err.message : 'Не вдалося оцінити відгук');
+    }
   };
 
   const handleSubmitReview = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!user) { openAuthModal('login'); return; }
 
     if (isBanned) {
       error(t('common.error'), 'Ваш акаунт заблоковано адміністратором. Публікація відгуків заборонена.');
@@ -95,8 +101,8 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
       setComment('');
       setPhotoUrl('');
       loadReviews();
-    } catch {
-      error(t('common.error'), 'Failed to submit review');
+    } catch (err) {
+      error(t('common.error'), err instanceof Error ? err.message : 'Не вдалося опублікувати відгук');
     } finally {
       setIsSubmitting(false);
     }
@@ -151,7 +157,7 @@ export const ReviewSection: React.FC<ReviewSectionProps> = ({
           </div>
         ) : (
           <Button
-            onClick={() => setIsModalOpen(true)}
+            onClick={() => user ? setIsModalOpen(true) : openAuthModal('login')}
             className="shadow-md shadow-brand-500/20"
           >
             <MessageSquarePlus className="w-4 h-4 mr-2" />

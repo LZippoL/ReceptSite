@@ -65,6 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         user_metadata: currUser.user_metadata,
         created_at: currUser.created_at,
       });
+      if (userRef.current?.id !== currUser.id) return;
       setUserProfile(prev => {
         if (!prev) return profile;
         if (
@@ -80,7 +81,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       });
     } catch (err) {
       console.warn('Failed to sync user profile:', err);
-      // Fallback local representation
+      if (userRef.current?.id !== currUser.id) return;
+      // Display only the authenticated user's details; RLS remains the authority.
       setUserProfile({
         id: currUser.id,
         friendlyId: generateFriendlyId(currUser.id),
@@ -99,7 +101,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!curr) return;
     try {
       const fresh = await userService.getById(curr.id, false);
-      if (fresh) {
+      if (fresh && userRef.current?.id === curr.id) {
         setUserProfile(prev => {
           if (
             prev?.isBanned !== fresh.isBanned ||
@@ -148,7 +150,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setUser(currUser);
       if (currUser) {
         if (currUser.id !== prevId) {
-          syncUserProfile(currUser);
+          window.setTimeout(() => { void syncUserProfile(currUser); }, 0);
         }
       } else {
         setUserProfile(null);
@@ -156,42 +158,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setLoading(false);
     });
 
-    // 3. Realtime channel to listen for instant admin ban / mute updates
-    const channel = supabase
-      .channel('users-moderation-realtime')
-      .on(
-        'postgres_changes',
-        { event: 'UPDATE', schema: 'public', table: 'recipes', filter: 'id=eq.__SYSTEM_USERS__' },
-        (payload) => {
-          const row = payload.new as any;
-          if (row?.description) {
-            try {
-              const list = JSON.parse(row.description) as UserProfileRecord[];
-              userService.updateMemoryCache(list);
-              const currId = userRef.current?.id;
-              if (currId) {
-                const myProfile = list.find((u) => u.id === currId);
-                if (myProfile) {
-                  setUserProfile(prev => {
-                    if (
-                      prev?.isBanned !== myProfile.isBanned ||
-                      prev?.isMuted !== myProfile.isMuted ||
-                      prev?.mutedUntil !== myProfile.mutedUntil ||
-                      prev?.banReason !== myProfile.banReason
-                    ) {
-                      return myProfile;
-                    }
-                    return prev;
-                  });
-                }
-              }
-            } catch (e) {
-              console.warn('Realtime parse error:', e);
-            }
-          }
-        }
-      )
-      .subscribe();
+    // Moderation is enforced in RLS immediately; refresh the displayed status periodically.
+    const profileTimer = window.setInterval(() => { void refreshUserProfile(); }, 30_000);
 
     // 4. Throttled tab focus listener (max once every 30 seconds)
     const onTabFocus = () => {
@@ -206,7 +174,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
     return () => {
       subscription.unsubscribe();
-      supabase.removeChannel(channel);
+      window.clearInterval(profileTimer);
       window.removeEventListener('focus', onTabFocus);
       document.removeEventListener('visibilitychange', onTabFocus);
     };

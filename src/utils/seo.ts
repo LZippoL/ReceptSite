@@ -26,8 +26,16 @@ export function updateMetaTags({
   if (ogImg) ogImg.setAttribute('content', image || '');
 
   if (url) {
-    const canonical = document.querySelector('link[rel="canonical"]');
-    if (canonical) canonical.setAttribute('href', url);
+    let canonical = document.querySelector('link[rel="canonical"]');
+    if (!canonical) {
+      canonical = document.createElement('link');
+      canonical.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonical);
+    }
+    canonical.setAttribute('href', url);
+  } else {
+    // A page that supplies no canonical must not inherit the previous page's URL.
+    document.querySelector('link[rel="canonical"]')?.remove();
   }
 }
 
@@ -64,13 +72,13 @@ export function generateRecipeSchema(recipe: Recipe): string {
       url: window.location.href + `#step-${step.stepNumber}`,
       image: step.image
     })),
-    aggregateRating: {
+    aggregateRating: recipe.reviewsCount > 0 && recipe.rating >= 1 && recipe.rating <= 5 ? {
       '@type': 'AggregateRating',
       ratingValue: recipe.rating.toString(),
-      reviewCount: Math.max(1, recipe.reviewsCount).toString(),
+      reviewCount: recipe.reviewsCount.toString(),
       bestRating: '5',
       worstRating: '1'
-    }
+    } : undefined
   };
 
   return JSON.stringify(schema);

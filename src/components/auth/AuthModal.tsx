@@ -130,8 +130,8 @@ export const AuthModal: React.FC = () => {
           </h2>
           <p className="text-xs sm:text-sm text-stone-500 max-w-sm mx-auto">
             {mode === 'login'
-              ? 'Увійдіть, щоб синхронізувати улюблені рецепти та списки покупок між пристроями'
-              : 'Створіть безкоштовний акаунт, щоб збережені страви ніколи не губилися'}
+              ? 'Увійдіть, щоб залишати відгуки, додавати фото та оцінювати відгуки інших кулінарів'
+              : 'Створіть безкоштовний акаунт, щоб ділитися враженнями та фото приготованих страв'}
           </p>
         </div>
 
@@ -282,13 +282,20 @@ export const AuthModal: React.FC = () => {
           </Button>
         </form>
 
+        <p lang="uk" className="text-xs leading-6 text-stone-600 dark:text-stone-300">
+          Перед створенням облікового запису ознайомтеся з{' '}
+          <a href={`${import.meta.env.BASE_URL}privacy/`} target="_blank" rel="noopener noreferrer" className="text-brand-700 dark:text-brand-300 underline underline-offset-2">політикою конфіденційності (нова вкладка)</a>
+          {' '}та{' '}
+          <a href={`${import.meta.env.BASE_URL}terms/`} target="_blank" rel="noopener noreferrer" className="text-brand-700 dark:text-brand-300 underline underline-offset-2">умовами користування (нова вкладка)</a>.
+        </p>
+
         {/* Benefits reminder */}
         <div className="p-3.5 rounded-2xl bg-amber-50/70 dark:bg-amber-950/20 border border-amber-200/50 dark:border-amber-800/40 flex items-center gap-2.5 text-xs text-amber-800 dark:text-amber-200">
           <Sparkles className="w-4 h-4 text-amber-500 shrink-0" />
           <span>
             {mode === 'login'
-              ? 'Після входу ваші рецепти та списки залишаться збереженими навіть при очищенні кешу.'
-              : 'Реєстрація захищає ваші вибрані рецепти від випадкового видалення під час очищення кешу браузера.'}
+              ? 'Відгуки зберігаються на сервері. Улюблені рецепти та списки покупок зберігаються у цьому браузері.'
+              : 'Для перегляду рецептів акаунт не потрібен. Улюблені рецепти та списки покупок зберігаються у цьому браузері.'}
           </span>
         </div>
       </div>

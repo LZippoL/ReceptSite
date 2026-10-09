@@ -16,15 +16,19 @@ export const storageService = {
       throw new Error('Supabase is not configured');
     }
 
-    // Generate safe unique filename
-    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-    const cleanFileName = `${Date.now()}-${Math.random().toString(36).substring(2, 8)}.${fileExt}`;
-    const filePath = `${folder}/${cleanFileName}`;
+    const { data: { user }, error: authError } = await supabase.auth.getUser();
+    if (authError || !user) throw new Error('Увійдіть, щоб завантажити фото');
+    const extensions: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/avif': 'avif', 'image/gif': 'gif' };
+    if (!extensions[file.type]) throw new Error('Оберіть зображення JPEG, PNG, WebP, AVIF або GIF');
+    if (file.size > 5 * 1024 * 1024) throw new Error('Розмір фото має бути до 5 МБ');
+    const cleanFileName = `${crypto.randomUUID()}.${extensions[file.type]}`;
+    const filePath = folder === 'reviews' ? `reviews/${user.id}/${cleanFileName}` : `${folder}/${cleanFileName}`;
 
     const { error: uploadError } = await supabase.storage
       .from('recipe-images')
       .upload(filePath, file, {
         cacheControl: '3600',
+        contentType: file.type,
         upsert: false
       });
 

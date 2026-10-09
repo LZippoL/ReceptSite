@@ -17,6 +17,8 @@ import { ArticlesPage } from './pages/ArticlesPage';
 import { ArticleDetailPage } from './pages/ArticleDetailPage';
 import { ProfilePage } from './pages/ProfilePage';
 import { NotFoundPage } from './pages/NotFoundPage';
+import { SiteInfoPage } from './pages/SiteInfoPage';
+import siteInfo from './data/siteInfo.json';
 
 import { AuthModal } from './components/auth/AuthModal';
 import { GuestSaveWarningModal } from './components/auth/GuestSaveWarningModal';
@@ -53,6 +55,7 @@ export function App() {
             <Route path="/articles" element={<ArticlesPage />} />
             <Route path="/articles/:slug" element={<ArticleDetailPage />} />
             <Route path="/profile" element={<ProfilePage />} />
+            {siteInfo.pages.map(page => <Route key={page.slug} path={`/${page.slug}`} element={<SiteInfoPage slug={page.slug} />} />)}
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </main>

@@ -1,4 +1,4 @@
-import { supabase, isSupabaseConfigured } from './supabaseClient';
+import { supabase } from './supabaseClient';
 import { storage } from './storageService';
 
 export interface UserProfileRecord {
@@ -17,8 +17,8 @@ export interface UserProfileRecord {
   mutedAt?: string;
 }
 
-const STORAGE_KEY = 'smakolyk_users_db';
-const SYSTEM_STORE_ID = '__SYSTEM_USERS__';
+// Remove the legacy cache that contained other users' emails.
+void storage.remove('smakolyk_users_db');
 
 export function generateFriendlyId(uuid: string): string {
   if (!uuid) return 'UID-00000000';
@@ -33,163 +33,27 @@ export function isUserMutedActive(user: UserProfileRecord | null | undefined): b
   return expiry > Date.now();
 }
 
-class UserService {
-  private memoryCache: UserProfileRecord[] | null = null;
-  private lastFetch = 0;
-  private readonly CACHE_TTL = 30_000; // 30 seconds cache
-
-  updateMemoryCache(list: UserProfileRecord[]): void {
-    if (Array.isArray(list)) {
-      this.memoryCache = list;
-      this.lastFetch = Date.now();
-      storage.set(STORAGE_KEY, list).catch(() => {});
-    }
-  }
-
-  async getAll(forceFresh = false): Promise<UserProfileRecord[]> {
-    if (!forceFresh && this.memoryCache && Date.now() - this.lastFetch < this.CACHE_TTL) {
-      return this.memoryCache;
-    }
-
-    if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase
-          .from('recipes')
-          .select('description')
-          .eq('id', SYSTEM_STORE_ID)
-          .maybeSingle();
-
-        if (!error && data?.description) {
-          try {
-            const parsed = JSON.parse(data.description) as UserProfileRecord[];
-            if (Array.isArray(parsed)) {
-              this.memoryCache = parsed;
-              this.lastFetch = Date.now();
-              await storage.set(STORAGE_KEY, parsed);
-              return parsed;
-            }
-          } catch (e) {
-            console.warn('Failed to parse users JSON from DB:', e);
-          }
-        }
-      } catch (err) {
-        console.warn('Supabase fetch users failed:', err);
-      }
-    }
-
-    const local = await storage.get<UserProfileRecord[]>(STORAGE_KEY, []);
-    this.memoryCache = local;
-    return local;
-  }
-
-  async getById(idOrFriendlyIdOrEmail: string, forceFresh = false): Promise<UserProfileRecord | null> {
-    if (!idOrFriendlyIdOrEmail) return null;
-    const users = await this.getAll(forceFresh);
-    const query = idOrFriendlyIdOrEmail.toLowerCase().trim();
-    return (
-      users.find(
-        (u) =>
-          u.id.toLowerCase() === query ||
-          u.friendlyId.toLowerCase() === query ||
-          u.email.toLowerCase() === query
-      ) || null
-    );
-  }
-
-  async saveAll(users: UserProfileRecord[]): Promise<void> {
-    this.memoryCache = users;
-    this.lastFetch = Date.now();
-    await storage.set(STORAGE_KEY, users);
-
-    if (isSupabaseConfigured) {
-      try {
-        const { error } = await supabase
-          .from('recipes')
-          .update({ description: JSON.stringify(users) })
-          .eq('id', SYSTEM_STORE_ID);
-
-        if (error) {
-          await supabase
-            .from('recipes')
-            .upsert({
-              id: SYSTEM_STORE_ID,
-              slug: '__system_users__',
-              title: 'System Users Store',
-              description: JSON.stringify(users),
-              category: 'system',
-              cuisine: 'system',
-              difficulty: 'easy',
-              prep_time: 0,
-              cook_time: 0,
-              total_time: 0,
-              servings: 1,
-              calories: 0,
-              image: '',
-              rating: 0,
-              reviews_count: 0,
-              dietary: {},
-              ingredients: [],
-              instructions: [],
-              tags: ['system'],
-              author: { name: 'system' }
-            });
-        }
-      } catch (err) {
-        console.error('Failed to sync users to Supabase:', err);
-      }
-    }
-  }
-
-  async syncUser(user: {
-    id: string;
-    email?: string;
-    user_metadata?: any;
-    created_at?: string;
-  }): Promise<UserProfileRecord> {
-    // ALWAYS fetch fresh from Supabase to prevent overwriting admin ban/mute sanctions!
-    const users = await this.getAll(true);
-    const existingIndex = users.findIndex((u) => u.id === user.id);
-
-    const friendlyId = generateFriendlyId(user.id);
-    const email = user.email || `${friendlyId.toLowerCase()}@smakolyk.local`;
-    const displayName =
-      user.user_metadata?.full_name ||
-      user.email?.split('@')[0] ||
-      `Кулінар ${friendlyId}`;
-    const now = new Date().toISOString();
-
-    if (existingIndex >= 0) {
-      const existing = users[existingIndex];
-      // If user details haven't changed, don't write to DB (prevents DB spam and Realtime echo)
-      if (existing.email === email && existing.displayName === displayName) {
-        return existing;
-      }
-      // CRUCIAL: Preserve existing isBanned, isMuted, banReason, mutedUntil from database!
-      const updated: UserProfileRecord = {
-        ...existing,
-        email: email || existing.email,
-        displayName: displayName || existing.displayName,
-        lastLoginAt: now,
-      };
-      users[existingIndex] = updated;
-      await this.saveAll(users);
-      return updated;
-    } else {
-      const newUser: UserProfileRecord = {
-        id: user.id,
-        friendlyId,
-        email,
-        displayName,
-        createdAt: user.created_at || now,
-        lastLoginAt: now,
-        isBanned: false,
-        isMuted: false,
-      };
-      users.unshift(newUser);
-      await this.saveAll(users);
-      return newUser;
-    }
-  }
+function mapProfile(row: any): UserProfileRecord {
+  return { id: row.id, friendlyId: generateFriendlyId(row.id), email: row.email,
+    displayName: row.display_name, createdAt: row.created_at, lastLoginAt: row.last_login_at,
+    isBanned: row.is_banned || row.is_deleted, banReason: row.ban_reason || undefined,
+    bannedAt: row.banned_at || undefined, isMuted: row.is_muted,
+    muteReason: row.mute_reason || undefined,
+    mutedUntil: row.is_muted ? (row.muted_until || 'permanent') : undefined,
+    mutedAt: row.muted_at || undefined };
 }
 
+class UserService {
+  async getById(id: string, _forceFresh = true): Promise<UserProfileRecord | null> {
+    const { data, error } = await supabase.from('user_profiles').select('*').eq('id', id).maybeSingle();
+    if (error) throw new Error('Не вдалося отримати профіль');
+    return data ? mapProfile(data) : null;
+  }
+  async syncUser(user: { id: string; email?: string; user_metadata?: any; created_at?: string }): Promise<UserProfileRecord> {
+    // Auth creates and synchronizes the profile on the server; clients never write moderation.
+    const profile = await this.getById(user.id);
+    if (!profile) throw new Error('Профіль ще не доступний');
+    return profile;
+  }
+}
 export const userService = new UserService();

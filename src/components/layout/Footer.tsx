@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ChefHat, Heart, Sparkles } from 'lucide-react';
 import { CATEGORIES } from '../../data/categories';
 import { useLanguage } from '../../context/LanguageContext';
+import siteInfo from '../../data/siteInfo.json';
 
 export const Footer: React.FC = () => {
   const { t, getCategoryName } = useLanguage();
@@ -118,6 +119,11 @@ export const Footer: React.FC = () => {
           </div>
         </div>
 
+        <nav lang="uk" aria-label="Інформація про сайт" className="flex flex-wrap gap-x-6 gap-y-3 pb-6 text-sm text-stone-600 dark:text-stone-300">
+          {siteInfo.pages.map(page => (
+            <Link key={page.slug} to={`/${page.slug}`} className="hover:text-brand-700 dark:hover:text-brand-300 hover:underline">{page.title}</Link>
+          ))}
+        </nav>
         <div className="pt-8 border-t border-stone-100 dark:border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-stone-500">
           <p>© {new Date().getFullYear()} {t('common.siteName')}. All rights reserved.</p>
           <div className="flex items-center gap-1 text-stone-400">
