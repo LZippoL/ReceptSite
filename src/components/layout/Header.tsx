@@ -52,11 +52,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
 
   return (
     <header className="sticky top-0 z-40 w-full bg-stone-50/90 dark:bg-stone-950/90 backdrop-blur-md border-b border-stone-200/70 dark:border-stone-800/80 transition-colors">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-2 sm:gap-4">
         {/* Logo */}
         <Link 
           to="/" 
-          className="flex items-center gap-2.5 group select-none shrink-0"
+          className="flex items-center gap-2 sm:gap-2.5 group select-none min-w-0 sm:shrink-0"
           aria-label="Кулінаріум - Головна сторінка"
         >
           <img
@@ -64,10 +64,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
             alt=""
             width={44}
             height={44}
-            className="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform"
+            className="w-10 h-10 sm:w-11 sm:h-11 shrink-0 rounded-2xl shadow-md shadow-brand-500/20 group-hover:scale-105 transition-transform"
           />
-          <div>
-            <span className="text-xl sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 via-amber-600 to-brand-700 dark:from-brand-400 dark:to-amber-400 bg-clip-text text-transparent">
+          <div className="min-w-0">
+            <span className="block truncate text-lg sm:text-2xl font-extrabold tracking-tight bg-gradient-to-r from-brand-600 via-amber-600 to-brand-700 dark:from-brand-400 dark:to-amber-400 bg-clip-text text-transparent">
               {t('common.siteName')}
             </span>
             <span className="hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-stone-600 dark:text-stone-300 -mt-1">
@@ -106,11 +106,11 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
         </nav>
 
         {/* Action icons right */}
-        <div className="flex items-center gap-1 sm:gap-2">
+        <div className="flex items-center gap-1 sm:gap-2 shrink-0">
           {/* Global search trigger */}
           <button
             onClick={onOpenSearch}
-            className="flex items-center gap-2 h-10 px-3 sm:px-4 rounded-2xl bg-stone-100 dark:bg-stone-900 hover:bg-stone-200/80 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-800 text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium transition-all group"
+            className="hidden sm:flex items-center gap-2 h-10 px-3 sm:px-4 rounded-2xl bg-stone-100 dark:bg-stone-900 hover:bg-stone-200/80 dark:hover:bg-stone-800 border border-stone-200/80 dark:border-stone-800 text-stone-500 dark:text-stone-400 text-xs sm:text-sm font-medium transition-all group"
             aria-label={t('common.search')}
           >
             <Search className="w-4 h-4 text-stone-500 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors" />
@@ -123,7 +123,7 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           {/* Shopping list button */}
           <Link
             to="/shopping-list"
-            className="relative p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-brand-600 transition-colors"
+            className="hidden sm:block relative p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 hover:text-brand-600 transition-colors"
             title={t('nav.shoppingList')}
             aria-label={t('nav.shoppingList')}
           >
@@ -136,10 +136,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           </Link>
 
           {/* Language Selector Dropdown */}
-          <LanguageSelector variant="header" />
+          <LanguageSelector variant="header" className="hidden sm:block" />
 
           {/* Theme Switcher */}
-          <ThemeToggle />
+          <div className="hidden sm:block"><ThemeToggle /></div>
 
           {/* User Profile / Login (Only show profile if logged in, otherwise show login button) */}
           {user ? (
@@ -168,18 +168,20 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
             <button
               type="button"
               onClick={() => openAuthModal('login')}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-2xl bg-brand-500 hover:bg-brand-600 active:scale-95 text-white text-xs sm:text-sm font-bold transition-all shadow-sm shadow-brand-500/20 shrink-0"
+              className="flex items-center justify-center gap-1.5 h-11 w-11 sm:w-auto sm:px-3 rounded-2xl bg-brand-500 hover:bg-brand-600 active:scale-95 text-white text-xs sm:text-sm font-bold transition-all shadow-sm shadow-brand-500/20 shrink-0"
+              aria-label="Увійти"
             >
               <LogIn className="w-4 h-4" />
-              <span>Увійти</span>
+              <span className="hidden sm:inline">Увійти</span>
             </button>
           )}
 
           {/* Mobile hamburger menu toggle */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="lg:hidden p-2.5 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
-            aria-label="Menu"
+            className="lg:hidden flex items-center justify-center h-11 w-11 shrink-0 rounded-2xl text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-stone-800 transition-colors"
+            aria-label="Меню"
+            aria-expanded={mobileMenuOpen}
           >
             {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
           </button>
@@ -263,6 +265,10 @@ export const Header: React.FC<HeaderProps> = ({ onOpenSearch }) => {
           </div>
 
           <div className="pt-2 border-t border-stone-200 dark:border-stone-800">
+            <div className="sm:hidden flex items-center justify-between mb-3">
+              <span className="text-sm font-semibold text-stone-600 dark:text-stone-300">Тема оформлення</span>
+              <ThemeToggle />
+            </div>
             <div className="text-xs font-semibold text-stone-500 mb-2">
               {t('profile.languageTitle')}
             </div>
