@@ -157,7 +157,7 @@ npm run deploy
 
 Команда перевіряє TypeScript, збирає сайт у `output/cloudflare/build`, створює інформаційні сторінки та завантажує файли у Pages. Налаштування проєкту зберігаються у `wrangler.jsonc`. Публікація не змінює рецепти, облікові записи чи фотографії в Supabase.
 
-Для DNS `culinorium.com` та `www.culinorium.com` мають бути прив'язані до Pages як Custom domains і вказувати на `culinorium.pages.dev`. Правила у `public/_redirects` переводять `www` на основний домен і прибирають старий префікс `/Smacolik/`.
+Для DNS `culinorium.com` та `www.culinorium.com` мають бути прив'язані до Pages як Custom domains і вказувати на `culinorium.pages.dev`. Правило Cloudflare Single Redirects переводить `www` на основний домен, а `public/_redirects` прибирає старий префікс `/Smacolik/`.
 
 У Supabase Authentication → URL Configuration потрібно встановити Site URL `https://culinorium.com` і дозволити Redirect URL `https://culinorium.com/**` для соціального входу та посилань авторизації.
 
