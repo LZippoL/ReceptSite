@@ -56,6 +56,8 @@ export default defineConfig({
         ]
       },
       workbox: {
+        globIgnores: ['**/images/recipe-thumbnails/**'],
+        runtimeCaching: [{ urlPattern: /\/images\/recipe-thumbnails\//, handler: 'CacheFirst', options: { cacheName: 'recipe-thumbnails', expiration: { maxEntries: 120, maxAgeSeconds: 2592000 }, cacheableResponse: { statuses: [200] } } }],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json}']
       }
     })
@@ -67,6 +69,8 @@ export default defineConfig({
   },
   base: siteBase,
   build: {
+    minify: 'terser',
+    terserOptions: { format: { comments: false }, compress: { passes: 2 } },
     outDir: process.env.SITE_BUILD_DIR || 'output/cloudflare/build',
     rollupOptions: {
       output: {

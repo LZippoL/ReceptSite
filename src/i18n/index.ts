@@ -1,17 +1,22 @@
 import { Language, TranslationSchema } from './types';
 import { uk } from './locales/uk';
-import { en } from './locales/en';
-import { de } from './locales/de';
-import { zh } from './locales/zh';
 
 export * from './types';
 
-export const translations: Record<Language, TranslationSchema> = {
-  uk,
-  en,
-  de,
-  zh
+export const translations: { uk: TranslationSchema } & Partial<Record<Language, TranslationSchema>> = { uk };
+const loaders = {
+  en: () => import('./locales/en').then(m => m.en),
+  de: () => import('./locales/de').then(m => m.de),
+  zh: () => import('./locales/zh').then(m => m.zh)
 };
+const pending: Partial<Record<Language, Promise<void>>> = {};
+export async function loadLanguage(language: Language): Promise<void> {
+  if (language === 'uk' || translations[language]) return;
+  await (pending[language] ||= loaders[language]().then(dict => { translations[language] = dict; }).catch(error => {
+    delete pending[language];
+    throw error;
+  }));
+}
 
 /**
  * Access a nested translation value by dot path, e.g. "hero.titleLine1"

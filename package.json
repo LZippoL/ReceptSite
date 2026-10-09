@@ -7,6 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build && node scripts/build-info-pages.mjs && node scripts/prerender-home.mjs",
     "preview": "vite preview",
+    "images:optimize": "node scripts/build-recipe-image-variants.mjs",
+    "test:performance-build": "node scripts/test-prerender-home.mjs && node scripts/test-recipe-image-variants.mjs",
     "deploy": "npm run build && wrangler pages deploy --project-name culinorium --branch main"
   },
   "dependencies": {
@@ -29,6 +31,7 @@
     "postcss": "^8.4.49",
     "sharp": "0.35.5",
     "tailwindcss": "^3.4.16",
+    "terser": "5.51.2",
     "typescript": "^5.6.3",
     "vite": "^6.0.1",
     "vite-plugin-pwa": "^0.21.1",

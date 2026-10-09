@@ -3,7 +3,8 @@ import { BrowserRouter, MemoryRouter, Routes, Route, useLocation } from 'react-r
 import { Header } from './components/layout/Header';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { Footer } from './components/layout/Footer';
-import { GlobalSearchModal } from './components/search/GlobalSearchModal';
+import { useAuth } from './context/AuthContext';
+const GlobalSearchModal = lazy(() => import('./components/search/GlobalSearchModal').then(m => ({ default: m.GlobalSearchModal })));
 
 // Pages
 import { HomePage } from './pages/HomePage';
@@ -20,8 +21,8 @@ const NotFoundPage = lazy(() => import('./pages/NotFoundPage').then(m => ({ defa
 const SiteInfoPage = lazy(() => import('./pages/SiteInfoPage').then(m => ({ default: m.SiteInfoPage })));
 import siteInfo from './data/siteInfo.json';
 
-import { AuthModal } from './components/auth/AuthModal';
-import { GuestSaveWarningModal } from './components/auth/GuestSaveWarningModal';
+const AuthModal = lazy(() => import('./components/auth/AuthModal').then(m => ({ default: m.AuthModal })));
+const GuestSaveWarningModal = lazy(() => import('./components/auth/GuestSaveWarningModal').then(m => ({ default: m.GuestSaveWarningModal })));
 
 // Scroll to top on route change
 function ScrollToTop() {
@@ -34,6 +35,17 @@ function ScrollToTop() {
 
 export function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const { isAuthModalOpen, isGuestWarningOpen } = useAuth();
+  React.useEffect(() => {
+    const openSearch = (event: KeyboardEvent) => {
+      if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+        event.preventDefault();
+        setIsSearchOpen(open => !open);
+      }
+    };
+    window.addEventListener('keydown', openSearch);
+    return () => window.removeEventListener('keydown', openSearch);
+  }, []);
   const Router = import.meta.env.SSR ? MemoryRouter : BrowserRouter;
 
   return (
@@ -70,16 +82,18 @@ export function App() {
         <MobileBottomNav onOpenSearch={() => setIsSearchOpen(true)} />
 
         {/* Global Instant Search Modal */}
-        <GlobalSearchModal
+        <Suspense fallback={null}>
+        {isSearchOpen && <GlobalSearchModal
           isOpen={isSearchOpen}
           onClose={() => setIsSearchOpen(false)}
-        />
+        />}
 
         {/* Authentication Modal */}
-        <AuthModal />
+        {isAuthModalOpen && <AuthModal />}
 
         {/* Guest Save Warning Modal */}
-        <GuestSaveWarningModal />
+        {isGuestWarningOpen && <GuestSaveWarningModal />}
+        </Suspense>
       </div>
     </Router>
   );

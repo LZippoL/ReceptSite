@@ -22,7 +22,7 @@ await build({
 process.env.NODE_ENV = 'production';
 const { renderHome } = await import(pathToFileURL(resolve(ssrDir, 'prerender.mjs')).href);
 const languages = ['uk', 'en', 'de', 'zh'];
-const homes = Object.fromEntries(languages.map(language => [language, renderHome(language)]));
+const homes = Object.fromEntries(await Promise.all(languages.map(async language => [language, await renderHome(language)])));
 const indexPath = resolve(buildDir, 'index.html');
 let html = await readFile(indexPath, 'utf8');
 if (!html.includes('<div id="root"></div>')) throw new Error('Expected an empty root before prerendering.');
@@ -46,7 +46,8 @@ await writeFile(indexPath, html);
 await generateSW({
   globDirectory: buildDir,
   globPatterns: ['**/*.{js,css,html,ico,png,svg,webp,json,webmanifest,txt,xml}'],
-  globIgnores: ['sw.js', 'workbox-*.js', 'registerSW.js'],
+  globIgnores: ['sw.js', 'workbox-*.js', 'registerSW.js', '**/images/recipe-thumbnails/**'],
+  runtimeCaching: [{ urlPattern: /\/images\/recipe-thumbnails\//, handler: 'CacheFirst', options: { cacheName: 'recipe-thumbnails', expiration: { maxEntries: 120, maxAgeSeconds: 2592000 }, cacheableResponse: { statuses: [200] } } }],
   swDest: resolve(buildDir, 'sw.js'),
   navigateFallback: `${base}index.html`,
   skipWaiting: true,

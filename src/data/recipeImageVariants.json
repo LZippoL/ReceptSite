@@ -1,0 +1,1636 @@
+{
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/b436c515-d5c6-43c4-bd24-8043dff3e6eb.webp": [
+    {
+      "path": "images/recipe-thumbnails/fedac97b5327f4b4-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 12628
+    },
+    {
+      "path": "images/recipe-thumbnails/fedac97b5327f4b4-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 23776
+    },
+    {
+      "path": "images/recipe-thumbnails/fedac97b5327f4b4-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 39600
+    },
+    {
+      "path": "images/recipe-thumbnails/fedac97b5327f4b4-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 50890
+    },
+    {
+      "path": "images/recipe-thumbnails/fedac97b5327f4b4-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 65516
+    },
+    {
+      "path": "images/recipe-thumbnails/fedac97b5327f4b4-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 115538
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/f301aebc-6197-4ad0-9b80-1b6a66409b81.webp": [
+    {
+      "path": "images/recipe-thumbnails/2cab538630453130-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 7520
+    },
+    {
+      "path": "images/recipe-thumbnails/2cab538630453130-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 13180
+    },
+    {
+      "path": "images/recipe-thumbnails/2cab538630453130-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 21336
+    },
+    {
+      "path": "images/recipe-thumbnails/2cab538630453130-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 27208
+    },
+    {
+      "path": "images/recipe-thumbnails/2cab538630453130-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 33202
+    },
+    {
+      "path": "images/recipe-thumbnails/2cab538630453130-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 55754
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/677e5fb5-6bd7-435a-b59e-d831adf12dc3.webp": [
+    {
+      "path": "images/recipe-thumbnails/c720d4f34b4f3b49-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 9240
+    },
+    {
+      "path": "images/recipe-thumbnails/c720d4f34b4f3b49-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 16232
+    },
+    {
+      "path": "images/recipe-thumbnails/c720d4f34b4f3b49-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 25968
+    },
+    {
+      "path": "images/recipe-thumbnails/c720d4f34b4f3b49-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 32862
+    },
+    {
+      "path": "images/recipe-thumbnails/c720d4f34b4f3b49-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 41514
+    },
+    {
+      "path": "images/recipe-thumbnails/c720d4f34b4f3b49-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 66736
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/913c2dfb-0606-4bcd-887a-3dc67885f4ab.webp": [
+    {
+      "path": "images/recipe-thumbnails/0f654df75e9e242d-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 9018
+    },
+    {
+      "path": "images/recipe-thumbnails/0f654df75e9e242d-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 16084
+    },
+    {
+      "path": "images/recipe-thumbnails/0f654df75e9e242d-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 26708
+    },
+    {
+      "path": "images/recipe-thumbnails/0f654df75e9e242d-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 33904
+    },
+    {
+      "path": "images/recipe-thumbnails/0f654df75e9e242d-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 41842
+    },
+    {
+      "path": "images/recipe-thumbnails/0f654df75e9e242d-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 71524
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/080c5120-070e-45d9-99e5-bc4caab14200.webp": [
+    {
+      "path": "images/recipe-thumbnails/8b41e361b8512b86-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 14098
+    },
+    {
+      "path": "images/recipe-thumbnails/8b41e361b8512b86-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 26946
+    },
+    {
+      "path": "images/recipe-thumbnails/8b41e361b8512b86-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 44900
+    },
+    {
+      "path": "images/recipe-thumbnails/8b41e361b8512b86-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 58760
+    },
+    {
+      "path": "images/recipe-thumbnails/8b41e361b8512b86-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 75976
+    },
+    {
+      "path": "images/recipe-thumbnails/8b41e361b8512b86-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 127510
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/bc99bb85-0030-4057-8330-ab1e6414294a.webp": [
+    {
+      "path": "images/recipe-thumbnails/f26a4b62155ababb-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 14708
+    },
+    {
+      "path": "images/recipe-thumbnails/f26a4b62155ababb-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 27620
+    },
+    {
+      "path": "images/recipe-thumbnails/f26a4b62155ababb-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 44568
+    },
+    {
+      "path": "images/recipe-thumbnails/f26a4b62155ababb-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 57302
+    },
+    {
+      "path": "images/recipe-thumbnails/f26a4b62155ababb-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 72724
+    },
+    {
+      "path": "images/recipe-thumbnails/f26a4b62155ababb-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 118656
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/01171be1-1bb5-498f-8996-adbcadee2b55.webp": [
+    {
+      "path": "images/recipe-thumbnails/eda8dfd63f6d0498-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 11124
+    },
+    {
+      "path": "images/recipe-thumbnails/eda8dfd63f6d0498-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 20088
+    },
+    {
+      "path": "images/recipe-thumbnails/eda8dfd63f6d0498-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 33440
+    },
+    {
+      "path": "images/recipe-thumbnails/eda8dfd63f6d0498-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 42944
+    },
+    {
+      "path": "images/recipe-thumbnails/eda8dfd63f6d0498-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 54486
+    },
+    {
+      "path": "images/recipe-thumbnails/eda8dfd63f6d0498-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 93658
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/831702a3-4237-4152-a0bf-5b7ecf9bfa10.webp": [
+    {
+      "path": "images/recipe-thumbnails/f194750c1b3220cb-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 5672
+    },
+    {
+      "path": "images/recipe-thumbnails/f194750c1b3220cb-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 9792
+    },
+    {
+      "path": "images/recipe-thumbnails/f194750c1b3220cb-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 15222
+    },
+    {
+      "path": "images/recipe-thumbnails/f194750c1b3220cb-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 19684
+    },
+    {
+      "path": "images/recipe-thumbnails/f194750c1b3220cb-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 24422
+    },
+    {
+      "path": "images/recipe-thumbnails/f194750c1b3220cb-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 38796
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/3c4336de-dc42-45cc-9dd8-4ab682e7661a.webp": [
+    {
+      "path": "images/recipe-thumbnails/6e4d74c6e86513eb-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 13044
+    },
+    {
+      "path": "images/recipe-thumbnails/6e4d74c6e86513eb-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 24842
+    },
+    {
+      "path": "images/recipe-thumbnails/6e4d74c6e86513eb-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 40826
+    },
+    {
+      "path": "images/recipe-thumbnails/6e4d74c6e86513eb-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 53524
+    },
+    {
+      "path": "images/recipe-thumbnails/6e4d74c6e86513eb-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 69136
+    },
+    {
+      "path": "images/recipe-thumbnails/6e4d74c6e86513eb-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 115462
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/38b377b5-bd55-4445-9573-c8f74c4db43a.webp": [
+    {
+      "path": "images/recipe-thumbnails/8d52e4ec1da328ed-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 5360
+    },
+    {
+      "path": "images/recipe-thumbnails/8d52e4ec1da328ed-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 10124
+    },
+    {
+      "path": "images/recipe-thumbnails/8d52e4ec1da328ed-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 17386
+    },
+    {
+      "path": "images/recipe-thumbnails/8d52e4ec1da328ed-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 23150
+    },
+    {
+      "path": "images/recipe-thumbnails/8d52e4ec1da328ed-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 28502
+    },
+    {
+      "path": "images/recipe-thumbnails/8d52e4ec1da328ed-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 53644
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/dd896269-7c6a-4c8f-9e6a-ac73553037ff.webp": [
+    {
+      "path": "images/recipe-thumbnails/2adad0666978918f-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 15000
+    },
+    {
+      "path": "images/recipe-thumbnails/2adad0666978918f-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 30032
+    },
+    {
+      "path": "images/recipe-thumbnails/2adad0666978918f-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 53248
+    },
+    {
+      "path": "images/recipe-thumbnails/2adad0666978918f-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 71150
+    },
+    {
+      "path": "images/recipe-thumbnails/2adad0666978918f-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 95452
+    },
+    {
+      "path": "images/recipe-thumbnails/2adad0666978918f-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 168230
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/d2cd03a2-aa53-4678-9eb0-ae950c5d4603.webp": [
+    {
+      "path": "images/recipe-thumbnails/55ec8aae6fe54afd-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 12148
+    },
+    {
+      "path": "images/recipe-thumbnails/55ec8aae6fe54afd-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 22302
+    },
+    {
+      "path": "images/recipe-thumbnails/55ec8aae6fe54afd-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 35376
+    },
+    {
+      "path": "images/recipe-thumbnails/55ec8aae6fe54afd-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 45124
+    },
+    {
+      "path": "images/recipe-thumbnails/55ec8aae6fe54afd-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 55858
+    },
+    {
+      "path": "images/recipe-thumbnails/55ec8aae6fe54afd-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 91482
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/9e875ded-adf6-4727-bfb9-c57ffbc79420.webp": [
+    {
+      "path": "images/recipe-thumbnails/6ef8a619f4de72d1-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 7680
+    },
+    {
+      "path": "images/recipe-thumbnails/6ef8a619f4de72d1-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 13282
+    },
+    {
+      "path": "images/recipe-thumbnails/6ef8a619f4de72d1-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 22356
+    },
+    {
+      "path": "images/recipe-thumbnails/6ef8a619f4de72d1-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 27738
+    },
+    {
+      "path": "images/recipe-thumbnails/6ef8a619f4de72d1-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 33998
+    },
+    {
+      "path": "images/recipe-thumbnails/6ef8a619f4de72d1-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 57714
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/e325c7c2-4ac1-4b23-a48d-f3f31e6b5ee8.webp": [
+    {
+      "path": "images/recipe-thumbnails/d4368e46fff55c39-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 11048
+    },
+    {
+      "path": "images/recipe-thumbnails/d4368e46fff55c39-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 21666
+    },
+    {
+      "path": "images/recipe-thumbnails/d4368e46fff55c39-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 37982
+    },
+    {
+      "path": "images/recipe-thumbnails/d4368e46fff55c39-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 49710
+    },
+    {
+      "path": "images/recipe-thumbnails/d4368e46fff55c39-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 65618
+    },
+    {
+      "path": "images/recipe-thumbnails/d4368e46fff55c39-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 117532
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/bcc9d2e2-fbbb-4331-9a58-4e6eb486a29e.webp": [
+    {
+      "path": "images/recipe-thumbnails/09d6352e32dfb119-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 11602
+    },
+    {
+      "path": "images/recipe-thumbnails/09d6352e32dfb119-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 20764
+    },
+    {
+      "path": "images/recipe-thumbnails/09d6352e32dfb119-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 33706
+    },
+    {
+      "path": "images/recipe-thumbnails/09d6352e32dfb119-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 43162
+    },
+    {
+      "path": "images/recipe-thumbnails/09d6352e32dfb119-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 53876
+    },
+    {
+      "path": "images/recipe-thumbnails/09d6352e32dfb119-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 87512
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/5ced82d7-8c9b-4405-907c-4b7ff1fd3c2c.webp": [
+    {
+      "path": "images/recipe-thumbnails/522d3799e51af4be-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 12300
+    },
+    {
+      "path": "images/recipe-thumbnails/522d3799e51af4be-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 23108
+    },
+    {
+      "path": "images/recipe-thumbnails/522d3799e51af4be-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 37900
+    },
+    {
+      "path": "images/recipe-thumbnails/522d3799e51af4be-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 48944
+    },
+    {
+      "path": "images/recipe-thumbnails/522d3799e51af4be-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 63444
+    },
+    {
+      "path": "images/recipe-thumbnails/522d3799e51af4be-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 107170
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/8a5a0f00-85d4-4b11-a1dd-8efa63205389.webp": [
+    {
+      "path": "images/recipe-thumbnails/b2f1aa8b9d848f3c-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 9344
+    },
+    {
+      "path": "images/recipe-thumbnails/b2f1aa8b9d848f3c-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 17016
+    },
+    {
+      "path": "images/recipe-thumbnails/b2f1aa8b9d848f3c-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 28282
+    },
+    {
+      "path": "images/recipe-thumbnails/b2f1aa8b9d848f3c-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 36384
+    },
+    {
+      "path": "images/recipe-thumbnails/b2f1aa8b9d848f3c-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 45768
+    },
+    {
+      "path": "images/recipe-thumbnails/b2f1aa8b9d848f3c-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 77326
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/140d4906-2245-4944-aac5-4106a88b9f52.webp": [
+    {
+      "path": "images/recipe-thumbnails/a872bec21381ad99-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 13736
+    },
+    {
+      "path": "images/recipe-thumbnails/a872bec21381ad99-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 27380
+    },
+    {
+      "path": "images/recipe-thumbnails/a872bec21381ad99-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 47242
+    },
+    {
+      "path": "images/recipe-thumbnails/a872bec21381ad99-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 63180
+    },
+    {
+      "path": "images/recipe-thumbnails/a872bec21381ad99-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 83778
+    },
+    {
+      "path": "images/recipe-thumbnails/a872bec21381ad99-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 143146
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/cc168443-0701-4722-81b5-f13e58e7acd4.webp": [
+    {
+      "path": "images/recipe-thumbnails/883d25831b5c2bbb-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 7766
+    },
+    {
+      "path": "images/recipe-thumbnails/883d25831b5c2bbb-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 13690
+    },
+    {
+      "path": "images/recipe-thumbnails/883d25831b5c2bbb-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 22478
+    },
+    {
+      "path": "images/recipe-thumbnails/883d25831b5c2bbb-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 28298
+    },
+    {
+      "path": "images/recipe-thumbnails/883d25831b5c2bbb-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 34458
+    },
+    {
+      "path": "images/recipe-thumbnails/883d25831b5c2bbb-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 57528
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/f4fc153f-81c0-4cf2-8a0a-d73e25a0fbfe.webp": [
+    {
+      "path": "images/recipe-thumbnails/907bf601c017ee53-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 7064
+    },
+    {
+      "path": "images/recipe-thumbnails/907bf601c017ee53-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 13216
+    },
+    {
+      "path": "images/recipe-thumbnails/907bf601c017ee53-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 22432
+    },
+    {
+      "path": "images/recipe-thumbnails/907bf601c017ee53-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 29740
+    },
+    {
+      "path": "images/recipe-thumbnails/907bf601c017ee53-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 37806
+    },
+    {
+      "path": "images/recipe-thumbnails/907bf601c017ee53-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 65078
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/eb64a2b7-3ee7-46e4-a618-cf6de8ebe55d.webp": [
+    {
+      "path": "images/recipe-thumbnails/eba66109a994f414-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 12094
+    },
+    {
+      "path": "images/recipe-thumbnails/eba66109a994f414-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 22496
+    },
+    {
+      "path": "images/recipe-thumbnails/eba66109a994f414-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 38790
+    },
+    {
+      "path": "images/recipe-thumbnails/eba66109a994f414-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 50142
+    },
+    {
+      "path": "images/recipe-thumbnails/eba66109a994f414-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 65064
+    },
+    {
+      "path": "images/recipe-thumbnails/eba66109a994f414-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 113612
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/5600952c-03d2-4a25-aaf3-8b5781131be8.webp": [
+    {
+      "path": "images/recipe-thumbnails/6025fd98ef5b270d-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 10622
+    },
+    {
+      "path": "images/recipe-thumbnails/6025fd98ef5b270d-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 19192
+    },
+    {
+      "path": "images/recipe-thumbnails/6025fd98ef5b270d-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 31464
+    },
+    {
+      "path": "images/recipe-thumbnails/6025fd98ef5b270d-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 39918
+    },
+    {
+      "path": "images/recipe-thumbnails/6025fd98ef5b270d-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 50680
+    },
+    {
+      "path": "images/recipe-thumbnails/6025fd98ef5b270d-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 83148
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/6fda5e19-6719-4a91-b2d1-d4a381829600.webp": [
+    {
+      "path": "images/recipe-thumbnails/77986b0af2a07170-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 10132
+    },
+    {
+      "path": "images/recipe-thumbnails/77986b0af2a07170-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 19178
+    },
+    {
+      "path": "images/recipe-thumbnails/77986b0af2a07170-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 31596
+    },
+    {
+      "path": "images/recipe-thumbnails/77986b0af2a07170-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 40494
+    },
+    {
+      "path": "images/recipe-thumbnails/77986b0af2a07170-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 51770
+    },
+    {
+      "path": "images/recipe-thumbnails/77986b0af2a07170-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 89094
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/ed4fa270-3555-49c5-b0d2-6fb062c0b0c5.webp": [
+    {
+      "path": "images/recipe-thumbnails/c7e687c739639692-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 13846
+    },
+    {
+      "path": "images/recipe-thumbnails/c7e687c739639692-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 26160
+    },
+    {
+      "path": "images/recipe-thumbnails/c7e687c739639692-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 43654
+    },
+    {
+      "path": "images/recipe-thumbnails/c7e687c739639692-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 56482
+    },
+    {
+      "path": "images/recipe-thumbnails/c7e687c739639692-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 72042
+    },
+    {
+      "path": "images/recipe-thumbnails/c7e687c739639692-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 119590
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/07e9e5e7-eae4-4c42-bc22-bd8a0e613e11.webp": [
+    {
+      "path": "images/recipe-thumbnails/803aeb62476c92fd-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 13678
+    },
+    {
+      "path": "images/recipe-thumbnails/803aeb62476c92fd-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 26850
+    },
+    {
+      "path": "images/recipe-thumbnails/803aeb62476c92fd-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 45660
+    },
+    {
+      "path": "images/recipe-thumbnails/803aeb62476c92fd-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 60110
+    },
+    {
+      "path": "images/recipe-thumbnails/803aeb62476c92fd-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 79728
+    },
+    {
+      "path": "images/recipe-thumbnails/803aeb62476c92fd-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 137346
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/7c2a3fe7-4e48-43a1-a690-c10785c80cda.webp": [
+    {
+      "path": "images/recipe-thumbnails/a79b82e4768c0e3a-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 10556
+    },
+    {
+      "path": "images/recipe-thumbnails/a79b82e4768c0e3a-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 19492
+    },
+    {
+      "path": "images/recipe-thumbnails/a79b82e4768c0e3a-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 32970
+    },
+    {
+      "path": "images/recipe-thumbnails/a79b82e4768c0e3a-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 41988
+    },
+    {
+      "path": "images/recipe-thumbnails/a79b82e4768c0e3a-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 54086
+    },
+    {
+      "path": "images/recipe-thumbnails/a79b82e4768c0e3a-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 96590
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791456248606-l2viyy.png": [
+    {
+      "path": "images/recipe-thumbnails/2be6fa52cf850f04-320.webp",
+      "width": 320,
+      "height": 267,
+      "bytes": 25484
+    },
+    {
+      "path": "images/recipe-thumbnails/2be6fa52cf850f04-480.webp",
+      "width": 480,
+      "height": 400,
+      "bytes": 53168
+    },
+    {
+      "path": "images/recipe-thumbnails/2be6fa52cf850f04-640.webp",
+      "width": 640,
+      "height": 533,
+      "bytes": 86652
+    },
+    {
+      "path": "images/recipe-thumbnails/2be6fa52cf850f04-800.webp",
+      "width": 800,
+      "height": 667,
+      "bytes": 124040
+    },
+    {
+      "path": "images/recipe-thumbnails/2be6fa52cf850f04-960.webp",
+      "width": 960,
+      "height": 800,
+      "bytes": 162118
+    },
+    {
+      "path": "images/recipe-thumbnails/2be6fa52cf850f04-1280.webp",
+      "width": 1280,
+      "height": 1067,
+      "bytes": 237280
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791456535655-f9xdxc.png": [
+    {
+      "path": "images/recipe-thumbnails/f9d6c3637cdb95f0-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 9016
+    },
+    {
+      "path": "images/recipe-thumbnails/f9d6c3637cdb95f0-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 17416
+    },
+    {
+      "path": "images/recipe-thumbnails/f9d6c3637cdb95f0-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 27696
+    },
+    {
+      "path": "images/recipe-thumbnails/f9d6c3637cdb95f0-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 40098
+    },
+    {
+      "path": "images/recipe-thumbnails/f9d6c3637cdb95f0-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 54056
+    },
+    {
+      "path": "images/recipe-thumbnails/f9d6c3637cdb95f0-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 81384
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/3e49d1a6-a019-4bb3-959a-ed3f5316cded.webp": [
+    {
+      "path": "images/recipe-thumbnails/ccf17ff3ac274e85-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 13614
+    },
+    {
+      "path": "images/recipe-thumbnails/ccf17ff3ac274e85-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 25994
+    },
+    {
+      "path": "images/recipe-thumbnails/ccf17ff3ac274e85-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 43772
+    },
+    {
+      "path": "images/recipe-thumbnails/ccf17ff3ac274e85-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 57474
+    },
+    {
+      "path": "images/recipe-thumbnails/ccf17ff3ac274e85-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 74792
+    },
+    {
+      "path": "images/recipe-thumbnails/ccf17ff3ac274e85-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 128946
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791455369130-7mhqyl.png": [
+    {
+      "path": "images/recipe-thumbnails/77622a5d73fc89a6-320.webp",
+      "width": 320,
+      "height": 213,
+      "bytes": 19468
+    },
+    {
+      "path": "images/recipe-thumbnails/77622a5d73fc89a6-480.webp",
+      "width": 480,
+      "height": 320,
+      "bytes": 38292
+    },
+    {
+      "path": "images/recipe-thumbnails/77622a5d73fc89a6-640.webp",
+      "width": 640,
+      "height": 427,
+      "bytes": 61994
+    },
+    {
+      "path": "images/recipe-thumbnails/77622a5d73fc89a6-800.webp",
+      "width": 800,
+      "height": 533,
+      "bytes": 87432
+    },
+    {
+      "path": "images/recipe-thumbnails/77622a5d73fc89a6-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 116570
+    },
+    {
+      "path": "images/recipe-thumbnails/77622a5d73fc89a6-1280.webp",
+      "width": 1280,
+      "height": 853,
+      "bytes": 176106
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791455899125-0jp4tf.png": [
+    {
+      "path": "images/recipe-thumbnails/b75e81cd450a21b6-320.webp",
+      "width": 320,
+      "height": 267,
+      "bytes": 20024
+    },
+    {
+      "path": "images/recipe-thumbnails/b75e81cd450a21b6-480.webp",
+      "width": 480,
+      "height": 400,
+      "bytes": 39412
+    },
+    {
+      "path": "images/recipe-thumbnails/b75e81cd450a21b6-640.webp",
+      "width": 640,
+      "height": 533,
+      "bytes": 62684
+    },
+    {
+      "path": "images/recipe-thumbnails/b75e81cd450a21b6-800.webp",
+      "width": 800,
+      "height": 667,
+      "bytes": 90102
+    },
+    {
+      "path": "images/recipe-thumbnails/b75e81cd450a21b6-960.webp",
+      "width": 960,
+      "height": 800,
+      "bytes": 117996
+    },
+    {
+      "path": "images/recipe-thumbnails/b75e81cd450a21b6-1280.webp",
+      "width": 1280,
+      "height": 1067,
+      "bytes": 176062
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/e2482cc7-749a-4055-8e92-1b0e21314ad2.webp": [
+    {
+      "path": "images/recipe-thumbnails/e50b860d413fa992-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 10528
+    },
+    {
+      "path": "images/recipe-thumbnails/e50b860d413fa992-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 19336
+    },
+    {
+      "path": "images/recipe-thumbnails/e50b860d413fa992-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 31764
+    },
+    {
+      "path": "images/recipe-thumbnails/e50b860d413fa992-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 40904
+    },
+    {
+      "path": "images/recipe-thumbnails/e50b860d413fa992-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 51780
+    },
+    {
+      "path": "images/recipe-thumbnails/e50b860d413fa992-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 90556
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791455219797-h3orsd.png": [
+    {
+      "path": "images/recipe-thumbnails/4a3de6892552ebe3-320.webp",
+      "width": 320,
+      "height": 213,
+      "bytes": 20868
+    },
+    {
+      "path": "images/recipe-thumbnails/4a3de6892552ebe3-480.webp",
+      "width": 480,
+      "height": 320,
+      "bytes": 41892
+    },
+    {
+      "path": "images/recipe-thumbnails/4a3de6892552ebe3-640.webp",
+      "width": 640,
+      "height": 427,
+      "bytes": 68686
+    },
+    {
+      "path": "images/recipe-thumbnails/4a3de6892552ebe3-800.webp",
+      "width": 800,
+      "height": 533,
+      "bytes": 98084
+    },
+    {
+      "path": "images/recipe-thumbnails/4a3de6892552ebe3-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 130332
+    },
+    {
+      "path": "images/recipe-thumbnails/4a3de6892552ebe3-1280.webp",
+      "width": 1280,
+      "height": 853,
+      "bytes": 202488
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1162d47f-6f84-4d5a-9601-d42b535a9814.webp": [
+    {
+      "path": "images/recipe-thumbnails/69328db29491cd33-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 11566
+    },
+    {
+      "path": "images/recipe-thumbnails/69328db29491cd33-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 22726
+    },
+    {
+      "path": "images/recipe-thumbnails/69328db29491cd33-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 39510
+    },
+    {
+      "path": "images/recipe-thumbnails/69328db29491cd33-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 52272
+    },
+    {
+      "path": "images/recipe-thumbnails/69328db29491cd33-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 69882
+    },
+    {
+      "path": "images/recipe-thumbnails/69328db29491cd33-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 119218
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1dd98a22-62b9-4e36-92fd-94ead040879d.webp": [
+    {
+      "path": "images/recipe-thumbnails/16dbb344bee927cf-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 11304
+    },
+    {
+      "path": "images/recipe-thumbnails/16dbb344bee927cf-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 20800
+    },
+    {
+      "path": "images/recipe-thumbnails/16dbb344bee927cf-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 34140
+    },
+    {
+      "path": "images/recipe-thumbnails/16dbb344bee927cf-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 42500
+    },
+    {
+      "path": "images/recipe-thumbnails/16dbb344bee927cf-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 54658
+    },
+    {
+      "path": "images/recipe-thumbnails/16dbb344bee927cf-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 91208
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791454973921-d8ejjl.png": [
+    {
+      "path": "images/recipe-thumbnails/3f60da7bd68a8d09-320.webp",
+      "width": 320,
+      "height": 213,
+      "bytes": 18184
+    },
+    {
+      "path": "images/recipe-thumbnails/3f60da7bd68a8d09-480.webp",
+      "width": 480,
+      "height": 320,
+      "bytes": 35462
+    },
+    {
+      "path": "images/recipe-thumbnails/3f60da7bd68a8d09-640.webp",
+      "width": 640,
+      "height": 427,
+      "bytes": 57980
+    },
+    {
+      "path": "images/recipe-thumbnails/3f60da7bd68a8d09-800.webp",
+      "width": 800,
+      "height": 533,
+      "bytes": 82726
+    },
+    {
+      "path": "images/recipe-thumbnails/3f60da7bd68a8d09-960.webp",
+      "width": 960,
+      "height": 640,
+      "bytes": 110616
+    },
+    {
+      "path": "images/recipe-thumbnails/3f60da7bd68a8d09-1280.webp",
+      "width": 1280,
+      "height": 853,
+      "bytes": 166626
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791455679642-2uw5tt.png": [
+    {
+      "path": "images/recipe-thumbnails/433c6e96ff76d3b2-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 5006
+    },
+    {
+      "path": "images/recipe-thumbnails/433c6e96ff76d3b2-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 9648
+    },
+    {
+      "path": "images/recipe-thumbnails/433c6e96ff76d3b2-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 15478
+    },
+    {
+      "path": "images/recipe-thumbnails/433c6e96ff76d3b2-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 21268
+    },
+    {
+      "path": "images/recipe-thumbnails/433c6e96ff76d3b2-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 27550
+    },
+    {
+      "path": "images/recipe-thumbnails/433c6e96ff76d3b2-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 41896
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/68345540-f00c-4649-9aa8-050c806e74e3.webp": [
+    {
+      "path": "images/recipe-thumbnails/f49ebd553000bc82-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 13966
+    },
+    {
+      "path": "images/recipe-thumbnails/f49ebd553000bc82-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 27318
+    },
+    {
+      "path": "images/recipe-thumbnails/f49ebd553000bc82-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 48320
+    },
+    {
+      "path": "images/recipe-thumbnails/f49ebd553000bc82-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 63422
+    },
+    {
+      "path": "images/recipe-thumbnails/f49ebd553000bc82-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 82024
+    },
+    {
+      "path": "images/recipe-thumbnails/f49ebd553000bc82-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 143322
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/725e867c-f040-493d-8eec-a36dd4e775f5.webp": [
+    {
+      "path": "images/recipe-thumbnails/ba3453d2df9f01ff-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 16138
+    },
+    {
+      "path": "images/recipe-thumbnails/ba3453d2df9f01ff-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 32176
+    },
+    {
+      "path": "images/recipe-thumbnails/ba3453d2df9f01ff-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 54482
+    },
+    {
+      "path": "images/recipe-thumbnails/ba3453d2df9f01ff-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 72008
+    },
+    {
+      "path": "images/recipe-thumbnails/ba3453d2df9f01ff-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 92818
+    },
+    {
+      "path": "images/recipe-thumbnails/ba3453d2df9f01ff-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 161186
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791456033332-ty47o4.png": [
+    {
+      "path": "images/recipe-thumbnails/8dd53f62c3787d88-320.webp",
+      "width": 320,
+      "height": 267,
+      "bytes": 19486
+    },
+    {
+      "path": "images/recipe-thumbnails/8dd53f62c3787d88-480.webp",
+      "width": 480,
+      "height": 400,
+      "bytes": 36540
+    },
+    {
+      "path": "images/recipe-thumbnails/8dd53f62c3787d88-640.webp",
+      "width": 640,
+      "height": 533,
+      "bytes": 58008
+    },
+    {
+      "path": "images/recipe-thumbnails/8dd53f62c3787d88-800.webp",
+      "width": 800,
+      "height": 667,
+      "bytes": 82158
+    },
+    {
+      "path": "images/recipe-thumbnails/8dd53f62c3787d88-960.webp",
+      "width": 960,
+      "height": 800,
+      "bytes": 106042
+    },
+    {
+      "path": "images/recipe-thumbnails/8dd53f62c3787d88-1280.webp",
+      "width": 1280,
+      "height": 1067,
+      "bytes": 159274
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/2aa0ca80-3da9-4548-ac14-8e92adf8c8b4.webp": [
+    {
+      "path": "images/recipe-thumbnails/d2b70286de1f9427-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 11940
+    },
+    {
+      "path": "images/recipe-thumbnails/d2b70286de1f9427-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 22840
+    },
+    {
+      "path": "images/recipe-thumbnails/d2b70286de1f9427-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 38418
+    },
+    {
+      "path": "images/recipe-thumbnails/d2b70286de1f9427-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 49672
+    },
+    {
+      "path": "images/recipe-thumbnails/d2b70286de1f9427-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 62622
+    },
+    {
+      "path": "images/recipe-thumbnails/d2b70286de1f9427-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 105186
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/1791456173106-p1qcsn.png": [
+    {
+      "path": "images/recipe-thumbnails/602907d45a8b2554-320.webp",
+      "width": 320,
+      "height": 267,
+      "bytes": 25504
+    },
+    {
+      "path": "images/recipe-thumbnails/602907d45a8b2554-480.webp",
+      "width": 480,
+      "height": 400,
+      "bytes": 48496
+    },
+    {
+      "path": "images/recipe-thumbnails/602907d45a8b2554-640.webp",
+      "width": 640,
+      "height": 533,
+      "bytes": 75416
+    },
+    {
+      "path": "images/recipe-thumbnails/602907d45a8b2554-800.webp",
+      "width": 800,
+      "height": 667,
+      "bytes": 105400
+    },
+    {
+      "path": "images/recipe-thumbnails/602907d45a8b2554-960.webp",
+      "width": 960,
+      "height": 800,
+      "bytes": 135912
+    },
+    {
+      "path": "images/recipe-thumbnails/602907d45a8b2554-1280.webp",
+      "width": 1280,
+      "height": 1067,
+      "bytes": 198040
+    }
+  ],
+  "https://gcpqkxahkqkanolrjrhb.supabase.co/storage/v1/object/public/recipe-images/recipes/8dcf94c1-bdb0-4a8a-9350-89c6aefaee15.webp": [
+    {
+      "path": "images/recipe-thumbnails/6dcc149a7e4ad88b-320.webp",
+      "width": 320,
+      "height": 180,
+      "bytes": 10892
+    },
+    {
+      "path": "images/recipe-thumbnails/6dcc149a7e4ad88b-480.webp",
+      "width": 480,
+      "height": 270,
+      "bytes": 20204
+    },
+    {
+      "path": "images/recipe-thumbnails/6dcc149a7e4ad88b-640.webp",
+      "width": 640,
+      "height": 360,
+      "bytes": 32900
+    },
+    {
+      "path": "images/recipe-thumbnails/6dcc149a7e4ad88b-800.webp",
+      "width": 800,
+      "height": 450,
+      "bytes": 42468
+    },
+    {
+      "path": "images/recipe-thumbnails/6dcc149a7e4ad88b-960.webp",
+      "width": 960,
+      "height": 540,
+      "bytes": 52682
+    },
+    {
+      "path": "images/recipe-thumbnails/6dcc149a7e4ad88b-1280.webp",
+      "width": 1280,
+      "height": 720,
+      "bytes": 88396
+    }
+  ]
+}

@@ -1,6 +1,6 @@
-import React, { createContext, useContext, useState, useEffect, useMemo } from 'react';
+import React, { createContext, useContext, useState, useEffect, useMemo, useRef } from 'react';
 import { Language, SUPPORTED_LANGUAGES, LanguageOption } from '../i18n/types';
-import { getTranslation, translations } from '../i18n';
+import { getTranslation, translations, loadLanguage } from '../i18n';
 import { Recipe, Article } from '../types';
 import type { getLocalizedRecipe } from '../i18n/recipeTranslations';
 import { getLocalizedArticle } from '../i18n/articleTranslations';
@@ -23,6 +23,7 @@ const STORAGE_KEY = 'smakolyk_language';
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLanguage?: Language }> = ({ children, initialLanguage }) => {
   const [recipeLocalizer, setRecipeLocalizer] = useState<typeof getLocalizedRecipe | null>(null);
+  const languageRequest = useRef(0);
   const [language, setLanguageState] = useState<Language>(() => {
     if (initialLanguage) return initialLanguage;
     try {
@@ -41,7 +42,11 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLang
     }
   });
 
-  const setLanguage = (lang: Language) => {
+  const setLanguage = async (lang: Language) => {
+    const request = ++languageRequest.current;
+    try { await loadLanguage(lang); }
+    catch (error) { console.warn('Interface language could not be loaded:', error); return; }
+    if (request !== languageRequest.current) return;
     setLanguageState(lang);
     try {
       localStorage.setItem(STORAGE_KEY, lang);

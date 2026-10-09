@@ -14,6 +14,7 @@ assert.ok(initial && bootstrap, 'Home must contain readable HTML before JavaScri
 assert.ok(html.includes('<style>'), 'The first paint must not wait for an external app stylesheet.');
 process.env.NODE_ENV = 'production';
 const { renderHome } = await import(pathToFileURL(resolve(rootPath, 'output/cloudflare/ssr/prerender.mjs')).href);
+const homes = Object.fromEntries(await Promise.all(['uk', 'en', 'de', 'zh'].map(async language => [language, await renderHome(language)])));
 
 function boot({ saved, browser = 'uk-UA', pathname = '/', storageBlocked = false, theme, systemDark = false } = {}) {
   const attributes = { 'data-prerendered': 'true' };
@@ -30,12 +31,12 @@ function boot({ saved, browser = 'uk-UA', pathname = '/', storageBlocked = false
 
 for (const language of ['uk', 'en', 'de', 'zh']) {
   const result = boot({ saved: language });
-  assert.equal(result.root.innerHTML, renderHome(language), `${language} must match React's hydration input.`);
+  assert.equal(result.root.innerHTML, homes[language], `${language} must match React's hydration input.`);
   assert.equal(result.document.documentElement.lang, language);
 }
-assert.equal(boot({ browser: 'de-DE' }).root.innerHTML, renderHome('de'));
-assert.equal(boot({ saved: 'invalid', browser: 'en-US' }).root.innerHTML, renderHome('en'));
-assert.equal(boot({ storageBlocked: true }).root.innerHTML, renderHome('uk'));
+assert.equal(boot({ browser: 'de-DE' }).root.innerHTML, homes.de);
+assert.equal(boot({ saved: 'invalid', browser: 'en-US' }).root.innerHTML, homes.en);
+assert.equal(boot({ storageBlocked: true }).root.innerHTML, homes.uk);
 assert.ok(boot({ theme: 'dark' }).classes.has('dark'));
 assert.ok(boot({ systemDark: true }).classes.has('dark'));
 const deepRoute = boot({ pathname: '/recipes/ukrainian-red-borscht' });

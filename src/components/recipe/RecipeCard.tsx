@@ -8,18 +8,20 @@ import { useLanguage } from '../../context/LanguageContext';
 import { RatingStars } from '../common/RatingStars';
 import { Badge } from '../common/Badge';
 import { cn } from '../../utils/cn';
-import { recipeThumbnail } from '../../utils/recipeThumbnail';
+import { recipeImageProps } from '../../utils/recipeThumbnail';
 
 interface RecipeCardProps {
   recipe: Recipe;
   matchInfo?: IngredientMatchResult;
   className?: string;
+  imageSizes?: string;
 }
 
 export const RecipeCard: React.FC<RecipeCardProps> = ({
   recipe,
   matchInfo,
-  className
+  className,
+  imageSizes
 }) => {
   const { isFavorite, toggleFavorite } = useFavorites();
   const { success, info } = useToast();
@@ -52,7 +54,7 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
     >
       <Link to={`/recipes/${recipe.slug}`} className="block relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800">
         <img
-          src={recipeThumbnail(recipe.image) || `${import.meta.env.BASE_URL}images/recipe-placeholder.svg`}
+          {...recipeImageProps(recipe.image || `${import.meta.env.BASE_URL}images/recipe-placeholder.svg`, imageSizes)}
           alt={recipe.title}
           loading="lazy"
           decoding="async"
