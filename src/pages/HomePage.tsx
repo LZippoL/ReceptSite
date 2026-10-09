@@ -19,6 +19,7 @@ import { RecipeCard } from '../components/recipe/RecipeCard';
 import { Button } from '../components/common/Button';
 import { useLanguage } from '../context/LanguageContext';
 import { updateMetaTags } from '../utils/seo';
+import { recipeThumbnail } from '../utils/recipeThumbnail';
 
 interface HomePageProps {
   onOpenSearch: () => void;
@@ -202,7 +203,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onOpenSearch }) => {
 
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden shadow-xl">
               <img
-                src={recipeOfTheDay.image}
+                src={recipeThumbnail(recipeOfTheDay.image)}
                 alt={recipeOfTheDay.title}
                 loading="lazy"
                 decoding="async"

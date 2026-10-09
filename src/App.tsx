@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, MemoryRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Header } from './components/layout/Header';
 import { MobileBottomNav } from './components/layout/MobileBottomNav';
 import { Footer } from './components/layout/Footer';
@@ -34,9 +34,10 @@ function ScrollToTop() {
 
 export function App() {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const Router = import.meta.env.SSR ? MemoryRouter : BrowserRouter;
 
   return (
-    <BrowserRouter basename={import.meta.env.BASE_URL}>
+    <Router basename={import.meta.env.BASE_URL}>
       <ScrollToTop />
       <div className="min-h-screen flex flex-col bg-stone-50 dark:bg-stone-950 text-stone-900 dark:text-stone-100 transition-colors font-sans overflow-x-hidden w-full max-w-full">
         {/* Sticky Header */}
@@ -80,7 +81,7 @@ export function App() {
         {/* Guest Save Warning Modal */}
         <GuestSaveWarningModal />
       </div>
-    </BrowserRouter>
+    </Router>
   );
 }
 

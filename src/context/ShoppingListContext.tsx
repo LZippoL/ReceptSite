@@ -24,22 +24,25 @@ interface ShoppingListContextType {
 const ShoppingListContext = createContext<ShoppingListContextType | undefined>(undefined);
 
 export const ShoppingListProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [items, setItems] = useState<ShoppingListItem[]>(() => {
-    try {
-      const saved = localStorage.getItem('smakolyk_shopping_list');
-      return saved ? JSON.parse(saved) : [
+  const [items, setItems] = useState<ShoppingListItem[]>(() => [
         { id: 'item-1', name: 'Кисломолочний сир 9%', amount: '500 г', completed: false, recipeTitle: 'Пишні сирники', createdAt: '2024-03-01' },
         { id: 'item-2', name: 'Ванільний цукор', amount: '1 пакетик', completed: true, recipeTitle: 'Пишні сирники', createdAt: '2024-03-01' },
         { id: 'item-3', name: 'Пармезан', amount: '100 г', completed: false, recipeTitle: 'Паста Карбонара', createdAt: '2024-03-02' }
-      ];
-    } catch {
-      return [];
-    }
-  });
+  ]);
+
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('smakolyk_shopping_list');
+      if (saved) setItems(JSON.parse(saved));
+    } catch { /* Keep the defaults if storage is unavailable. */ }
+    setPreferencesLoaded(true);
+  }, []);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
     localStorage.setItem('smakolyk_shopping_list', JSON.stringify(items));
-  }, [items]);
+  }, [items, preferencesLoaded]);
 
   const addItem = (params: AddItemParams) => {
     const newItem: ShoppingListItem = {

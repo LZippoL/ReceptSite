@@ -8,6 +8,7 @@ import { useLanguage } from '../../context/LanguageContext';
 import { RatingStars } from '../common/RatingStars';
 import { Badge } from '../common/Badge';
 import { cn } from '../../utils/cn';
+import { recipeThumbnail } from '../../utils/recipeThumbnail';
 
 interface RecipeCardProps {
   recipe: Recipe;
@@ -51,9 +52,10 @@ export const RecipeCard: React.FC<RecipeCardProps> = ({
     >
       <Link to={`/recipes/${recipe.slug}`} className="block relative aspect-[4/3] overflow-hidden bg-stone-100 dark:bg-stone-800">
         <img
-          src={recipe.image || `${import.meta.env.BASE_URL}images/recipe-placeholder.svg`}
+          src={recipeThumbnail(recipe.image) || `${import.meta.env.BASE_URL}images/recipe-placeholder.svg`}
           alt={recipe.title}
           loading="lazy"
+          decoding="async"
           className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500 ease-out"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-stone-950/60 via-transparent to-transparent pointer-events-none" />

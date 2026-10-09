@@ -11,14 +11,21 @@ interface ThemeContextType {
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    const saved = localStorage.getItem('smakolyk_theme') as Theme;
-    return saved || 'system';
-  });
+  const [theme, setThemeState] = useState<Theme>('system');
+  const [themeLoaded, setThemeLoaded] = useState(false);
+
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem('smakolyk_theme');
+      if (saved === 'light' || saved === 'dark' || saved === 'system') setThemeState(saved);
+    } catch { /* Storage can be unavailable in private browsing. */ }
+    setThemeLoaded(true);
+  }, []);
 
   const [resolvedTheme, setResolvedTheme] = useState<'light' | 'dark'>('light');
 
   useEffect(() => {
+    if (!themeLoaded) return;
     const root = document.documentElement;
     const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
 
@@ -41,7 +48,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     mediaQuery.addEventListener('change', handler);
     return () => mediaQuery.removeEventListener('change', handler);
-  }, [theme]);
+  }, [theme, themeLoaded]);
 
   const setTheme = (newTheme: Theme) => {
     setThemeState(newTheme);

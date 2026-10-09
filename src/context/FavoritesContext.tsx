@@ -28,57 +28,45 @@ const FavoritesContext = createContext<FavoritesContextType | undefined>(undefin
 
 export const FavoritesProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { isGuest, openGuestWarning } = useAuth();
-  const [favorites, setFavorites] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('smakolyk_favorites');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [collections, setCollections] = useState<UserCollection[]>(() => {
-    try {
-      const saved = localStorage.getItem('smakolyk_collections');
-      return saved ? JSON.parse(saved) : DEFAULT_COLLECTIONS;
-    } catch {
-      return DEFAULT_COLLECTIONS;
-    }
-  });
-
-  const [recentlyViewed, setRecentlyViewed] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('smakolyk_history');
-      return saved ? JSON.parse(saved) : [];
-    } catch {
-      return [];
-    }
-  });
-
-  const [userStaples, setUserStaplesState] = useState<string[]>(() => {
-    try {
-      const saved = localStorage.getItem('smakolyk_staples');
-      return saved ? JSON.parse(saved) : DEFAULT_STAPLES;
-    } catch {
-      return DEFAULT_STAPLES;
-    }
-  });
+  const [favorites, setFavorites] = useState<string[]>([]);
+  const [collections, setCollections] = useState<UserCollection[]>(DEFAULT_COLLECTIONS);
+  const [recentlyViewed, setRecentlyViewed] = useState<string[]>([]);
+  const [userStaples, setUserStaplesState] = useState<string[]>(DEFAULT_STAPLES);
+  const [preferencesLoaded, setPreferencesLoaded] = useState(false);
 
   useEffect(() => {
+    const restore = <T,>(key: string, fallback: T): T => {
+      try {
+        const saved = localStorage.getItem(key);
+        return saved ? JSON.parse(saved) : fallback;
+      } catch { return fallback; }
+    };
+    setFavorites(restore('smakolyk_favorites', []));
+    setCollections(restore('smakolyk_collections', DEFAULT_COLLECTIONS));
+    setRecentlyViewed(restore('smakolyk_history', []));
+    setUserStaplesState(restore('smakolyk_staples', DEFAULT_STAPLES));
+    setPreferencesLoaded(true);
+  }, []);
+
+  useEffect(() => {
+    if (!preferencesLoaded) return;
     localStorage.setItem('smakolyk_favorites', JSON.stringify(favorites));
-  }, [favorites]);
+  }, [favorites, preferencesLoaded]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
     localStorage.setItem('smakolyk_collections', JSON.stringify(collections));
-  }, [collections]);
+  }, [collections, preferencesLoaded]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
     localStorage.setItem('smakolyk_history', JSON.stringify(recentlyViewed));
-  }, [recentlyViewed]);
+  }, [recentlyViewed, preferencesLoaded]);
 
   useEffect(() => {
+    if (!preferencesLoaded) return;
     localStorage.setItem('smakolyk_staples', JSON.stringify(userStaples));
-  }, [userStaples]);
+  }, [userStaples, preferencesLoaded]);
 
   const toggleFavorite = (recipeId: string) => {
     setFavorites(prev => {

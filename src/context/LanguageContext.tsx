@@ -21,9 +21,10 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 
 const STORAGE_KEY = 'smakolyk_language';
 
-export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const LanguageProvider: React.FC<{ children: React.ReactNode; initialLanguage?: Language }> = ({ children, initialLanguage }) => {
   const [recipeLocalizer, setRecipeLocalizer] = useState<typeof getLocalizedRecipe | null>(null);
   const [language, setLanguageState] = useState<Language>(() => {
+    if (initialLanguage) return initialLanguage;
     try {
       const saved = localStorage.getItem(STORAGE_KEY) as Language;
       if (saved && (saved === 'uk' || saved === 'en' || saved === 'de' || saved === 'zh')) {

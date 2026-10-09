@@ -18,7 +18,7 @@ export interface UserProfileRecord {
 }
 
 // Remove the legacy cache that contained other users' emails.
-void storage.remove('smakolyk_users_db');
+if (typeof window !== 'undefined') void storage.remove('smakolyk_users_db');
 
 export function generateFriendlyId(uuid: string): string {
   if (!uuid) return 'UID-00000000';
