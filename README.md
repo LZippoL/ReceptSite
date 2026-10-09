@@ -141,27 +141,25 @@ src/
 
 ---
 
-## 🚢 Деплой на GitHub Pages
+## 🚢 Публікація на Cloudflare Pages
 
-Репозиторій налаштований для автоматичної публікації через **GitHub Actions**:
-`.github/workflows/deploy.yml`
+Цільовий домен: `https://culinorium.com`. Проєкт Cloudflare Pages: `culinorium`, гілка production: `main`. Публікація використовує Direct Upload на безкоштовному тарифі; push у GitHub самостійно не запускає деплой.
 
-### Як опублікувати оновлення:
-1. Зафіксуйте зміни у Git та надішліть їх у гілку `main`:
-   ```bash
-   git add .
-   git commit -m "Оновлення рецептів та функцій"
-   git push origin main
-   ```
-2. GitHub Actions автоматично запустить збірку `npm run build` і опублікує сайт на GitHub Pages.
-3. У репозиторії перейдіть у **Settings → Pages** і переконайтеся, що **Source** встановлено на **GitHub Actions**.
-4. Сайт буде доступний за адресою:
-   `https://lzippol.github.io/ReceptSite/`
+Для публікації потрібен Node.js 22 або новіший та доступ до відповідного акаунта Cloudflare:
 
-### Налаштування власного домену (Custom Domain)
-1. У налаштуваннях репозиторію **Settings → Pages** у полі **Custom domain** введіть ваш домен (наприклад `smakolyk.ua`).
-2. Додайте у вашого DNS-провайдера CNAME-запис, що вказує на `lzippol.github.io`.
-3. У `vite.config.ts` змініть `base: '/'` замість `'/ReceptSite/'`.
+```bash
+npm ci
+npx wrangler login
+npm run deploy
+```
+
+Для підтвердження входу з іншого пристрою: `npx wrangler login --device --browser=false`.
+
+Команда перевіряє TypeScript, збирає сайт у `output/cloudflare/build`, створює інформаційні сторінки та завантажує файли у Pages. Налаштування проєкту зберігаються у `wrangler.jsonc`. Публікація не змінює рецепти, облікові записи чи фотографії в Supabase.
+
+Для DNS `culinorium.com` та `www.culinorium.com` мають бути прив'язані до Pages як Custom domains і вказувати на `culinorium.pages.dev`. Правила у `public/_redirects` переводять `www` на основний домен і прибирають старий префікс `/Smacolik/`.
+
+У Supabase Authentication → URL Configuration потрібно встановити Site URL `https://culinorium.com` і дозволити Redirect URL `https://culinorium.com/**` для соціального входу та посилань авторизації.
 
 ---
 

@@ -3,8 +3,9 @@ import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = fileURLToPath(new URL('../', import.meta.url));
+const buildDir = resolve(root, process.env.SITE_BUILD_DIR || 'output/cloudflare/build');
 const data = JSON.parse(await readFile(resolve(root, 'src/data/siteInfo.json'), 'utf8'));
-const template = await readFile(resolve(root, 'dist/index.html'), 'utf8');
+const template = await readFile(resolve(buildDir, 'index.html'), 'utf8');
 const base = new URL(data.siteUrl).pathname;
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
 const href = value => value.startsWith('/') ? `${base}${value.slice(1)}` : value;
@@ -37,7 +38,7 @@ for (const page of data.pages) {
     .replace(/(<meta name="twitter:description" content=")[^"]*("\s*\/?>)/, `$1${escape(page.description)}$2`)
     .replace('</head>', `<link rel="canonical" href="${escape(canonical)}" /></head>`)
     .replace('<div id="root"></div>', `<div id="root">${content}</div>`);
-  await mkdir(resolve(root, 'dist', page.slug), { recursive: true });
-  await writeFile(resolve(root, 'dist', page.slug, 'index.html'), html);
+  await mkdir(resolve(buildDir, page.slug), { recursive: true });
+  await writeFile(resolve(buildDir, page.slug, 'index.html'), html);
 }
 console.log(`Generated ${data.pages.length} public information pages.`);
